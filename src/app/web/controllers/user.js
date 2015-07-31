@@ -1,12 +1,8 @@
 import ManagerError from 'piggy-module/lib/Errors';
 import FlashMessage from 'FlashMessage';
+import ModuleFactory from 'library/ModuleFactory';
 
-import UserManager from 'modules/user/Manager';
-import Storage from 'piggy-module/lib/Storage/Db';
-import db from 'database';
-let collection = db.getMonkCollection('user');
-let storage = new Storage(collection);
-let userManager = new UserManager(storage);
+let userManager = ModuleFactory.getManager('user');
 
 module.exports.new = function *() {
 

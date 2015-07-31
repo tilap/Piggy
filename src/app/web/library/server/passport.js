@@ -2,9 +2,8 @@ import passport from 'koa-passport';
 
 import PassportExtractor from 'PassportExtractor';
 
-import UserManager from 'modules/user/Manager';
-import storageFactory from 'library/storageFactory';
-let userManager = new UserManager(storageFactory('user'));
+import ModuleFactory from 'library/ModuleFactory';
+let userManager = ModuleFactory.getManager('user');
 
 let logger = require('library/loggers/common')();
 let passportConfig = require('config/main').authentification.providers;

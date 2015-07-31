@@ -4,6 +4,7 @@ import ItemVo from './Vo';
 import ItemValidator from './Validator';
 
 export default class UserManager extends Manager {
+
   constructor(storage) {
     super(storage);
   }
@@ -49,6 +50,7 @@ export default class UserManager extends Manager {
       });
     });
   }
+
 }
 
 Manager.init(UserManager, ItemVo, ItemValidator);
