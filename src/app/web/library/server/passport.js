@@ -1,4 +1,5 @@
 import passport from 'koa-passport';
+
 import PassportExtractor from 'PassportExtractor';
 
 import UserManager from 'modules/user/Manager';
@@ -96,11 +97,15 @@ module.exports.middlewares = function(app) {
             }
 
             return userManager.assumeHasUniqueUsername(user)
+              .catch( err => {
+                console.error('Passport error (userManager.assumeHasUniqueUsername)', err);
+                throw err;
+              })
               .then(user => {
                 return userManager.saveOne(user);
               })
-              .catch(err => {
-                console.error('passport error', err);
+              .catch( err => {
+                console.error('Passport error (userManager.saveOne)', err);
                 throw err;
               })
               .then( user => {

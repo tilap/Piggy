@@ -19,7 +19,7 @@ module.exports.new = function *() {
     errors: {}
   });
 
-  let user = new userManager.voClass();
+  let user = userManager.getNewVo();
 
   if(this.request.method==='POST') {
 
