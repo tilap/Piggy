@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  {{ html.head.toString() }}
+</head>
+<body>
+
+{% if currentUser %}
+  {{ currentUser.username }} | <a href="/logout/">Logout</a>
+{% else %}
+  Not connected.
+  <a href="/login/">Login</a> or <a href="/register/">Register</a>
+{% endif %}
+
+{# TODO Put the full dom in another file and make it renderable by browser #}
+{% if flash.title || flash.content %}
+  <div class="flash-message flash-message-{{flash.type }}">
+      {% if flash.title %}
+      <div class="flash-message-title">{{ flash.title }}</div>
+      {% endif %}
+      {% if flash.content %}
+      <div class="flash-message-content">{{ flash.content }}</div>
+      {% endif %}
+  </div>
+{% endif %}
+
+{% if currentUser %}
+  <div>
+    <a href="/user/">Manage users</a> |
+    <a href="/book/">Manage books</a>
+  </div>
+{% endif %}
+
+{% block content %}{% endblock %}
+
+</body>
+</html>

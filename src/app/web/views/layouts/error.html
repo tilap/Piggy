@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Error - {{ status }}</title>
+</head>
+<body>
+<div id="error">
+
+{% if status == 404 %}
+    <h1>Page not found</h1>
+{% elif status == 500 %}
+    <h1>Internal error</h1>
+    <p>Looks like something broke!</p>
+{% endif %}
+
+{% if env == 'development' %}
+    <h2>Message:</h2>
+    <pre><code>{{ error }}</code></pre>
+    <h2>Stack:</h2>
+    <pre><code>{{ stack }}</code></pre>
+{% endif %}
+
+</div>
+</body>
+</html>

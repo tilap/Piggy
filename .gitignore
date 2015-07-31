@@ -1,0 +1,21 @@
+!.keep
+
+# logs
+/logs/**/*
+*.log
+
+# vendors
+node_modules
+
+# compiled code
+lib
+
+tmp
+tmp/**/*
+
+public
+public/**/*
+
+# environment ovveride config
+src/config/environment/**/env-override.json
+src/config/environment/**/main.js

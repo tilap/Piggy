@@ -1,0 +1,48 @@
+{% extends '../../layouts/default.html' %}
+
+{% block content %}
+
+<h1>Users list</h1>
+
+<p><a href="/user/new/">Add a new one</a></p>
+
+<form method="post">
+
+<table>
+  <tr>
+    <th></th>
+    <th>Id</th>
+    <th>Username</th>
+    <th>Firstname</th>
+    <th>Lastname</th>
+    <th>Email</th>
+    <th>Action</th>
+  </tr>
+{% for user in users %}
+  <tr>
+    <td><input type="checkbox" name="usernames[]" value="{{ user.username }}"></td>
+    <td>{{ user.id }}</td>
+    <td>{{ user.username || '-' }}</td>
+    <td>{{ user.firstname || '-' }}</td>
+    <td>{{ user.lastname || '-' }}</td>
+    <td>{{ user.email || '-' }}</td>
+    <td>
+      <td><a href="/user/view/{{ user.id }}/">View</a></td>
+      <td><a href="/user/edit/{{ user.id }}/">Edit</a></td>
+      <td><a href="/user/delete/{{ user.id }}/">Delete</a></td>
+    </td>
+  </tr>
+{% endfor %}
+  <tr>
+    <td colspan="4">
+      <select name="action">
+        <option value="delete">Delete selected items</option>
+      </select>
+      <button>Submit</button>
+    </td>
+    <td colspan="3"><p>{{ users.length }} users</p></td>
+  </tr>
+</table>
+
+</form>
+{% endblock %}

@@ -1,0 +1,60 @@
+{
+  "name": "piggy",
+  "version": "0.0.1",
+  "description": "Basic node js app I work on to learn nodejs, koa, es6 and so on",
+  "repository": "git@github.com:tilap/piggy.git",
+  "main": "src/server.js",
+  "scripts": {
+    "test": "echo \"Error: no test yet\" && exit 1"
+  },
+  "engines": {
+    "node": "0.12.4"
+  },
+  "author": "Julien Tilap LA VINH <jlavinh@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "bytes": "^2.1.0",
+    "cli-color": "^1.0.0",
+    "deep-extend": "^0.4.0",
+    "humanize": "0.0.9",
+    "humanize-number": "0.0.2",
+    "koa": "^0.21.0",
+    "koa-bodyparser": "^2.0.0",
+    "koa-compress": "^1.0.8",
+    "koa-error": "^1.1.3",
+    "koa-flash": "^1.0.0",
+    "koa-generic-session": "^1.9.0",
+    "koa-i18n": "^1.1.0",
+    "koa-locale": "^1.0.0",
+    "koa-passport": "^1.1.6",
+    "koa-router": "^5.1.2",
+    "koa-sanitize-uri": "^0.1.0",
+    "koa-sess-mongo-store": "^0.1.1",
+    "koa-static": "^1.4.9",
+    "koa-swig": "^2.0.0",
+    "mongodb": "^2.0.35",
+    "monk": "^1.0.1",
+    "passport-facebook": "^2.0.0",
+    "passport-google-auth": "^1.0.0",
+    "passport-twitter": "^1.0.3",
+    "passthrough-counter": "^1.0.0",
+    "piggy-htmldoc": "^0.0.2",
+    "piggy-module": "0.0.2",
+    "winston": "^1.0.0"
+  },
+  "devDependencies": {
+    "del": "^1.2.0",
+    "depcheck": "^0.4.7",
+    "gulp": "^3.9.0",
+    "gulp-babel": "^5.1.0",
+    "gulp-data": "^1.2.0",
+    "gulp-load-plugins": "^1.0.0-rc.1",
+    "gulp-nodemon": "^2.0.3",
+    "gulp-rename": "^1.2.2",
+    "gulp-sourcemaps": "^1.5.2",
+    "gulp-swig": "^0.7.4",
+    "gulp-watch": "^4.2.4",
+    "inquirer": "^0.9.0",
+    "run-sequence": "^1.1.0"
+  }
+}

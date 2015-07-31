@@ -1,0 +1,14 @@
+{% extends '../../layouts/default.html' %}
+
+{% block content %}
+
+<h1>Book "{{ book.title }}"</h1>
+
+<ul>
+  <li><strong>id</strong>: {{ book.id }}</li>
+  <li><strong>title</strong>: {{ book.title }}</li>
+  <li><strong>author</strong>: {{ book.author || 'N/A' }}</li>
+  <li><strong>description</strong>: {{ book.description || 'N/A' }}</li>
+</ul>
+
+{% endblock %}

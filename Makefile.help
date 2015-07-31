@@ -1,0 +1,21 @@
+   _   _
+  \_/-\_/
+   )   (
+  (     )    Makefile options
+   )   (
+  /     \
+ (   9   )
+(_\_____/_)`
+
+[i]nstall : install all packages dependancies
+[r]eset   : remove all the packages files
+[c]lean   : remove all the generated files
+[b]uild   : generate all the files
+[w]atch   : start the server and watch changing files
+[n]ew     : reinstall and regenerate all files
+
+[cb]      : run clean, then build
+[bw]      : run build, then watch
+[cbw]     : run clean, build then watch
+
+[d]oc     : generate documentation

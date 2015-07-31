@@ -1,0 +1,37 @@
+{% extends '../../layouts/default.html' %}
+
+{% block content %}
+<h1>Create</h1>
+
+<form method="post">
+    <div>
+        <label for="title">
+            Title
+            <input type="text" name="title" id="title" value="{{ form.book.title }}">
+        </label>
+        {% if form.errors.title %}
+            {{ form.errors.title }}
+        {% endif %}
+    </div>
+    <div>
+        <label for="description">
+            Description
+            <textarea type="text" name="description" id="description">{{ form.book.description }}</textarea>
+        </label>
+        {% if form.errors.description %}
+            {{ form.errors.description }}
+        {% endif %}
+    </div>
+    <div>
+        <label for="author">
+            Author
+            <input type="text" name="author" id="author" value="{{ form.book.author }}">
+        </label>
+        {% if form.errors.author %}
+            {{ form.errors.author }}
+        {% endif %}
+    </div>
+    <input type="submit">
+</form>
+
+{% endblock %}

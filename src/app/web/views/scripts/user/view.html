@@ -1,0 +1,16 @@
+{% extends '../../layouts/default.html' %}
+
+{% block content %}
+
+<h1>User {{ user.username }}</h1>
+
+<ul>
+  <li><strong>id</strong>: {{ user.id }}</li>
+  <li><strong>username</strong>: {{ user.username }}</li>
+  <li><strong>firstname</strong>: {{ user.firstname || 'N/A' }}</li>
+  <li><strong>lastname</strong>: {{ user.lastname || 'N/A' }}</li>
+  <li><strong>email</strong>: {{ user.email || 'N/A' }}</li>
+  <li><strong>gender</strong>: {{ user.gender || 'N/A' }}</li>
+</ul>
+
+{% endblock %}

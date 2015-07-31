@@ -1,0 +1,16 @@
+{% extends '../../layouts/default.html' %}
+
+{% block content %}
+
+{% if data.message %}
+<p>{{ data.message }}</p>
+{% endif %}
+<h1>{{ data.pageTitle }}</h1>
+
+<ul>
+{% for strategy in strategies %}
+  <li><a href="/login/{{strategy}}/">{{strategy}}</a></li>
+{% endfor %}
+</ul>
+
+{% endblock %}

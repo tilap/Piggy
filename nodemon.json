@@ -1,0 +1,7 @@
+{
+  "verbose": false,
+  "ignore": ["*.log"],
+  "execMap": {
+    "js": "node --harmony"
+  }
+}

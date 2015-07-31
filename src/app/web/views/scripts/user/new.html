@@ -1,0 +1,46 @@
+{% extends '../../layouts/default.html' %}
+
+{% block content %}
+<h1>Create</h1>
+
+<form method="post">
+    <div>
+        <label for="username">
+            Username
+            <input type="text" name="username" id="username" value="{{ form.user.username }}">
+        </label>
+        {% if form.errors.username %}
+            {{ form.errors.username }}
+        {% endif %}
+    </div>
+    <div>
+        <label for="firstname">
+            First name
+            <input type="text" name="firstname" id="firstname" value="{{ form.user.firstname }}">
+        </label>
+        {% if form.errors.firstname %}
+            {{ form.errors.firstname }}
+        {% endif %}
+    </div>
+    <div>
+        <label for="lastname">
+            Last name
+            <input type="text" name="lastname" id="lastname" value="{{ form.user.lastname }}">
+        </label>
+        {% if form.errors.lastname %}
+            {{ form.errors.lastname }}
+        {% endif %}
+    </div>
+    <div>
+        <label for="email">
+            Email
+            <input type="email" name="email" id="email" value="{{ form.user.email }}">
+        </label>
+        {% if form.errors.email %}
+            {{ form.errors.email }}
+        {% endif %}
+    </div>
+    <input type="submit">
+</form>
+
+{% endblock %}
