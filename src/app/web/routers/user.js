@@ -6,7 +6,6 @@ let router= new Router();
 router.prefix('/user');
 
 router.get('user.list', '/', controller.list);
-router.post('/', controller.listaction);
 router.get('user.new', '/new/', controller.new);
 router.post('/new/', controller.new);
 router.get('user.viewById', '/view/:id/', controller.viewById);

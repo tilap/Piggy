@@ -15,15 +15,15 @@ import {Head} from 'piggy-htmldoc';
 
 // local modules
 import ViewBag from 'ViewBag';
+import koaUtils from 'koa-utils';
 
 // Specific
-import commonLogger from 'library/loggers/common';
+import logger from 'library/logger';
 import redirectOnHtmlStatus from 'koa-redirectOnHtmlStatus';
-import requestLogger from 'library/loggers/request';
+import koaRequestLog from 'library/middleware/koa-request-log';
 
 
 let config = require('config/main');
-let logger = commonLogger();
 let app= koa();
 
 
@@ -45,8 +45,7 @@ app.use(redirectOnHtmlStatus({redirect_url: '/login/'}));
 
 // Add logs on requests
 if(config.loggers.requests) {
-  let logReq = requestLogger();
-  app.use(logReq);
+  app.use(koaRequestLog);
 }
 
 // Force clean uri
@@ -60,6 +59,9 @@ if(sessionConfig.mongo) {
   sessionConfig.store = new koaMongoStore({ url: sessionConfig.mongo });
 }
 app.use(koaSession(sessionConfig));
+
+// Utils
+app.use(koaUtils);
 
 // Viewdata
 app.use(function *(next) {
@@ -100,22 +102,6 @@ app.context.render = koaSwig(config.view);
 // Response compress
 app.use(koaCompress());
 
-// Get param helper
-app.use(function *(next) {
-  let queryStr = this.request.querystring;
-  let params = {}, temp;
-
-  if(queryStr!=='' && queryStr.split('&').length > 0) {
-    queryStr.split('&').forEach( query => {
-      temp = query.split('=');
-      params[temp[0]] = decodeURIComponent(temp[1]) || '';
-    });
-  }
-
-  this.request.args = params;
-  yield next;
-});
-
 // Routing
 // @todo: replace koa-router by a both front/back router (like https://github.com/kieran/barista )
 import routers from 'routers';
@@ -133,3 +119,8 @@ if (!module.parent) {
 else {
   module.exports=app;
 }
+
+process.on('SIGINT', function() {
+  logger.warn('Server stopped');
+  process.exit(0);
+});

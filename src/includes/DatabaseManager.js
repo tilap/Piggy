@@ -1,13 +1,16 @@
 import monk from 'monk';
 
-/**
- * Multidatabase config manager to get Monk and Monk collection with ease
- */
 export default class DatabaseManager {
-  constructor() {
+  constructor(closeOnSigint = true) {
     this._servers = {};
     this._instances = {};
     this._defaultServer = '';
+
+    if(closeOnSigint) {
+      process.on('SIGINT', () => {
+        this.closeAllInstances();
+      });
+    }
   }
 
   addServer(name, conf) {
@@ -39,25 +42,40 @@ export default class DatabaseManager {
     return this._servers[name];
   }
 
-  _createInstance(name, instance) {
-    this._instances[name] = instance;
+  _createInstance(name, config) {
+    let db = monk(config);
+    this._instances[name] = db;
   }
 
   _instanceExists(name) {
     return Object.keys(this._instances).indexOf(name) > -1;
   }
 
-  getMonk(name) {
+  _closeInstance(name) {
+    if(!this._instanceExists(name)) {
+      return false;
+    }
+    this._instances[name].close();
+    return true;
+  }
+
+  closeAllInstances() {
+    Object.keys(this._instances).forEach( name => {
+      this._closeInstance(name);
+    });
+  }
+
+  getDb(name) {
     if(!this._instanceExists(name)) {
       let config = this.getServer(name);
-      this._createInstance(name, monk(config));
+      this._createInstance(name, config);
     }
 
     return this._instances[name];
   }
 
-  getMonkCollection(collection, serverName) {
+  getCollection(collection, serverName) {
     serverName = serverName || this._defaultServer;
-    return this.getMonk(serverName).get(collection);
+    return this.getDb(serverName).get(collection);
   }
 }

@@ -27,29 +27,6 @@ export default class UserManager extends Manager {
     });
   }
 
-  assumeHasUniqueUsername(vo) {
-    let me = this;
-    let usernameBase = vo.username;
-    let inc = 0;
-
-    return new Promise((resolve, reject) => {
-      setImmediate(function myPromise() {
-        return me.getByUniqueProperty('username', vo.username)
-          .then( result => {
-            if (result!==null) {
-              inc++;
-              vo.username = usernameBase + inc;
-              setImmediate(myPromise);
-            } else {
-              resolve(vo);
-            }
-          })
-          .catch(err => {
-            reject(err);
-          });
-      });
-    });
-  }
 
 }
 

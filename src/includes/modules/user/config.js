@@ -83,6 +83,16 @@ export default {
           msg: 'module.user.validation.error.gender.enum.format'
         }
       ]
+    },
+    source: {
+      type: String,
+      validators: [
+        {
+          fct: value => ['backoffice', 'passport'].indexOf(value)>-1,
+          skipIfEmpty: true,
+          msg: 'module.user.validation.error.source.enum.format'
+        }
+      ]
     }
   }
 };

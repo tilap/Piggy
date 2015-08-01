@@ -39,7 +39,7 @@
     "passport-twitter": "^1.0.3",
     "passthrough-counter": "^1.0.0",
     "piggy-htmldoc": "^0.0.2",
-    "piggy-module": "^0.0.3",
+    "piggy-module": "^0.0.4",
     "winston": "^1.0.0"
   },
   "devDependencies": {

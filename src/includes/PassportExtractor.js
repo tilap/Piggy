@@ -1,3 +1,4 @@
+// Extract passport user info with ease from passport data stuff
 export default class PassportExtractor {
 
   constructor(profile = {}) {

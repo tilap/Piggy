@@ -1,11 +1,10 @@
 import passport from 'koa-passport';
-
+import logger from 'library/logger';
 import PassportExtractor from 'PassportExtractor';
 
 import ModuleFactory from 'library/ModuleFactory';
-let userManager = ModuleFactory.getManager('user');
+let userService = ModuleFactory.getService('user');
 
-let logger = require('library/loggers/common')();
 let passportConfig = require('config/main').authentification.providers;
 
 let PassportStrategies= {
@@ -42,7 +41,7 @@ module.exports.middlewares = function(app) {
   });
 
   passport.deserializeUser( (id, done) => {
-    return userManager.getByUniqueProperty('_id', id)
+    return userService.getById(id)
       .catch( err => {
         done(err);
       })
@@ -63,7 +62,7 @@ module.exports.middlewares = function(app) {
 
     passport.use( new PassportStrategies[strategy](strategyConfig, (token, tokenSecret, profile, done) => {
 
-      userManager.getByStrategyToken(strategy, profile.id)
+      userService.getByStrategyToken(strategy, profile.id)
         .then(
           user => {
             // login
@@ -78,33 +77,35 @@ module.exports.middlewares = function(app) {
               throw new Error('Cannot use ' + strategy + ' to register');
             }
 
-            user = userManager.getNewVo();
-
+            // Build user data
+            let userData = {};
             let profileData = new PassportExtractor(profile);
             ['username', 'lastname', 'firstname', 'email', 'gender'].forEach( property => {
               if(profileData[property]) {
-                user[property] = profileData[property];
+                userData[property] = profileData[property];
               }
             });
-            user.auths={};
-            user.auths[strategy]=profile;
-
+            userData.auths={};
+            userData.auths[strategy]=profile;
+            let username;
             try {
-              user.username = profileData.buildUsername();
+              username = profileData.buildUsername();
             } catch(err) {
               throw new Error('Unable to generate a valid username'); // @todo: generate a unique random one
             }
 
-            return userManager.assumeHasUniqueUsername(user)
+            return userService.generateUniqueUsername(username)
               .catch( err => {
-                console.error('Passport error (userManager.assumeHasUniqueUsername)', err);
+                console.error('Passport error (userService.generateUniqueUsername)', err);
                 throw err;
               })
-              .then(user => {
-                return userManager.saveOne(user);
+              .then(username => {
+                console.log(username);
+                userData.username = username;
+                return userService.createFromData(userData);
               })
               .catch( err => {
-                console.error('Passport error (userManager.saveOne)', err);
+                console.error('Passport error (userService.saveOne)', err);
                 throw err;
               })
               .then( user => {
