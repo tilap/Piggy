@@ -77,7 +77,7 @@ module.exports.list = function *() {
   this.utils.requireConnected();
 
   try {
-    let users = yield userService.get();
+    let users = yield userService.getByPage();
     this.viewBag.set('users', users);
   } catch(err) {
     this.logger.error('Error while listing users', err);

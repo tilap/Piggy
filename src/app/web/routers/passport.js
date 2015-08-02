@@ -1,7 +1,7 @@
 import Router from 'koa-router';
 import controller from '../controllers/passport';
 
-let providers = require('../config/main').authentification.providers;
+let providers = require('config/main').authentification.providers;
 
 let router= new Router();
 let strategies = Object.keys(providers);

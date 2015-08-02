@@ -94,7 +94,7 @@ module.exports.middlewares = function(app) {
               throw new Error('Unable to generate a valid username'); // @todo: generate a unique random one
             }
 
-            return userService.generateUniqueUsername(username)
+            return userService.createUniqueUsername(username)
               .catch( err => {
                 console.error('Passport error (userService.generateUniqueUsername)', err);
                 throw err;

@@ -1,9 +1,10 @@
-require('../env-override')();
-
+require('./../env-override')();
 import path from 'path';
 
 let root = path.normalize(__dirname + '/../../../../../');
-let src = path.resolve(root, 'src');
+
+// @todo: make it as a function and give it the few path as args
+// @todo: put local in app dir maybe?
 
 export default {
     port: 3013,
@@ -30,7 +31,7 @@ export default {
         file: {
           enabled: true,
           level: 'warn',
-          filename: path.resolve(root, 'logs/app.json')
+          filename: path.resolve(root, 'logs/web.log.json')
         }
       },
       requests: true

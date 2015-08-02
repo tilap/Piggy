@@ -13,5 +13,6 @@
 	"authentification.error": "Error occured while authentifying",
 	"authenfication.medium.disabled": "Authenification with %s is not allowed",
 	"page.register.title": "Register",
-	"page.login.title": "Login"
+	"page.login.title": "Login",
+	"user.view.notfound.message": "user.view.notfound.message"
 }

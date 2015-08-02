@@ -14,11 +14,10 @@ export default class UserService extends Service{
     return this._manager.getByStrategyToken(strategy, strategyId);
   }
 
-  generateUniqueUsername(username) {
+  createUniqueUsername(username) {
     let me = this;
     let usernameBase = username;
     let inc = 0;
-
     return new Promise((resolve, reject) => {
       setImmediate(function myPromise() {
         return me._manager.getByUniqueProperty('username', username)
