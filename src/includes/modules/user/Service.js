@@ -6,21 +6,20 @@ export default class UserService extends Service{
     super(manager);
   }
 
-  getByUsername(username) {
+  getOneByUsername(username) {
     return this._manager.getByUniqueProperty('username', username);
   }
 
-  getByStrategyToken(strategy, strategyId) {
-    return this._manager.getByStrategyToken(strategy, strategyId);
+  getOneByStrategyAndToken(strategy, token) {
+    return this._manager.getByStrategyToken(strategy, token);
   }
 
   createUniqueUsername(username) {
-    let me = this;
     let usernameBase = username;
     let inc = 0;
     return new Promise((resolve, reject) => {
       setImmediate(function myPromise() {
-        return me._manager.getByUniqueProperty('username', username)
+        return this._manager.getByUniqueProperty('username', username)
           .then( result => {
             if (result!==null) {
               inc++;
@@ -33,7 +32,7 @@ export default class UserService extends Service{
           .catch(err => {
             reject(err);
           });
-      });
+      }.bind(this));
     });
   }
 }

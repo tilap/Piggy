@@ -62,7 +62,7 @@ module.exports.middlewares = function(app) {
 
     passport.use( new PassportStrategies[strategy](strategyConfig, (token, tokenSecret, profile, done) => {
 
-      userService.getByStrategyToken(strategy, profile.id)
+      userService.getOneByStrategyAndToken(strategy, profile.id)
         .then(
           user => {
             // login

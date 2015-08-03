@@ -101,7 +101,7 @@ module.exports.viewById = function *() {
 
 module.exports.viewByUsername = function *() {
   let username = this.params.username || '';
-  let user = yield userService.getByUsername(username);
+  let user = yield userService.getOneByUsername(username);
   if(!user) {
     this.throw(404, this.i18n.__('user.view.notfound.message'));
   }
