@@ -29,6 +29,10 @@ w: watch
 watch:
 	$(BIN)/gulp watch
 
+wapi: watchapi
+watchapi:
+	$(BIN)/gulp watch:api
+
 n: new
 new: clean reset install build
 

@@ -36,8 +36,14 @@ gulp.task('build', function() {
 
 gulp.task('watch', function() {
   runSequence(
-    'server',
+    ['server'],
     ['es6:watch', 'views:watch']
+  );
+});
+
+gulp.task('watch:api', function() {
+  runSequence(
+    ['server:api']
   );
 });
 
@@ -127,6 +133,32 @@ gulp.task('server', function() {
     env: {
       NODE_ENV: options.env ? options.env : 'development',
       NODE_PATH: './lib/app/modules:./lib/app/web:./lib/includes',
+    },
+    watch: [
+      'lib/**/*.js'
+    ],
+    ignore: [
+      'logs/**/*',
+      'node_modules/**/*',
+      'public/**/*',
+      'src/**/*'
+    ],
+    delay: 150
+  })
+  .on('restart', function (files) {
+    var filesStr = files ? 'Files changed: ' + files.join(', ') : '(manual request)';
+    console.log('[Server restarted]', filesStr);
+  });
+});
+
+gulp.task('server:api', function() {
+  $.nodemon({
+    script: 'lib/app/api/server.js',
+    ext: 'js html',
+    verbose: false,
+    env: {
+      NODE_ENV: options.env ? options.env : 'development',
+      NODE_PATH: './lib/app/modules:./lib/app/api:./lib/includes',
     },
     watch: [
       'lib/**/*.js'
