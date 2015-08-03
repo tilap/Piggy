@@ -85,6 +85,7 @@ module.exports.middlewares = function(app) {
                 userData[property] = profileData[property];
               }
             });
+            // userData.source = 'oauth';
             userData.auths={};
             userData.auths[strategy]=profile;
             let username;

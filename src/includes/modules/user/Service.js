@@ -14,7 +14,7 @@ export default class UserService extends Service{
     return this._manager.getByStrategyToken(strategy, token);
   }
 
-  createUniqueUsername(username) {
+  OldcreateUniqueUsername(username) {
     let usernameBase = username;
     let inc = 0;
     return new Promise((resolve, reject) => {
@@ -34,5 +34,19 @@ export default class UserService extends Service{
           });
       }.bind(this));
     });
+  }
+
+  async createUniqueUsername(username) {
+    let usernameBase = username;
+    let inc = 0;
+
+    while (true) {
+      let result = await this._manager.getByUniqueProperty('username', username);
+      if (result === null) {
+        return username;
+      }
+      inc++;
+      username = usernameBase + inc;
+    }
   }
 }

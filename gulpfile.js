@@ -69,8 +69,9 @@ gulp.task('es6', function() {
       .pipe($.sourcemaps.init())
       .pipe($.babel({
         compact: false,
-        comments: true,
-        blacklist: ['regenerator']
+        comments: false,
+        blacklist: ['regenerator'],
+        optional: ['asyncToGenerator']
       }))
       .pipe($.sourcemaps.write('.'))
       .pipe(gulp.dest(config.es6.dist));
@@ -87,7 +88,8 @@ gulp.task('es6:watch', function() {
         .pipe($.babel({
           compact: false,
           comments: true,
-          blacklist: ['regenerator']
+          blacklist: ['regenerator'],
+          optional: ['asyncToGenerator']
         }))
         .pipe($.sourcemaps.write('.')) // @tofix
         .pipe(gulp.dest(config.es6.dist));
