@@ -9,7 +9,7 @@ let root = path.normalize(__dirname + '/../../../../../');
 export default {
     port: 3013,
     keys: ['some-secret-key'],
-
+    display_error: true,
     db: {
       local: 'mongodb://localhost/piggy'
     },

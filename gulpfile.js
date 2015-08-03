@@ -89,7 +89,7 @@ gulp.task('es6:watch', function() {
           comments: true,
           blacklist: ['regenerator']
         }))
-        .pipe($.sourcemaps.write('.'))
+        .pipe($.sourcemaps.write('.')) // @tofix
         .pipe(gulp.dest(config.es6.dist));
     });
 });

@@ -40,6 +40,25 @@ app.use(function *(next) {
 
 app.use(koaError(config.error));
 
+import {parse as stackParser} from 'springbokjs-errors';
+import HtmlStackRenderer from 'springbokjs-errors/lib/HtmlRenderer';
+app.use(function *(next) {
+  try {
+    yield next;
+  } catch (err) {
+    // @todo: depend on environment var
+    logger.error(stackParser(err).toString());
+
+    if(config.display_error) {
+      const htmlStackRenderer = new HtmlStackRenderer();
+      this.status = 500;
+      this.body=htmlStackRenderer.render(err);
+    }
+  }
+});
+
+
+
 // On 401, redirect to login page
 app.use(redirectOnHtmlStatus({redirect_url: '/login/'}));
 
@@ -71,7 +90,7 @@ app.use(function *(next) {
   });
 
   this.viewBag.get('html').head.title.queue('Mon appli');
-  this.renderView = (file) => this.render('scripts/' + file, this.viewBag.data);
+  this.renderView = (file) => this.render('scripts/' + file, this.viewBag);
 
   yield next;
 });
