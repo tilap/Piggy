@@ -1,6 +1,5 @@
-import Vo from 'includes/modules/Vo';
-
-import cfg from './config';
+import Vo from 'piggy-module/lib/Vo';
+import config from './config';
 
 export default class {{Nicename}} extends Vo {
   constructor(data) {
@@ -8,4 +7,5 @@ export default class {{Nicename}} extends Vo {
   }
 }
 
-Vo.init({{Nicename}}, cfg.attributes);
+Vo.init({{Nicename}}, config.attributes);
+

@@ -46,3 +46,5 @@ doc:
 
 module:
 	$(BIN)/gulp module
+api:
+	$(BIN)/gulp module:api

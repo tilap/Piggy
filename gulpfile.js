@@ -8,6 +8,7 @@ var options = process.argv.slice(2);
 var depcheck = require('depcheck');
 var path = require('path');
 var inquirer = require('inquirer');
+var fs = require('fs');
 
 var config = {
   es6: {
@@ -185,27 +186,43 @@ gulp.task('server:api', function() {
 // =============================================================================
 
 gulp.task('module', function (done) {
+  var srcPath = __dirname + '/dev/modules/templates/';
+  var distPath = path.resolve(__dirname + '/src/includes/modules/');
+  let moduleFiles = fs.readdirSync(srcPath).sort();
+
+  console.info('');
+  console.info('==============================');
+  console.info('  Generator for empty module');
+  console.info('==============================');
+  console.info('');
+
   inquirer.prompt([
     { type: 'input',
       name: 'name',
       message: 'Module name',
-      default: ''
+      default: '',
+      validate: function(value) {
+        return value!=='';
+      }
     },
     { type: 'input',
       name: 'collection',
       message: 'Mongo Collection',
-      default: ''
+      default: '',
+      validate: function(value) {
+        return value!=='';
+      }
     },
     { type: 'checkbox',
       name: 'files',
       message: 'What to generate ?',
-      choices: [ 'Manager.js', 'Validator.js', 'Vo.js', 'config.js', 'Storage_Db.js'],
-      default: [ 'Manager.js', 'Validator.js', 'Vo.js', 'config.js', 'Storage_Db.js'],
+      choices: moduleFiles,
+      default: moduleFiles
     },
     { type: 'input',
       name: 'destination',
       message: 'Destination',
-      default: path.resolve(__dirname + '/src/app/modules/')
+      default: distPath
     },
     { type: 'confirm',
       name: 'moveon',
@@ -213,7 +230,9 @@ gulp.task('module', function (done) {
     }
   ],
   function (answers) {
+
     if (!answers.moveon) {
+      console.info('Module creation aborted');
       return done();
     }
 
@@ -224,23 +243,85 @@ gulp.task('module', function (done) {
     };
     var destinationFolder = answers.destination;
 
-    var sources = answers.files;
-    sources.forEach( function(file, index) {
-      sources[index] = __dirname + '/dev/modules/templates/' + file;
-    })
-    gulp.src(sources)
+    var sourcesFiles = answers.files;
+    sourcesFiles.forEach( function(file, index) {
+      sourcesFiles[index] = srcPath + file;
+    });
+
+    gulp.src(sourcesFiles)
       .pipe($.data(data))
       .pipe($.swig())
       .pipe($.rename(function (path) {
         path.dirname += '/' + data.Lowername;
         path.extname = '.js';
-        console.log('Creating ' + path.basename + path.extname + ' in ' + destinationFolder + '/' + path.dirname);
+        console.info('Creating ' + path.basename + path.extname + ' in ' + destinationFolder + '/' + path.dirname);
       }))
       .pipe(gulp.dest(destinationFolder))
       .on('end', function () {
-        console.log('Module ' + data.Nicename + ' created');
+        console.info('Module ' + data.Nicename + ' created');
         done();
       });
+  });
+});
+
+
+gulp.task('module:api', function (done) {
+  var srcPath = path.resolve(__dirname + '/lib/includes/modules/');
+
+  if(!fs.existsSync(srcPath)) {
+    console.error('The source path was not found (' + srcPath + ').');
+    console.error('Maybe you should run build before asking me that...');
+    return done();
+  }
+  let modules = fs.readdirSync(srcPath).sort();
+
+  console.info('');
+  console.info('=============================');
+  console.info('  Generator api from module');
+  console.info('=============================');
+  console.info('');
+
+  inquirer.prompt([
+    { type: 'list',
+      name: 'module',
+      choices: modules,
+      message: 'Choose the source module',
+      default: modules[0]
+    },
+    { type: 'checkbox',
+      name: 'methods',
+      message: function(inquirer) {
+        var module = inquirer.module;
+        return 'What API method to generate for the module ' + module +'?';
+      },
+      choices: function(inquirer) {
+        var module = inquirer.module;
+        var Service = require(srcPath + '/' + module + '/Service');
+        var service = new Service(null);
+        var methods = service.availableMethods;
+        return methods;
+      },
+      default: function(inquirer) {
+        var module = inquirer.module;
+        var Service = require(srcPath + '/' + module + '/Service');
+        var service = new Service(null);
+        var methods = service.availableMethods;
+        return methods;
+      }
+    },
+    { type: 'confirm',
+      name: 'moveon',
+      message: 'Continue ?'
+    }
+  ],
+  function (answers) {
+
+    if (!answers.moveon) {
+      console.info('Module creation aborted');
+      return done();
+    }
+    console.log('do stuff here');
+    return done();
   });
 });
 
