@@ -14,7 +14,7 @@ module.exports.new = function *() {
   if(this.request.method==='POST') {
     try {
       itemData = this.utils.getFromPost(['username', 'firstname', 'lastname', 'email']);
-      let newUser = yield userService.createFromData(itemData, 'backoffice');
+      let newUser = yield userService.createOneFromData(itemData, 'backoffice');
 
       this.flash = new FlashMessage(this.i18n.__('user.new.success.message', newUser.username), FlashMessage.TYPES.SUCCESS);
       return this.redirect(this.request.href);
@@ -43,7 +43,7 @@ module.exports.edit = function *() {
   this.utils.requireConnected();
 
   let id = this.params.id || '';
-  let user = yield userService.getById(id);
+  let user = yield userService.getOneById(id);
   if(!user) {
     this.throw(404, this.i18n.__('user.edit.notfound.message'));
   }
@@ -54,7 +54,7 @@ module.exports.edit = function *() {
   if(this.request.method==='POST') {
     try {
       itemData = this.utils.getFromPost(['firstname', 'lastname', 'email']);
-      let updatedUser = yield userService.updateFromData(itemData, user.id);
+      let updatedUser = yield userService.updateOneFromData(itemData, user.id);
 
       let msg = this.i18n.__('user.update.success.message', updatedUser.username);
       this.flash = new FlashMessage(msg, FlashMessage.TYPES.SUCCESS);
@@ -90,7 +90,7 @@ module.exports.list = function *() {
 module.exports.viewById = function *() {
 
   let id = this.params.id || '';
-  let user = yield userService.getById(id);
+  let user = yield userService.getOneById(id);
   if(!user) {
     this.throw(404, this.i18n.__('user.view.notfound.message'));
   }
@@ -115,12 +115,12 @@ module.exports.deleteById = function *() {
 
   try {
     let id = this.params.id || '';
-    let user = yield userService.getById(id);
+    let user = yield userService.getOneById(id);
     if(!user) {
       this.throw(404, this.i18n.__('user.view.notfound.message'));
     }
 
-    yield userService.deleteById(id);
+    yield userService.deleteOneById(id);
     let msg = this.i18n.__('user.deleted.success.message', user.username);
     this.flash = new FlashMessage(msg, FlashMessage.TYPES.SUCCESS);
     return this.redirect('/user/');
