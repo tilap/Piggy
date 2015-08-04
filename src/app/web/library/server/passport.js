@@ -41,7 +41,7 @@ module.exports.middlewares = function(app) {
   });
 
   passport.deserializeUser( (id, done) => {
-    return userService.getById(id)
+    return userService.getOneById(id)
       .catch( err => {
         done(err);
       })
@@ -101,12 +101,11 @@ module.exports.middlewares = function(app) {
                 throw err;
               })
               .then(username => {
-                console.log(username);
                 userData.username = username;
-                return userService.createFromData(userData);
+                return userService.createOneFromData(userData);
               })
               .catch( err => {
-                console.error('Passport error (userService.saveOne)', err);
+                console.error('Passport error (userService.createOneFromData)', err);
                 throw err;
               })
               .then( user => {

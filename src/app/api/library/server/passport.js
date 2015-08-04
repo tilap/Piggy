@@ -100,7 +100,6 @@ module.exports.middlewares = function(app) {
                 throw err;
               })
               .then(username => {
-                console.log(username);
                 userData.username = username;
                 return userService.createFromData(userData);
               })
