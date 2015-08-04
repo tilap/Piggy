@@ -14,28 +14,6 @@ export default class UserService extends Service{
     return this._manager.getByStrategyToken(strategy, token);
   }
 
-  OldcreateUniqueUsername(username) {
-    let usernameBase = username;
-    let inc = 0;
-    return new Promise((resolve, reject) => {
-      setImmediate(function myPromise() {
-        return this._manager.getByUniqueProperty('username', username)
-          .then( result => {
-            if (result!==null) {
-              inc++;
-              username = usernameBase + inc;
-              setImmediate(myPromise);
-            } else {
-              resolve(username);
-            }
-          })
-          .catch(err => {
-            reject(err);
-          });
-      }.bind(this));
-    });
-  }
-
   async createUniqueUsername(username) {
     let usernameBase = username;
     let inc = 0;
