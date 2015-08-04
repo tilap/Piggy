@@ -8,7 +8,7 @@ export default {
       type: ObjectId,
       unique: true,
       validators: [
-        { fct: 'isMongoId', skipIfEmpty: true, msg: 'module.{{Lowername}}.validation.error.mongoid'}
+        { fct: 'isMongoId', skipIfEmpty: true, msg: 'module.user.validation.error.mongoid'}
       ]
     }
   }

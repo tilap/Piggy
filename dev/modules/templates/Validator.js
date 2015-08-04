@@ -1,5 +1,5 @@
-import Validator from 'includes/modules/Validator';
-import Vo from './Vo';
+import Validator from 'piggy-module/lib/Validator';
+import cfg from './config';
 
 export default class {{Nicename}}Validator extends Validator {
   constructor(vo) {
@@ -7,4 +7,4 @@ export default class {{Nicename}}Validator extends Validator {
   }
 }
 
-Validator.initFromVoClass({{Nicename}}Validator, Vo);
+Validator.initFromVoClass({{Nicename}}Validator, cfg.attributes);
