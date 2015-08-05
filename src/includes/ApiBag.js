@@ -10,11 +10,10 @@ export default class ApiBag {
   reset() {
     this.resetDatas();
     this.resetErrors();
-    this.resetMetas();
-    this.setResponseMultiple();
+    this.setMultipleRessourceResponse();
   }
 
-  setResponseMultiple() {
+  setMultipleRessourceResponse() {
     if(this.hasDatas()) {
       throw new Error('Cannot change multiple type of bag that already has data');
     }
@@ -23,7 +22,7 @@ export default class ApiBag {
     return this;
   }
 
-  setResponseUnique() {
+  setSingleRessourceResponse() {
     if(this.hasDatas()) {
       throw new Error('Cannot change multiple type of bag that already has data');
     }
@@ -32,52 +31,52 @@ export default class ApiBag {
     return this;
   }
 
-  setVoRessource(vo) {
-    let r = new ApiBagRessource();
-    r.id = vo.id;
-    r.type = vo.constructor.name;
-    r.attributes = vo.data;
-    this.setData(r);
+  _convertVoToRessource(vo) {
+    let ressource = new ApiBagRessource();
+    ressource.id = vo.id;
+    ressource.type = vo.constructor.name;
+    ressource.attributes = vo.data;
+    return ressource;
+  }
+
+  addDataFromVo(vo) {
+    let ressource = this._convertVoToRessource(vo);
+    return this.addDataFromRessource(ressource);
+  }
+
+  addDataFromRessource(ressource) {
+    this._checkRessoure(ressource);
+    return this.addData(ressource.toJson());
+  }
+
+  addData(data) {
+    if(!this._multiple) {
+      throw new Error('Response must contain multidata');
+    }
+    this._datas.push(data);
     return this;
   }
 
-  setData(ressource) {
+  setDataFromVo(vo) {
+    let ressource = this._convertVoToRessource(vo);
+    return this.setDataFromRessource(ressource);
+  }
+
+  setDataFromRessource(ressource) {
     this._checkRessoure(ressource);
+    return this.setData(ressource.toJson());
+  }
+
+  setData(data) {
     if(this._multiple) {
       throw new Error('Response must contain multidata');
     }
-    this._datas = ressource;
-    return this;
-  }
-
-  setDatas(datas) {
-    if(!this._multiple) {
-      throw new Error('Response must contain single data.');
-    }
-    if(datas.constructor!==Array) {
-      throw new Error('Response can only handle multiple data - Array expected');
-    }
-    datas.forEach( obj=> {
-      this.addData(obj);
-    });
-    return this;
-  }
-
-  addData(ressource) {
-    this._checkRessoure(ressource);
-
-    if(!this._multiple) {
-      throw new Error('Response can have only one data set with setData');
-    }
-    this._datas.push(ressource);
+    this._datas= data;
     return this;
   }
 
   hasDatas() {
-    if(this._multiple) {
-      return this._datas.length > 0;
-    }
-    return this._datas!==null;
+    return this._multiple ? this._datas.length > 0 : this._datas!==null;
   }
 
   resetDatas() {
@@ -85,8 +84,14 @@ export default class ApiBag {
     return this;
   }
 
-  setErrors(errors) {
-    this._errors = errors;
+
+  addErrors(errors) {
+    if(errors.constructor!==Array) {
+      throw new Error('Array expected');
+    }
+    errors.forEach(error => {
+      this.addError(error);
+    })
     return this;
   }
 
@@ -104,28 +109,6 @@ export default class ApiBag {
     return this;
   }
 
-  setMetas(metas) {
-    this._metas = metas;
-    return this;
-  }
-
-  addMeta(name, value) {
-    this._metas[meta] = value;
-    return this;
-  }
-
-  hasMeta(key) {
-    return Object.keys(this._metas).indexOf(key) > -1;
-  }
-
-  hasMetas() {
-    return Object.keys(this._metas).length > 0;
-  }
-
-  resetMetas() {
-    this._metas = {};
-    return this;
-  }
 
   _checkRessoure(ressource) {
     if(!ressource instanceof ApiBagRessource) {
@@ -140,12 +123,12 @@ export default class ApiBag {
   }
 
   checkFormat() {
-    if(!this.hasDatas() && !this.hasErrors() && !this.hasMetas()) {
-      throw new Error(ApiBag.OUTPUT_FORMAT_EMPTY);
+    if(!this.hasDatas() && !this.hasErrors()) {
+      throw new Error(ApiBag.ERRORS.OUTPUT_FORMAT_EMPTY);
     }
 
     if(this.hasDatas() && this.hasErrors()) {
-      throw new Error(ApiBag.OUTPUT_FORMAT_DUAL);
+      throw new Error(ApiBag.ERRORS.OUTPUT_FORMAT_DUAL);
     }
   }
 
@@ -155,7 +138,9 @@ export default class ApiBag {
     }
     catch(err) {
       // TODO: return json response
-      return {errors: ['Internal error: bad response format']};
+      return {
+        errors: [err.message]
+      };
     }
 
     let res = {};
@@ -164,9 +149,6 @@ export default class ApiBag {
     }
     if(this.hasErrors()) {
       res.errors = this._errors;
-    }
-    if(this.hasMetas()) {
-      res.metas = this._metas;
     }
     return res;
   }

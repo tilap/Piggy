@@ -5,6 +5,15 @@ export default class ApiBagRessource {
     this.attributes = attributes;
   }
 
+  set attributes(attributes) {
+    this._attributes = {};
+    Object.keys(attributes).forEach(name => {
+      if(name.substring(0, 1)!=='_') {
+        this._attributes[name] = attributes[name];
+      }
+    });
+  }
+
   validate() {
     if(!this.id) {
       throw new Error('id required');
@@ -20,8 +29,8 @@ export default class ApiBagRessource {
       id: this.id,
       type: this.type
     };
-    if(this.attributes && Object.keys(this.attributes).length > 0) {
-      res.attribues = this.attributes;
+    if(this._attributes && Object.keys(this._attributes).length > 0) {
+      res.attribues = this._attributes;
     }
     return res;
   }
