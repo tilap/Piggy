@@ -10,7 +10,7 @@ export default class ApiBag {
   reset() {
     this.resetDatas();
     this.resetErrors();
-    this.setMultipleRessourceResponse();
+    this.setRawResponse();
   }
 
   setMultipleRessourceResponse() {
@@ -18,6 +18,7 @@ export default class ApiBag {
       throw new Error('Cannot change multiple type of bag that already has data');
     }
     this._multiple = true;
+    this._raw = false;
     this.resetDatas();
     return this;
   }
@@ -27,6 +28,14 @@ export default class ApiBag {
       throw new Error('Cannot change multiple type of bag that already has data');
     }
     this._multiple = false;
+    this._raw = false;
+    this.resetDatas();
+    return this;
+  }
+
+  setRawResponse() {
+    this._multiple = null;
+    this._raw = true;
     this.resetDatas();
     return this;
   }
@@ -50,11 +59,25 @@ export default class ApiBag {
   }
 
   addData(data) {
+    if(this._raw) {
+      if(!this._datas) {
+        this._datas = [];
+      }
+      this._datas.push(data);
+      return this;
+    }
+
     if(!this._multiple) {
       throw new Error('Response must contain multidata');
     }
     this._datas.push(data);
     return this;
+  }
+
+  setDataFromVos(vos) {
+    vos.forEach( vo => {
+      this.addDataFromVo(vo);
+    });
   }
 
   setDataFromVo(vo) {
@@ -68,6 +91,11 @@ export default class ApiBag {
   }
 
   setData(data) {
+    if(this._raw) {
+      this._datas = data;
+      return this;
+    }
+
     if(this._multiple) {
       throw new Error('Response must contain multidata');
     }
@@ -80,10 +108,9 @@ export default class ApiBag {
   }
 
   resetDatas() {
-    this._datas = this._multiple ? [] : null;
+    this._datas = this._multiple===true ? [] : null;
     return this;
   }
-
 
   addErrors(errors) {
     if(errors.constructor!==Array) {

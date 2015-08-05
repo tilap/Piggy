@@ -14,5 +14,7 @@
 	"authenfication.medium.disabled": "Authenification with %s is not allowed",
 	"page.register.title": "Register",
 	"page.login.title": "Login",
-	"user.view.notfound.message": "user.view.notfound.message"
+	"user.view.notfound.message": "user.view.notfound.message",
+	"user.new.exception.message": "user.new.exception.message",
+	"api.user.create.exception.message": "api.user.create.exception.message"
 }
