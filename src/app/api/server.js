@@ -61,7 +61,7 @@ app.use(koai18n(app, config.i18n));
 app.use(koaStatic(config.static.directory, config.static));
 
 // Render middleware
-app.context.render = koaSwig(config.view);
+// app.context.render = koaSwig(config.view);
 
 // Response compress
 app.use(koaCompress());
@@ -75,17 +75,13 @@ app.use(function *(next) {
   }
   catch(err) {
     this.bag.reset();
-    if(err) {
-      this.status = err.status || 500;
-      this.bag.addError(err.message);
+    if(this.response.status==404) {
+      this.bag.addError('not found');
     }
     else {
-      if(this.response.status===404) {
-        this.bag.addError('Not found');
-      }
-      else {
-        this.bag.addError('Internal error');
-      }
+      logger.error('Api dispatch error: ' + err.message, err);
+      this.status = 500;
+      this.bag.addError('internal error');
     }
     return this.renderBag();
   }
