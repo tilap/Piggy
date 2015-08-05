@@ -41,7 +41,7 @@ module.exports.middlewares = function(app) {
   });
 
   passport.deserializeUser( (id, done) => {
-    return userService.getById(id)
+    return userService.getOneById(id)
       .catch( err => {
         done(err);
       })
