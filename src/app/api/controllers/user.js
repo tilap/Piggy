@@ -13,9 +13,7 @@ module.exports.getOneByUsername = function *() {
   this.bag.setSingleRessourceResponse();
   let username = this.params.username || '';
   let item = yield userService.getOneByUsername(username);
-  if(!item) {
-    this.throw(404);
-  }
+  this.assert(item, 404, 'item not found')
   this.bag.setDataFromVo(item);
   return this.renderBag();
 };
@@ -25,9 +23,7 @@ module.exports.getOneById = function *() {
   this.bag.setSingleRessourceResponse();
   let id = this.params.id || '';
   let item = yield userService.getOneById(id);
-  if(!item) {
-    this.throw(404);
-  }
+  this.assert(item, 404, 'item not found')
   this.bag.setDataFromVo(item);
   return this.renderBag();
 };
@@ -58,9 +54,7 @@ module.exports.updateOneById = function *() {
   let itemData = this.utils.getFromPost(['username', 'firstname', 'lastname', 'email']);
 
   let item = yield userService.getOneById(id);
-  if(!item) {
-    this.throw(404);
-  }
+  this.assert(item, 404, 'item not found')
 
   try {
     let updatedVo = yield userService.updateOneFromData(itemData, item.id);
@@ -81,9 +75,7 @@ module.exports.deleteOneById = function *() {
 
   let id = this.params.id || '';
   let item = yield userService.getOneById(id);
-  if(!item) {
-    this.throw(404);
-  }
+  this.assert(item, 404, 'item not found')
 
   let successDeleted = yield userService.deleteOneById(item.id);
   this.bag.setData({deleted: true===successDeleted ? 1: 0});
