@@ -7,7 +7,7 @@ export default class UserService extends Service{
   }
 
   getOneByUsername(username) {
-    return this._manager.getByUniqueProperty('username', username);
+    return this._manager.getOneByUsername(username);
   }
 
   getOneByStrategyAndToken(strategy, token) {
