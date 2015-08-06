@@ -55,7 +55,7 @@ gulp.task('views', function() {
 
 gulp.task('views:watch', function() {
     return gulp.watch(config.views.src, function(fileStatus) {
-      console.log('[Wiews watcher] ' + fileStatus.type + ' ' + fileStatus.path);
+      console.log('[Views watcher] ' + fileStatus.type + ' ' + fileStatus.path);
       return gulp.src(fileStatus.path)
         .pipe(gulp.dest(config.views.dist));
     });
