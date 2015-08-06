@@ -17,9 +17,12 @@ make i
 make build
 make b
 
-# Start and watch the app with automatically reload
+# Start and watch the WEB APP with automatically reload
 make watch
 make w
+
+# Start and watch the API with automatically reload
+make wapi
 
 # Clean the generated files
 make clean

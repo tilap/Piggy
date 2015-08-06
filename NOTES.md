@@ -1,60 +1,50 @@
-# What's done
+# NOTES
 
-Here's what I've done - will probably be refactor while learning new things :)
+_Just to remember what I did and next steps_
 
-- gulp tasks
-- es6 transpilation
-- code base structure
-- configuration by environment
-- authentification with 3rd party services via passport
+## What's in?
+
+### Basic stack
+
+- simple gulp tasks to clean, reset, build the app/api
+- ENV var easy override
+- configuration by environment (development, staging, production)
+- Makefile for quick tasks
+- es6 transpilation with babel over gulp task (build and watch)
 - logger for request, debug and code
-- business module: a set of base class that can be extended with Object Manager, VO, Storage...
 - i18n
-- some homemade middlewares
-- Makefile
+- ioJS
 
-I don't work on frontend yet.
+### App
+- koa utils middleware
+- authentification with 3rd party services via passport
+- user module
+- gulp tasks for interactive module creation
+- FlashMessage better formating (FlashMessage class for levels that make sense)
+- PassportDataExtractor: just a helper to get clean data or build some one from any remote (4ever wip)
+- ViewBag
 
-## Code folders
+### Api
+- basic api stack
+- ApiBag and ApiResponse
+- Global error catcher
 
-- **lib**: generated src once transpiled / cleaned
-- **locales**: translations
-- **logs**
-- **src** all the sources
-  - app: application specific code
-    - controllers
-    - library: specific stuff for the app (middleware, helpers, ...)
-    - modules: business models
-    - routers
-    - views
-      - layouts
-  - config
-  - includes
-    - common: generic lib, class, middlewares I can use in others projets
-- **public** for static public files
+### Side
 
-### Environments & config
+Some stuff coded for this app need but that are generic (so release as standelone packages on npm)
 
-The app config is done in ```src/config```. It comes with a default base config, that can be extended. The env folder picked for the config is based on the NODE_ENV.
+- [piggy-module](https://www.npmjs.com/package/piggy-module), a basic business module: service, manager, vo, validator
+- [piggy-htmldoc](https://www.npmjs.com/package/piggy-htmldoc), helper to build standard and easy to evolve html stuff (header/footer)
+- [koa-sanitize-uri](https://www.npmjs.com/package/koa-sanitize-uri) based on [piggy-sanitize-uri](https://www.npmjs.com/package/piggy-sanitize-uri) to have cleaned uri
 
+## Next: (?)
 
-## Working on...
-
-### WIP
-
-
-### Todo
-
+- [jwt](https://github.com/auth0/node-jsonwebtoken) for authentification on api call => cleaner and will allow to remove ugly passport middleware on API
 - replace the linter: jshint => eslint (better es6 support)
-- modules: manage the required option for properties
-- test JSDoc: not sure it's good for a whole project
-- have a look at shrinkwrap for packages versions
+- Shrinkwrap for packages versions?
+- Change router to make it available with ease on frontend ?
+- translation: find a way to get all the translation in code
+- JSDoc ? Maybe just on modules? On API?
+- Basic unit testing, at least on API?
 
-### Ideas
-
-- find a good way to have a url generator based on route. The koa one won't work fin on front...
-- Package the stuffs located in src/includes
-- Modules: Scaffolding
-- Modules: check cast on set
-- Modules: add sanitizer value options
-- Translation: parser to get all the translations from the code and make sure the translation file has everything possible
+DO NOT work on frontend before a clean enough back :)
