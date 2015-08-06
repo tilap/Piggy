@@ -15,4 +15,6 @@ strategies.forEach( medium => {
   router.get('passport.logout', '/logout', controller.logout );
 });
 
+router.get('get_token', '/mytoken/', controller.getToken);
+
 module.exports= router;

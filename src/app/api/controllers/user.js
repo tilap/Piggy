@@ -2,6 +2,7 @@ import ModuleFactory from 'library/ModuleFactory';
 let userService = ModuleFactory.getServiceInstance('user');
 
 module.exports.get = function *() {
+  this.utils.requireConnected();
   this.bag.setMultipleRessourceResponse();
   let items = yield userService.getByPage();
   this.bag.setDataFromVos(items);

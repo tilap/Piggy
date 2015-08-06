@@ -64,6 +64,12 @@ export default {
         error: '/login/',
         logout: '/',
         sessionkey: 'redirectAfterLogin'
+      },
+      token: {
+        name: '_tokenidentifier',
+        secret: 'plug_in_baby',
+        algorithm: 'HS256',
+        expiresInMinutes: 10080 // 7 days
       }
     },
 

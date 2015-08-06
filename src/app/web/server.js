@@ -12,6 +12,8 @@ import koaSwig from 'koa-swig';
 import koaError from 'koa-error';
 import sanitizeUri from 'koa-sanitize-uri';
 import {Head} from 'piggy-htmldoc';
+import {parse as stackParser} from 'springbokjs-errors';
+import HtmlStackRenderer from 'springbokjs-errors/lib/HtmlRenderer';
 
 // local modules
 import ViewBag from 'ViewBag';
@@ -40,27 +42,39 @@ app.use(function *(next) {
 
 app.use(koaError(config.error));
 
-import {parse as stackParser} from 'springbokjs-errors';
-import HtmlStackRenderer from 'springbokjs-errors/lib/HtmlRenderer';
 app.use(function *(next) {
   try {
     yield next;
   } catch (err) {
-    // @todo: depend on environment var
     logger.error(stackParser(err).toString());
 
+    // 401 (require auth) and 404 alread managed with redirectOnHtmlStatus
+    if(this.status==401 || this.status==404) {
+      return next;
+    }
+    // Else log
+
+    // Display error in development environement
     if(config.display_error) {
       const htmlStackRenderer = new HtmlStackRenderer();
       this.status = 500;
-      this.body=htmlStackRenderer.render(err);
+      return this.body=htmlStackRenderer.render(err);
+    }
+    // Or display an error page for user
+    else {
+      return next;
     }
   }
 });
 
-
-
 // On 401, redirect to login page
-app.use(redirectOnHtmlStatus({redirect_url: '/login/'}));
+app.use(redirectOnHtmlStatus({
+  status_code: 401,
+  redirect_url: '/login/',
+  redirect_name: 'redirect',
+  message_name: 'message',
+  accepts: 'html'
+}));
 
 // Add logs on requests
 if(config.loggers.requests) {

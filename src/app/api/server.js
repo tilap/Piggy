@@ -11,6 +11,7 @@ import sanitizeUri from 'koa-sanitize-uri';
 import koaUtils from 'koa-utils';
 import logger from 'library/logger';
 import koaRequestLog from 'library/middleware/koa-request-log';
+import koaJWTauth from 'library/middleware/jwt-auth';
 import ApiBag from 'ApiBag';
 
 let config = require('config/main');
@@ -59,6 +60,8 @@ app.use(koai18n(app, config.i18n));
 
 // Static files middleware
 app.use(koaStatic(config.static.directory, config.static));
+
+app.use(koaJWTauth);
 
 // Render middleware
 // app.context.render = koaSwig(config.view);

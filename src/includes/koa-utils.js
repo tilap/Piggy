@@ -7,7 +7,7 @@ export default function *(next) {
         let result = {};
         keys.forEach(key => {
           result[key] = this.request.body[key] || defaultValue;
-        })
+        });
         return result;
       }
       else {
@@ -15,12 +15,22 @@ export default function *(next) {
       }
     },
 
+    // Passport stuff
     requireConnected: () => {
       if (!this.isAuthenticated()) {
         this.throw(401);
       }
-    }
-  }
+    },
+
+    requireNotConnected: () => {
+      if (this.isAuthenticated()) {
+        this.throw(404);
+      }
+    },
+
+    getUser: () => this.req.user ? this.req.user : null
+
+  };
 
   // Get param helper
   let queryStr = this.request.querystring;

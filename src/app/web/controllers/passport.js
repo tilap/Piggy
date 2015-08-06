@@ -2,6 +2,8 @@ import passport from 'koa-passport';
 import FlashMessage from 'FlashMessage';
 import {strategies} from 'library/server/passport';
 import {authentification as authConfig} from 'config/main';
+import jwt from 'jsonwebtoken';
+let tokenConfig = require('config/main').authentification.token;
 
 const redirectLoginSuccess = authConfig.redirections.success;
 const redirectLoginError = authConfig.redirections.error;
@@ -10,6 +12,8 @@ const sessionKey = authConfig.redirections.sessionkey;
 
 
 module.exports.login = function *() {
+  this.utils.requireNotConnected();
+
   this.session[sessionKey] = this.request.args.redirect ? decodeURIComponent(this.request.args.redirect) : redirectLoginSuccess;
 
   let title = this.i18n.__('page.login.title');
@@ -17,12 +21,13 @@ module.exports.login = function *() {
   this.viewBag.set('pageTitle', title);
   this.viewBag.set('strategies', strategies.login);
   this.viewBag.set('message', this.request.args.message ? decodeURIComponent(this.request.args.message) : '');
-
   return yield this.renderView('passport/login.html');
 };
 
 
 module.exports.register = function *() {
+  this.utils.requireNotConnected();
+
   this.session[sessionKey] = this.request.args.redirect ? decodeURIComponent(this.request.args.redirect) : redirectLoginSuccess;
 
   let title = this.i18n.__('page.register.title');
@@ -101,6 +106,24 @@ module.exports.authentificateCB = function *() {
 
 
 module.exports.logout = function *() {
+  this.utils.requireConnected();
   this.logout();
-  this.redirect(redirectLogout);
+  return this.redirect(redirectLogout);
+};
+
+module.exports.getToken = function *() {
+  this.utils.requireConnected();
+  let user = this.utils.getUser();
+
+  let payload = {
+    id: user.id,
+    created_at: new Date()
+  };
+  let config = {
+    algorithm: tokenConfig.algorithm,
+    expiresInMinutes: tokenConfig.expiresInMinutes
+  };
+  let token = jwt.sign(payload, tokenConfig.secret, config);
+  // let token = 'pouet';
+  return this.body = token;
 };
