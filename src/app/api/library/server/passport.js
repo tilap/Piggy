@@ -3,7 +3,7 @@ import logger from 'library/logger';
 import PassportExtractor from 'PassportExtractor';
 
 import ModuleFactory from 'library/ModuleFactory';
-let userService = ModuleFactory.getService('user');
+let userService = ModuleFactory.getServiceInstance('user');
 
 let passportConfig = require('config/main').authentification.providers;
 

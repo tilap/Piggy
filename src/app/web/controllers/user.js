@@ -2,7 +2,7 @@ import ManagerError from 'piggy-module/lib/Errors';
 import FlashMessage from 'FlashMessage';
 import ModuleFactory from 'library/ModuleFactory';
 
-let userService = ModuleFactory.getService('user');
+let userService = ModuleFactory.getServiceInstance('user');
 
 module.exports.new = function *() {
 

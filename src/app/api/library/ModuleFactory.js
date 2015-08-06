@@ -11,6 +11,11 @@ export default class ModuleFactory {
 
   static getService(module) {
     let Service = require('modules/' + module + '/Service');
+    return Service;
+  }
+
+  static getServiceInstance(module) {
+    let Service = ModuleFactory.getService(module);
     let manager = ModuleFactory.getManager(module);
     return new Service(manager);
   }
