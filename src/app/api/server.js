@@ -12,6 +12,7 @@ import koaUtils from 'koa-utils';
 import logger from 'library/logger';
 import koaRequestLog from 'library/middleware/koa-request-log';
 import koaJWTauth from 'library/middleware/jwt-auth';
+import koaModuleLoader from 'library/middleware/koa-piggy-module-loader';
 import ApiBag from 'ApiBag';
 
 let config = require('config/main');
@@ -62,9 +63,10 @@ app.use(koai18n(app, config.i18n));
 app.use(koaStatic(config.static.directory, config.static));
 
 app.use(koaJWTauth);
+app.use(koaModuleLoader);
 
 // Render middleware
-// app.context.render = koaSwig(config.view);
+app.context.render = koaSwig(config.view);
 
 // Response compress
 app.use(koaCompress());
@@ -78,11 +80,11 @@ app.use(function *(next) {
   }
   catch(err) {
     this.bag.reset();
+    logger.error('Api dispatch error: ' + err.message, err);
     if(this.response.status==404) {
       this.bag.addError('not found');
     }
     else {
-      logger.error('Api dispatch error: ' + err.message, err);
       this.status = 500;
       this.bag.addError('internal error');
     }

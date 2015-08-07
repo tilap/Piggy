@@ -1,8 +1,11 @@
-import ModuleFactory from 'library/ModuleFactory';
-let userService = ModuleFactory.getServiceInstance('user');
+// import ModuleFactory from 'library/ModuleFactory';
+// let userService = ModuleFactory.getServiceInstance('user');
 
 module.exports.get = function *() {
-  this.utils.requireConnected();
+  // this.utils.requireConnected();
+console.log('pouet');
+  let userService = this.getModuleService('user');
+
   this.bag.setMultipleRessourceResponse();
   let items = yield userService.getByPage();
   this.bag.setDataFromVos(items);
@@ -11,6 +14,8 @@ module.exports.get = function *() {
 
 
 module.exports.getOneById = function *() {
+  let userService = this.getModuleService('user');
+
   this.bag.setSingleRessourceResponse();
   let id = this.params.id || '';
   let item = yield userService.getOneById(id);
@@ -21,6 +26,8 @@ module.exports.getOneById = function *() {
 
 
 module.exports.getOneByUsername = function *() {
+  let userService = this.getModuleService('user');
+
   this.bag.setSingleRessourceResponse();
   let username = this.params.username || '';
   let item = yield userService.getOneByUsername(username);
@@ -31,6 +38,8 @@ module.exports.getOneByUsername = function *() {
 
 
 module.exports.createOne = function *(next) {
+  let userService = this.getModuleService('user');
+
   this.bag.setSingleRessourceResponse();
   let itemData = this.utils.getFromPost(['username', 'firstname', 'lastname', 'email']);
   try {
@@ -49,6 +58,8 @@ module.exports.createOne = function *(next) {
 
 
 module.exports.updateOneById = function *() {
+  let userService = this.getModuleService('user');
+
   this.bag.setSingleRessourceResponse();
 
   let id = this.params.id || '';
@@ -72,6 +83,8 @@ module.exports.updateOneById = function *() {
 };
 
 module.exports.deleteOneById = function *() {
+  let userService = this.getModuleService('user');
+
   this.bag.setRawResponse();
 
   let id = this.params.id || '';

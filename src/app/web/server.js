@@ -14,6 +14,7 @@ import sanitizeUri from 'koa-sanitize-uri';
 import {Head} from 'piggy-htmldoc';
 import {parse as stackParser} from 'springbokjs-errors';
 import HtmlStackRenderer from 'springbokjs-errors/lib/HtmlRenderer';
+import koaModuleLoader from 'library/middleware/koa-piggy-module-loader';
 
 // local modules
 import ViewBag from 'ViewBag';
@@ -128,6 +129,8 @@ app.use(koaStatic(config.static.directory, config.static));
 
 // Flash message middleware
 app.use(koaFlash(config.flash));
+
+app.use(koaModuleLoader);
 
 // Render middleware
 app.context.render = koaSwig(config.view);

@@ -1,12 +1,11 @@
 import ManagerError from 'piggy-module/lib/Errors';
 import FlashMessage from 'FlashMessage';
-import ModuleFactory from 'library/ModuleFactory';
 
-let userService = ModuleFactory.getServiceInstance('user');
 
 module.exports.new = function *() {
-
   this.utils.requireConnected();
+
+  let userService = this.getModuleService('user');
 
   let itemData = {};
   let formErrors = {};
@@ -42,6 +41,8 @@ module.exports.edit = function *() {
 
   this.utils.requireConnected();
 
+  let userService = this.getModuleService('user');
+
   let id = this.params.id || '';
   let user = yield userService.getOneById(id);
   if(!user) {
@@ -76,6 +77,8 @@ module.exports.list = function *() {
 
   this.utils.requireConnected();
 
+  let userService = this.getModuleService('user');
+
   try {
     let users = yield userService.getByPage();
     this.viewBag.set('users', users);
@@ -89,6 +92,8 @@ module.exports.list = function *() {
 
 module.exports.viewById = function *() {
 
+  let userService = this.getModuleService('user');
+
   let id = this.params.id || '';
   let user = yield userService.getOneById(id);
   if(!user) {
@@ -100,6 +105,9 @@ module.exports.viewById = function *() {
 };
 
 module.exports.viewByUsername = function *() {
+
+  let userService = this.getModuleService('user');
+
   let username = this.params.username || '';
   let user = yield userService.getOneByUsername(username);
   if(!user) {
@@ -112,6 +120,8 @@ module.exports.viewByUsername = function *() {
 module.exports.deleteById = function *() {
 
   this.utils.requireConnected();
+
+  let userService = this.getModuleService('user');
 
   try {
     let id = this.params.id || '';
