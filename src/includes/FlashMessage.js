@@ -13,13 +13,13 @@ export default class FlashMessage {
 }
 
 Object.defineProperty(FlashMessage, 'TYPES', {
-  enumerable: false,
-  writable: false,
-  configurable: false,
-  value: Object.freeze({
-    INFO: 'info',
-    SUCCESS: 'success',
-    WARNING: 'warning',
-    ERROR: 'error'
-  })
+  'enumerable': false,
+  'writable': false,
+  'configurable': false,
+  'value': Object.freeze({
+    'INFO': 'info',
+    'SUCCESS': 'success',
+    'WARNING': 'warning',
+    'ERROR': 'error',
+  }),
 });

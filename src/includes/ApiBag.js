@@ -14,7 +14,7 @@ export default class ApiBag {
   }
 
   setMultipleRessourceResponse() {
-    if(this.hasDatas()) {
+    if (this.hasDatas()) {
       throw new Error('Cannot change multiple type of bag that already has data');
     }
     this._multiple = true;
@@ -24,7 +24,7 @@ export default class ApiBag {
   }
 
   setSingleRessourceResponse() {
-    if(this.hasDatas()) {
+    if (this.hasDatas()) {
       throw new Error('Cannot change multiple type of bag that already has data');
     }
     this._multiple = false;
@@ -59,15 +59,15 @@ export default class ApiBag {
   }
 
   addData(data) {
-    if(this._raw) {
-      if(!this._datas) {
+    if (this._raw) {
+      if (!this._datas) {
         this._datas = [];
       }
       this._datas.push(data);
       return this;
     }
 
-    if(!this._multiple) {
+    if (!this._multiple) {
       throw new Error('Response must contain multidata');
     }
     this._datas.push(data);
@@ -91,34 +91,34 @@ export default class ApiBag {
   }
 
   setData(data) {
-    if(this._raw) {
+    if (this._raw) {
       this._datas = data;
       return this;
     }
 
-    if(this._multiple) {
+    if (this._multiple) {
       throw new Error('Response must contain multidata');
     }
-    this._datas= data;
+    this._datas = data;
     return this;
   }
 
   hasDatas() {
-    return this._multiple ? this._datas.length > 0 : this._datas!==null;
+    return this._multiple ? this._datas.length > 0 : this._datas !== null;
   }
 
   resetDatas() {
-    this._datas = this._multiple===true ? [] : null;
+    this._datas = this._multiple === true ? [] : null;
     return this;
   }
 
   addErrors(errors) {
-    if(errors.constructor!==Array) {
+    if (errors.constructor !== Array) {
       throw new Error('Array expected');
     }
     errors.forEach(error => {
       this.addError(error);
-    })
+    });
     return this;
   }
 
@@ -138,23 +138,22 @@ export default class ApiBag {
 
 
   _checkRessoure(ressource) {
-    if(!ressource instanceof ApiBagRessource) {
+    if (!ressource instanceof ApiBagRessource) {
       throw new Error('Not a ressource');
     }
     try {
-      ressource.validate()
-    }
-    catch(err) {
+      ressource.validate();
+    } catch(err) {
       throw new Error('Invalid ressource: ' + err.message);
     }
   }
 
   checkFormat() {
-    if(!this.hasDatas() && !this.hasErrors()) {
+    if (!this.hasDatas() && !this.hasErrors()) {
       throw new Error(ApiBag.ERRORS.OUTPUT_FORMAT_EMPTY);
     }
 
-    if(this.hasDatas() && this.hasErrors()) {
+    if (this.hasDatas() && this.hasErrors()) {
       throw new Error(ApiBag.ERRORS.OUTPUT_FORMAT_DUAL);
     }
   }
@@ -162,19 +161,18 @@ export default class ApiBag {
   toJson() {
     try {
       this.checkFormat();
-    }
-    catch(err) {
+    } catch(err) {
       // TODO: return json response
       return {
-        errors: [err.message]
+        'errors': [err.message],
       };
     }
 
     let res = {};
-    if(this.hasDatas()) {
+    if (this.hasDatas()) {
       res.data = this._datas;
     }
-    if(this.hasErrors()) {
+    if (this.hasErrors()) {
       res.errors = this._errors;
     }
     return res;
@@ -182,14 +180,14 @@ export default class ApiBag {
 }
 
 Object.defineProperty(ApiBag, 'ERRORS', {
-  enumerable: false,
-  writable: false,
-  configurable: false,
-  value: Object.freeze({
-    OUTPUT_FORMAT_EMPTY: 'OUTPUT_FORMAT_EMPTY',
-    OUTPUT_FORMAT_DUAL: 'OUTPUT_FORMAT_DUAL',
-    RESSOURCE_MISSING: 'RESSOURCE_MISSING'
-  })
+  'enumerable': false,
+  'writable': false,
+  'configurable': false,
+  'value': Object.freeze({
+    'OUTPUT_FORMAT_EMPTY': 'OUTPUT_FORMAT_EMPTY',
+    'OUTPUT_FORMAT_DUAL': 'OUTPUT_FORMAT_DUAL',
+    'RESSOURCE_MISSING': 'RESSOURCE_MISSING',
+  }),
 });
 
 

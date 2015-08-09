@@ -1,6 +1,6 @@
 import Service from 'piggy-module/lib/Service';
 
-export default class UserService extends Service{
+export default class UserService extends Service {
 
   constructor(manager) {
     super(manager);

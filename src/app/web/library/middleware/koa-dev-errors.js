@@ -7,19 +7,16 @@ export default function *(next) {
     logger.error(stackParser(err).toString());
 
     // 401 (require auth) and 404 alread managed with redirectOnHtmlStatus
-    if(this.status==401 || this.status==404) {
+    if (this.status === 401 || this.status === 404) {
       return next;
     }
-    // Else log
 
     // Display error in development environement
-    if(config.display_error) {
+    if (config.display_error) {
       const htmlStackRenderer = new HtmlStackRenderer();
       this.status = 500;
-      return this.body=htmlStackRenderer.render(err);
-    }
-    // Or display an error page for user
-    else {
+      this.body = htmlStackRenderer.render(err);
+    } else { // Or display an error page for user
       return next;
     }
   }

@@ -17,10 +17,10 @@ export default class ViewBag {
 
   setProtected(key, value='') {
     Object.defineProperty(this, key, {
-      writable: false,
-      configurable: false,
-      enumerable: true,
-      value: value,
+      'writable': false,
+      'configurable': false,
+      'enumerable': true,
+      'value': value,
     });
   }
 

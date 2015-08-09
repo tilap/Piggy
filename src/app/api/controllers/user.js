@@ -26,7 +26,7 @@ module.exports.getOneByUsername = function *() {
   this.bag.setSingleRessourceResponse();
   let username = this.params.username || '';
   let item = yield userService.getOneByUsername(username);
-  this.assert(item, 404, 'item not found')
+  this.assert(item, 404, 'item not found');
   this.bag.setDataFromVo(item);
   return this.renderBag();
 };
@@ -41,9 +41,8 @@ module.exports.createOne = function *(next) {
     let newVo = yield userService.createOneFromData(itemData, 'api');
     this.bag.setDataFromVo(newVo);
     this.renderBag();
-  }
-  catch(errors) {
-    if(errors instanceof Error) {
+  } catch(errors) {
+    if (errors instanceof Error) {
       throw errors;
     }
     this.bag.addError(errors);
@@ -67,9 +66,8 @@ module.exports.updateOneById = function *() {
     let updatedVo = yield userService.updateOneFromData(itemData, item.id);
     this.bag.setDataFromVo(updatedVo);
     return this.renderBag();
-  }
-  catch(errors) {
-    if(errors instanceof Error) {
+  } catch(errors) {
+    if (errors instanceof Error) {
       throw errors;
     }
     this.bag.addError(errors);
@@ -87,6 +85,6 @@ module.exports.deleteOneById = function *() {
   this.assert(item, 404, 'item not found');
 
   let successDeleted = yield userService.deleteOneById(item.id);
-  this.bag.setData({deleted: true===successDeleted ? 1: 0});
+  this.bag.setData({'deleted': successDeleted === true ? 1 : 0});
   return this.renderBag();
 };

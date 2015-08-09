@@ -6,21 +6,21 @@ export default class PassportExtractor {
   }
 
   get provider() {
-    if(!this.profile.provider) {
+    if (!this.profile.provider) {
       throw new Error('No provider');
     }
     return this.profile.provider.toLowerCase();
   }
 
   get firstname() {
-    switch(this.provider) {
+    switch (this.provider) {
       case 'facebook':
-        if(this.profile.name.givenName) {
+        if (this.profile.name.givenName) {
           return this.profile.name.givenName;
         }
         break;
       case 'twitter':
-        if(this.profile.displayName) {
+        if (this.profile.displayName) {
           return this.profile.displayName;
         }
         break;
@@ -31,9 +31,9 @@ export default class PassportExtractor {
   }
 
   get lastname() {
-    switch(this.provider) {
+    switch (this.provider) {
       case 'facebook':
-        if(this.profile.name.familyName) {
+        if (this.profile.name.familyName) {
           return this.profile.name.familyName;
         }
         break;
@@ -46,9 +46,9 @@ export default class PassportExtractor {
   }
 
   get email() {
-    switch(this.provider) {
+    switch (this.provider) {
       case 'facebook':
-        if(this.profile.emails) {
+        if (this.profile.emails) {
           return this.profile.emails[0].value;
         }
         break;
@@ -61,9 +61,9 @@ export default class PassportExtractor {
   }
 
   get gender() {
-    switch(this.provider) {
+    switch (this.provider) {
       case 'facebook':
-        if(this.profile.gender && this.profile.gender!=='') {
+        if (this.profile.gender && this.profile.gender !== '') {
           return this.profile.gender;
         }
         break;
@@ -76,10 +76,10 @@ export default class PassportExtractor {
   }
 
   get username() {
-    switch(this.provider) {
+    switch (this.provider) {
       case 'facebook':
       case 'twitter':
-        if(this.profile.username && this.profile.username!=='') {
+        if (this.profile.username && this.profile.username !== '') {
           return this.profile.username;
         }
         break;
@@ -90,13 +90,13 @@ export default class PassportExtractor {
   }
 
   buildUsername() {
-    if(this.username) {
+    if (this.username) {
       return this.cleanUsername(this.username);
     }
-    if(this.firstname) {
+    if (this.firstname) {
       return this.cleanUsername(this.firstname);
     }
-    if(this.lastname) {
+    if (this.lastname) {
       return this.cleanUsername(this.lastname);
     }
     throw new Error('Unable to build a username from the profile');

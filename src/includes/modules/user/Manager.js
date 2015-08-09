@@ -15,7 +15,7 @@ export default class UserManager extends Manager {
 
     return new Promise( (resolve) => {
       this.get(criteria).then( users => {
-        switch(users.length) {
+        switch (users.length) {
           case 0:
             return resolve(null);
           case 1:

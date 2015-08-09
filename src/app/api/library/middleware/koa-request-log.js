@@ -11,27 +11,27 @@ import bytes from 'bytes';
 export default function *(next) {
   let start = new Date();
 
-  if(!this.logger) {
+  if (!this.logger) {
     console.info('koa-request-log is enable but has no logger to output data');
   }
 
-  if(this.logger) {
+  if (this.logger) {
     this.logger.verbose('↓↓↓ %s %s', this.method, this.url);
   }
 
   yield next;
 
-  if(this.logger) {
+  if (this.logger) {
     let length = this.response.length;
     let body = this.body;
     let counter;
-    if (null == length && body && body.readable) {
+    if (length === null && body && body.readable) {
       this.body = body
         .pipe(counter = new Counter())
         .on('error', this.onerror);
     }
 
-    if(counter) {
+    if (counter) {
       length = counter.length;
     }
 

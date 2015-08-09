@@ -20,19 +20,17 @@
  *  accept: 'html'
  * }));
  */
-
-export default function (options) {
-
+export default function(options) {
   let config = {
-    status_code: 401,
-    redirect_url: '',
-    redirect_name: 'redirect',
-    message_name: 'message',
-    accepts: 'html'
+    'status_code': 401,
+    'redirect_url': '',
+    'redirect_name': 'redirect',
+    'message_name': 'message',
+    'accepts': 'html',
   };
 
   Object.keys(config).forEach( option => {
-    if(options[option]) {
+    if (options[option]) {
       config[option] = options[option];
     }
   });
@@ -40,25 +38,20 @@ export default function (options) {
   return function *(next) {
     try {
       return yield next;
-    }
-    catch (err) {
-      if(err.status===config.status_code && this.accepts(config.accepts) && config.redirect_url) {
-
-        let redirectUrl = config.redirect_url;
-
-        if(config.redirect_name) {
-          redirectUrl+= (redirectUrl.indexOf('?') <0 ? '?' : '&') ;
-          redirectUrl+= config.redirect_name + '=' + encodeURIComponent(this.request.href);
-        }
-
-        if(err.message && err.message!=='' && config.message_name) {
-          redirectUrl += '&' + config.message_name + '=' + encodeURIComponent(err.message);
-        }
-        return this.redirect(redirectUrl);
-      }
-      else {
+    } catch (err) {
+      if (err.status !== config.status_code || !this.accepts(config.accepts) || !config.redirect_url) {
         throw err;
       }
+
+      let redirectUrl = config.redirect_url;
+      if (config.redirect_name) {
+        redirectUrl += redirectUrl.indexOf('?') < 0 ? '?' : '&';
+        redirectUrl += config.redirect_name + '=' + encodeURIComponent(this.request.href);
+      }
+      if (err.message && err.message !== '' && config.message_name) {
+        redirectUrl += '&' + config.message_name + '=' + encodeURIComponent(err.message);
+      }
+      return this.redirect(redirectUrl);
     }
   };
 }

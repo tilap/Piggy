@@ -41,7 +41,7 @@ module.exports.register = function *() {
 
 module.exports.authentificate = function *() {
   let medium = this.params.medium;
-  if(strategies.login.indexOf(medium)<0) {
+  if (strategies.login.indexOf(medium) < 0) {
     this.throw(404, this.i18n.__('authenfication.medium.disabled', medium));
   }
   return yield passport.authenticate(medium);
@@ -50,7 +50,7 @@ module.exports.authentificate = function *() {
 
 module.exports.authentificateCB = function *() {
   let medium = this.params.medium;
-  if(strategies.login.indexOf(medium)<0) {
+  if (strategies.login.indexOf(medium) < 0) {
     this.throw(404, this.i18n.__('authenfication.medium.disabled', medium));
   }
 
@@ -58,42 +58,36 @@ module.exports.authentificateCB = function *() {
 
   yield passport.authenticate(medium, function *(err, user) {
     let res = {
-      message: null,
-      messageType: null,
-      redirectUrl: null
+      'message': null,
+      'messageType': null,
+      'redirectUrl': null,
     };
 
     // Error
-    if(err) {
+    if (err) {
       ctx.logger.error('Authentification error: ' + err.message);
       res = {
-        message: err.message,
-        messageType: FlashMessage.TYPES.ERROR,
-        redirectUrl: redirectLoginError
+        'message': err.message,
+        'messageType': FlashMessage.TYPES.ERROR,
+        'redirectUrl': redirectLoginError,
       };
-    }
-
-    // No error but no user found or not created. Should not occured at any time
-    else if(!user) {
+    } else if (!user) { // No error but no user found or not created. Should not occured at any time
       ctx.logger.error('Authentification failed', user);
       res = {
-        message: ctx.i18n.__('authentification.failed'),
-        messageType: FlashMessage.TYPES.SUCCESS,
-        redirectUrl: redirectLoginError
+        'message': ctx.i18n.__('authentification.failed'),
+        'messageType': FlashMessage.TYPES.SUCCESS,
+        'redirectUrl': redirectLoginError,
       };
-    }
-
-    // Success
-    else {
+    } else { // Success
       yield ctx.logIn(user);
 
       res = {
-        message: ctx.i18n.__('authentification.welcome', user.username),
-        messageType: FlashMessage.TYPES.SUCCESS,
-        redirectUrl: ctx.session[sessionKey] || redirectLoginSuccess
+        'message': ctx.i18n.__('authentification.welcome', user.username),
+        'messageType': FlashMessage.TYPES.SUCCESS,
+        'redirectUrl': ctx.session[sessionKey] || redirectLoginSuccess,
       };
 
-      if(ctx.session[sessionKey]) {
+      if (ctx.session[sessionKey]) {
         delete ctx.session[sessionKey];
       }
     }
@@ -115,13 +109,13 @@ module.exports.getToken = function *() {
   let user = this.utils.getUser();
 
   let payload = {
-    id: user.id,
-    created_at: new Date()
+    'id': user.id,
+    'created_at': new Date(),
   };
   let config = {
-    algorithm: tokenConfig.algorithm,
-    expiresInMinutes: tokenConfig.expiresInMinutes
+    'algorithm': tokenConfig.algorithm,
+    'expiresInMinutes': tokenConfig.expiresInMinutes,
   };
   let token = jwt.sign(payload, tokenConfig.secret, config);
-  return this.body = token;
+  this.body = token;
 };

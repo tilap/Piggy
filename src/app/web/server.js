@@ -5,14 +5,13 @@ import koaLocale from 'koa-locale';
 import koai18n from 'koa-i18n';
 import koaStatic from 'koa-static'; // @todo if koa-static-cache is bette?
 import koaSession from 'koa-generic-session';
-import koaMongoStore from 'koa-sess-mongo-store';
+import KoaMongoStore from 'koa-sess-mongo-store';
 import koaCompress from 'koa-compress';
 import koaFlash from 'koa-flash';
 import koaSwig from 'koa-swig';
 import koaError from 'koa-error';
 import sanitizeUri from 'koa-sanitize-uri';
 import {Head} from 'piggy-htmldoc';
-import HtmlStackRenderer from 'springbokjs-errors/lib/HtmlRenderer';
 import koaModuleLoader from 'library/middleware/koa-piggy-module-loader';
 import koaDevError from 'library/middleware/koa-dev-errors';
 
@@ -27,7 +26,7 @@ import koaRequestLog from 'library/middleware/koa-request-log';
 
 
 let config = require('config/main');
-let app= koa();
+let app = koa();
 
 
 if (!config.keys) {
@@ -46,27 +45,27 @@ app.use(koaDevError);
 
 // On 401, redirect to login page
 app.use(redirectOnHtmlStatus({
-  status_code: 401,
-  redirect_url: '/login/',
-  redirect_name: 'redirect',
-  message_name: 'message',
-  accepts: 'html'
+  'status_code': 401,
+  'redirect_url': '/login/',
+  'redirect_name': 'redirect',
+  'message_name': 'message',
+  'accepts': 'html',
 }));
 
 // Add logs on requests
-if(config.loggers.requests) {
+if (config.loggers.requests) {
   app.use(koaRequestLog);
 }
 
 // Force clean uri
 app.use(sanitizeUri({
-  ignore: [/^assets\/.*/i, /.*\.(js|html|css|png|jpg|gif)$/i]
+  'ignore': [/^assets\/.*/i, /.*\.(js|html|css|png|jpg|gif)$/i],
 }));
 
 // Session middleware
 let sessionConfig = config.session;
-if(sessionConfig.mongo) {
-  sessionConfig.store = new koaMongoStore({ url: sessionConfig.mongo });
+if (sessionConfig.mongo) {
+  sessionConfig.store = new KoaMongoStore({ 'url': sessionConfig.mongo });
 }
 app.use(koaSession(sessionConfig));
 
@@ -77,7 +76,7 @@ app.use(koaUtils);
 app.use(function *(next) {
   this.viewBag = new ViewBag();
   this.viewBag.setProtected('html', {
-    head: new Head()
+    'head': new Head(),
   });
 
   this.viewBag.get('html').head.title.queue('Mon appli');
@@ -125,11 +124,10 @@ Object.keys(routers).forEach( id => {
 if (!module.parent) {
   let port = config.port || 3000;
   app.listen(port, () => {
-    logger.info('Server listening on port %s under %s environment', port, (process.env.NODE_ENV || 'development') );
+    logger.info('Server listening on port %s under %s environment', port, process.env.NODE_ENV || 'development' );
   });
-}
-else {
-  module.exports=app;
+} else {
+  module.exports = app;
 }
 
 process.on('SIGINT', function() {
