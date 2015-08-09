@@ -14,6 +14,7 @@ import koaRequestLog from 'library/middleware/koa-request-log';
 import koaJWTauth from 'library/middleware/jwt-auth';
 import koaModuleLoader from 'library/middleware/koa-piggy-module-loader';
 import ApiBag from 'ApiBag';
+import routers from 'routers';
 
 let config = require('config/main');
 let app= koa();
@@ -75,12 +76,14 @@ app.use(function *(next) {
   this.bag = new ApiBag();
   this.renderBag = () => this.body = this.bag.toJson();
 
+  // Error interception for clean response whatever happens
   try {
     yield next;
   }
   catch(err) {
-    this.bag.reset();
     logger.error('Api dispatch error: ' + err.message, err);
+
+    this.bag.reset();
     if(this.response.status==404) {
       this.bag.addError('not found');
     }
@@ -93,8 +96,6 @@ app.use(function *(next) {
 });
 
 // Routing
-// @todo: replace koa-router by a both front/back router (like https://github.com/kieran/barista )
-import routers from 'routers';
 Object.keys(routers).forEach( id => {
   app.use(routers[id].middleware());
 });

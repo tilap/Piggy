@@ -12,9 +12,9 @@ import koaSwig from 'koa-swig';
 import koaError from 'koa-error';
 import sanitizeUri from 'koa-sanitize-uri';
 import {Head} from 'piggy-htmldoc';
-import {parse as stackParser} from 'springbokjs-errors';
 import HtmlStackRenderer from 'springbokjs-errors/lib/HtmlRenderer';
 import koaModuleLoader from 'library/middleware/koa-piggy-module-loader';
+import koaDevError from 'library/middleware/koa-dev-errors';
 
 // local modules
 import ViewBag from 'ViewBag';
@@ -42,31 +42,7 @@ app.use(function *(next) {
 });
 
 app.use(koaError(config.error));
-
-app.use(function *(next) {
-  try {
-    yield next;
-  } catch (err) {
-    logger.error(stackParser(err).toString());
-
-    // 401 (require auth) and 404 alread managed with redirectOnHtmlStatus
-    if(this.status==401 || this.status==404) {
-      return next;
-    }
-    // Else log
-
-    // Display error in development environement
-    if(config.display_error) {
-      const htmlStackRenderer = new HtmlStackRenderer();
-      this.status = 500;
-      return this.body=htmlStackRenderer.render(err);
-    }
-    // Or display an error page for user
-    else {
-      return next;
-    }
-  }
-});
+app.use(koaDevError);
 
 // On 401, redirect to login page
 app.use(redirectOnHtmlStatus({
