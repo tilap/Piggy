@@ -28,21 +28,23 @@ export default function *(next) {
       }
     },
 
-    getUser: () => this.req.user ? this.req.user : null
+    getUser: () => this.req.user ? this.req.user : null,
 
+    getFromQuery: (param, defaultValue) => {
+      const queryStr = this.request.querystring;
+      if(queryStr=='' || queryStr.split('&').length === 0) {
+        return defaultValue;
+      }
+      let temp, result=defaultValue;
+      queryStr.split('&').forEach( query => {
+        temp = query.split('=');
+        if(temp[0] && temp[1] && param === temp[0]) {
+          result=decodeURIComponent(temp[1]);
+        }
+      });
+      return result;
+    }
   };
-
-  // Get param helper
-  let queryStr = this.request.querystring;
-  let params = {}, temp;
-  if(queryStr!=='' && queryStr.split('&').length > 0) {
-    queryStr.split('&').forEach( query => {
-      temp = query.split('=');
-      params[temp[0]] = decodeURIComponent(temp[1]) || '';
-    });
-  }
-  this.request.args = params;
-
 
   yield next;
 }

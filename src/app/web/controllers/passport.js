@@ -14,13 +14,12 @@ const sessionKey = authConfig.redirections.sessionkey;
 module.exports.login = function *() {
   this.utils.requireNotConnected();
 
-  this.session[sessionKey] = this.request.args.redirect ? decodeURIComponent(this.request.args.redirect) : redirectLoginSuccess;
-
+  this.session[sessionKey] = this.utils.getFromQuery('redirect', redirectLoginSuccess);
   let title = this.i18n.__('page.login.title');
   this.viewBag.get('html').head.title.queue(title);
   this.viewBag.set('pageTitle', title);
   this.viewBag.set('strategies', strategies.login);
-  this.viewBag.set('message', this.request.args.message ? decodeURIComponent(this.request.args.message) : '');
+  this.viewBag.set('message', this.utils.getFromQuery('message', ''));
   return yield this.renderView('passport/login.html');
 };
 
@@ -28,13 +27,13 @@ module.exports.login = function *() {
 module.exports.register = function *() {
   this.utils.requireNotConnected();
 
-  this.session[sessionKey] = this.request.args.redirect ? decodeURIComponent(this.request.args.redirect) : redirectLoginSuccess;
+  this.session[sessionKey] = this.utils.getFromQuery('redirect', redirectLoginSuccess);
 
   let title = this.i18n.__('page.register.title');
   this.viewBag.get('html').head.title.queue(title);
   this.viewBag.set('pageTitle', title);
   this.viewBag.set('strategies', strategies.register);
-  this.viewBag.set('message', this.request.args.message ? decodeURIComponent(this.request.args.message) : '');
+  this.viewBag.set('message', this.utils.getFromQuery('message', ''));
 
   return yield this.renderView('passport/login.html');
 };
@@ -124,6 +123,5 @@ module.exports.getToken = function *() {
     expiresInMinutes: tokenConfig.expiresInMinutes
   };
   let token = jwt.sign(payload, tokenConfig.secret, config);
-  // let token = 'pouet';
   return this.body = token;
 };

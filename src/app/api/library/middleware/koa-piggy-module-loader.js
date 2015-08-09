@@ -1,3 +1,6 @@
+/*
+ * Controller helper to get service with context (user and app)
+ */
 import ModuleFactory from 'library/ModuleFactory';
 
 export default function *(next) {

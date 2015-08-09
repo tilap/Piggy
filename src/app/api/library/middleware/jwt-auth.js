@@ -1,7 +1,10 @@
+/*
+ * Automatically log a user if jwt header is provided
+ */
+
 import jwt from 'jsonwebtoken';
 import ModuleFactory from 'library/ModuleFactory';
 let userService = ModuleFactory.getServiceInstance('user');
-
 let config = require('config/main');
 
 export default function *(next) {
