@@ -1,9 +1,4 @@
-// import ModuleFactory from 'library/ModuleFactory';
-// let userService = ModuleFactory.getServiceInstance('user');
-
 module.exports.get = function *() {
-  // this.utils.requireConnected();
-console.log('pouet');
   let userService = this.getModuleService('user');
 
   this.bag.setMultipleRessourceResponse();
