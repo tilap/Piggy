@@ -3,7 +3,7 @@ import controller from '../controllers/passport';
 
 let providers = require('config/main').authentification.providers;
 
-let router= new Router();
+let router = new Router();
 let strategies = Object.keys(providers);
 
 router.get('login', '/login', controller.login);
@@ -17,4 +17,4 @@ strategies.forEach( medium => {
 
 router.get('get_token', '/mytoken/', controller.getToken);
 
-module.exports= router;
+module.exports = router;

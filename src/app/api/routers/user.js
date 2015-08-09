@@ -1,7 +1,7 @@
 import Router from 'koa-router';
 import controller from '../controllers/user';
 
-let router= new Router();
+let router = new Router();
 
 router.prefix('/user');
 
@@ -12,4 +12,4 @@ router.post('/', controller.createOne);
 router.patch('/:id/', controller.updateOneById);
 router.delete('/:id/', controller.deleteOneById);
 
-module.exports= router;
+module.exports = router;

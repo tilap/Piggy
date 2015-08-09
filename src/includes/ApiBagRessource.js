@@ -8,17 +8,17 @@ export default class ApiBagRessource {
   set attributes(attributes) {
     this._attributes = {};
     Object.keys(attributes).forEach(name => {
-      if(name.substring(0, 1)!=='_') {
+      if (name.substring(0, 1) !== '_') {
         this._attributes[name] = attributes[name];
       }
     });
   }
 
   validate() {
-    if(!this.id) {
+    if (!this.id) {
       throw new Error('id required');
     }
-    if(!this.type) {
+    if (!this.type) {
       throw new Error('id required');
     }
   }
@@ -26,10 +26,10 @@ export default class ApiBagRessource {
   toJson() {
     this.validate();
     let res = {
-      id: this.id,
-      type: this.type
+      'id': this.id,
+      'type': this.type,
     };
-    if(this._attributes && Object.keys(this._attributes).length > 0) {
+    if (this._attributes && Object.keys(this._attributes).length > 0) {
       res.attribues = this._attributes;
     }
     return res;

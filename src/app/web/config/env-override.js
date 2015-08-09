@@ -7,9 +7,9 @@ import fs from 'fs';
 module.exports = function(env) {
   env = env || (process.env.NODE_ENV || 'development');
   let file = env + '/env-override.js';
-  if(fs.existsSync(__dirname + '/' + file)) {
+  if (fs.existsSync(__dirname + '/' + file)) {
     let envOverride = require('./' + file);
-    Object.keys(envOverride).forEach(function (key) {
+    Object.keys(envOverride).forEach( key => {
       process.env[key] = envOverride[key];
     });
     console.info('Environment variables override: ' + Object.keys(envOverride).join(', '));

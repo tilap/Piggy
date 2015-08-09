@@ -18,6 +18,12 @@ var config = {
   views: {
     src: './src/**/*.html',
     dist: './lib'
+  },
+  babel: {
+    compact: false,
+    comments: true,
+    blacklist: ['regenerator'],
+    optional: ['asyncToGenerator']
   }
 };
 
@@ -65,15 +71,10 @@ gulp.task('views:clean', function(cb) {
   del(config.views.dist + '/**/*', cb);
 });
 
-gulp.task('es6', function() {
+gulp.task('es6', ['es6:lint'], function() {
     return gulp.src(config.es6.src + '/**/*.js')
       .pipe($.sourcemaps.init())
-      .pipe($.babel({
-        compact: false,
-        comments: false,
-        blacklist: ['regenerator'],
-        optional: ['asyncToGenerator']
-      }))
+      .pipe($.babel(config.babel))
       .pipe($.sourcemaps.write('.'))
       .pipe(gulp.dest(config.es6.dist));
 });
@@ -86,12 +87,7 @@ gulp.task('es6:watch', function() {
 
       return gulp.src(fileStatus.path, { base : config.es6.src })
         .pipe($.sourcemaps.init())
-        .pipe($.babel({
-          compact: false,
-          comments: true,
-          blacklist: ['regenerator'],
-          optional: ['asyncToGenerator']
-        }))
+        .pipe($.babel(config.bable))
         .pipe($.sourcemaps.write('.')) // @tofix
         .pipe(gulp.dest(config.es6.dist));
     });
@@ -101,6 +97,12 @@ gulp.task('es6:clean', function(cb) {
   del(config.es6.dist + '/**/*', cb);
 });
 
+gulp.task('es6:lint', function() {
+  gulp.src(config.es6.src + '/**/*.js')
+    .pipe($.eslint())
+    .pipe($.eslint.formatEach('compact', process.stderr))
+    .pipe($.eslint.failAfterError());
+});
 
 gulp.task('unusedPackages', function() {
   var options = {

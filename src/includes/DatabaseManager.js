@@ -6,7 +6,7 @@ export default class DatabaseManager {
     this._instances = {};
     this._defaultServer = '';
 
-    if(closeOnSigint) {
+    if (closeOnSigint) {
       process.on('SIGINT', () => {
         this.closeAllInstances();
       });
@@ -15,14 +15,14 @@ export default class DatabaseManager {
 
   addServer(name, conf) {
     this._servers[name] = conf;
-    if(!this.hasDefaultServer()) {
+    if (!this.hasDefaultServer()) {
       this.setDefaultServer(name);
     }
   }
 
   setDefaultServer(name) {
-    if(!this.hasServer(name)) {
-      throw new Error('Unknwon server "' + name +'"');
+    if (!this.hasServer(name)) {
+      throw new Error('Unknwon server "' + name + '"');
     }
     this._defaultServer = name;
   }
@@ -32,11 +32,11 @@ export default class DatabaseManager {
   }
 
   hasDefaultServer() {
-    return this._defaultServer!=='';
+    return this._defaultServer !== '';
   }
 
   getServer(name) {
-    if(!this.hasServer(name)) {
+    if (!this.hasServer(name)) {
       throw new Error('Database server ' + name + ' not set');
     }
     return this._servers[name];
@@ -52,7 +52,7 @@ export default class DatabaseManager {
   }
 
   _closeInstance(name) {
-    if(!this._instanceExists(name)) {
+    if (!this._instanceExists(name)) {
       return false;
     }
     this._instances[name].close();
@@ -66,7 +66,7 @@ export default class DatabaseManager {
   }
 
   getDb(name) {
-    if(!this._instanceExists(name)) {
+    if (!this._instanceExists(name)) {
       let config = this.getServer(name);
       this._createInstance(name, config);
     }

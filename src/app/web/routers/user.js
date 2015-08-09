@@ -1,7 +1,7 @@
 import Router from 'koa-router';
 import controller from '../controllers/user';
 
-let router= new Router();
+let router = new Router();
 
 router.prefix('/user');
 
@@ -14,4 +14,4 @@ router.get('user.edit', '/edit/:id/', controller.edit);
 router.post('/edit/:id/', controller.edit);
 router.get('user.delete', '/delete/:id/', controller.deleteById);
 
-module.exports= router;
+module.exports = router;

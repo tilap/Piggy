@@ -8,11 +8,11 @@ export default function *(next) {
     let user = this.utils.getUser();
     let app = 'api';
     let service = ModuleFactory.getServiceInstance(module);
-    if(user) {
+    if (user) {
       service.setUserContext(user);
     }
-    if(app) {
-      service.setAppContext(app)
+    if (app) {
+      service.setAppContext(app);
     }
     return service;
   };
