@@ -11,6 +11,7 @@ _Just to remember what I did and next steps_
 - ENV var easy override
 - Configuration by environment (development, staging, production)
 - Es6 transpilation with babel over gulp task (build and watch)
+- ESLint
 - Logger for request, debug and code
 - i18n
 - ioJS
