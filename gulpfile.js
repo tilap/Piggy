@@ -87,7 +87,7 @@ gulp.task('es6:watch', function() {
 
       return gulp.src(fileStatus.path, { base : config.es6.src })
         .pipe($.sourcemaps.init())
-        .pipe($.babel(config.bable))
+        .pipe($.babel(config.babel))
         .pipe($.sourcemaps.write('.')) // @tofix
         .pipe(gulp.dest(config.es6.dist));
     });
