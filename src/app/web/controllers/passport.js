@@ -1,7 +1,7 @@
 import passport from 'koa-passport';
 import FlashMessage from 'FlashMessage';
-import {strategies} from 'library/server/passport';
-// import {authentification as authConfig} from 'config/main';
+import {strategies} from 'library/middleware/passport';
+
 import config from 'config/main';
 let authConfig = config.authentification || {};
 import jwt from 'jsonwebtoken';

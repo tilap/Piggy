@@ -86,7 +86,7 @@ app.use(function *(next) {
 });
 
 // Passport
-import {middlewares} from 'library/server/passport';
+import {middlewares} from 'library/middleware/passport';
 middlewares(app);
 app.use(function *(next) {
   this.viewBag.setProtected('currentUser', this.isAuthenticated() ? this.req.user : null);

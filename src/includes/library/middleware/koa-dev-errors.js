@@ -1,4 +1,5 @@
 import {parse as stackParser} from 'springbokjs-errors';
+import logger from 'library/logger';
 
 export default function *(next) {
   try {

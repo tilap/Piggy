@@ -11,7 +11,7 @@ export default class UserManager extends Manager {
 
   getByStrategyToken(strategy, strategyId) {
     let criteria = {};
-    criteria['auths.' + strategy + '.id'] = strategyId;
+    criteria['_auths.' + strategy + '.id'] = strategyId;
 
     return new Promise( (resolve) => {
       this.get(criteria).then( users => {

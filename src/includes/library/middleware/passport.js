@@ -83,8 +83,8 @@ export function middlewares(app) {
                 userData[property] = profileData[property];
               }
             });
-            userData.auths = {};
-            userData.auths[strategy] = profile;
+            userData._auths = {};
+            userData._auths[strategy] = profile;
             let username;
             try {
               username = profileData.buildUsername();
@@ -99,7 +99,7 @@ export function middlewares(app) {
               })
               .then(username => {
                 userData.username = username;
-                return userService.createFromData(userData);
+                return userService.createOneFromData(userData);
               })
               .catch( err => {
                 console.error('Passport error (userService.saveOne)', err);

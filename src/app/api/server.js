@@ -3,7 +3,6 @@ import koa from 'koa';
 import koaBodyParser from 'koa-bodyparser';
 import koaLocale from 'koa-locale';
 import koai18n from 'koa-i18n';
-import koaStatic from 'koa-static'; // @todo if koa-static-cache is bette?
 import koaSession from 'koa-generic-session';
 import KoaMongoStore from 'koa-sess-mongo-store';
 import koaCompress from 'koa-compress';
@@ -19,7 +18,7 @@ import logger from 'library/logger';
 import koaRequestLog from 'library/middleware/koa-request-log';
 import koaJWTauth from 'library/middleware/jwt-auth';
 import koaModuleLoader from 'library/middleware/koa-piggy-module-loader';
-import {middlewares} from 'library/server/passport';
+import {middlewares} from 'library/middleware/passport';
 
 // App
 import routers from 'routers';

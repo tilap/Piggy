@@ -74,7 +74,7 @@ export default {
         },
       ],
     },
-    'auths': {
+    '_auths': {
       'type': Object,
       'default': {},
     },
@@ -88,7 +88,7 @@ export default {
         },
       ],
     },
-    'source': {
+    '_source': {
       'type': String,
       'validators': [
         {

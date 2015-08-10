@@ -1,9 +1,10 @@
 require('./../env-override')();
 import path from 'path';
 
-let root = path.normalize(__dirname + '/../../../../../');
+let root = path.normalize(__dirname + '/../../../../');
+
 export default {
-  'port': 3013,
+  'port': 3014,
   'keys': ['some-secret-key'],
   'db': {
     'local': 'mongodb://localhost/piggy',
