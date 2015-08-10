@@ -106,7 +106,7 @@ gulp.task('es6:lint', function() {
 
 gulp.task('unusedPackages', function() {
   var options = {
-    withoutDev: false,
+    withoutDev: true,
     ignoreDirs: ['src', 'locales', 'logs', 'public'],
     ignoreMatches: ['gulp-*']
   };

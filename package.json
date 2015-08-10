@@ -5,7 +5,8 @@
   "repository": "git@github.com:tilap/piggy.git",
   "main": "src/server.js",
   "scripts": {
-    "test": "echo \"Error: no test yet\" && exit 1"
+    "test": "echo \"Error: no test yet\" && exit 1",
+    "nsp" : "./node_modules/.bin/nsp audit-package"
   },
   "engines": {
     "node": ">= 2.4.0"
