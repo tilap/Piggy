@@ -51,6 +51,7 @@ Some stuff coded for this app need but that are generic (so release as standelon
 - **Unit testing** (mocha and so on), at least on API?
 - **CircleCI** ?
 - **Babel** config in a .babelrc file?
+- **Api discovering** such like [Google Api discovering](https://developers.google.com/apis-explorer/#p/discovery/v1/discovery.apis.getRest?api=urlshortener&version=v1&_h=1&) ? => hard coz of format return description for automatied. Think of doc commenting maybe.
 
 DO NOT work on frontend before a clean enough back :)
 - **Router**: change to make it available with ease on frontend?
