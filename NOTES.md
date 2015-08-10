@@ -50,6 +50,7 @@ Some stuff coded for this app need but that are generic (so release as standelon
 - **Package dependancies security** with ESP ?
 - **Unit testing** (mocha and so on), at least on API?
 - **CircleCI** ?
+- **Babel** config in a .babelrc file?
 
 DO NOT work on frontend before a clean enough back :)
 - **Router**: change to make it available with ease on frontend?
