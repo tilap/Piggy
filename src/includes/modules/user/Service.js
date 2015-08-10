@@ -6,6 +6,18 @@ export default class UserService extends Service {
     super(manager);
   }
 
+  createNewOne(data, source='') {
+    data._source = source;
+    data.created_at = new Date();
+    data.updated_at = new Date();
+    return super.createOneFromData(data);
+  }
+
+  updateOneFromData(data, id) {
+    data.updated_at = new Date();
+    return super.updateOneFromData(data, id);
+  }
+
   getOneByUsername(username) {
     return this._manager.getOneByUsername(username);
   }

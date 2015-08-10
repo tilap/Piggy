@@ -7,7 +7,7 @@ export default {
   'port': 3013,
   'keys': ['some-secret-key'],
   'db': {
-    'local': 'mongodb://localhost/piggy',
+    'local': 'mongodb://localhost:27017/piggy',
   },
   'loggers': {
     'winston': {
@@ -36,24 +36,24 @@ export default {
   'authentification': {
     'providers': {
       'twitter': {
-        'register': true,
-        'bind': false,
+        'strategy': 'twitter',
         'consumerKey': process.env.TWITTER_CLIENTID,
         'consumerSecret': process.env.TWITTER_SECRET,
       },
       'facebook': {
-        'register': true,
-        'bind': true,
+        'strategy': 'facebook',
         'clientID': process.env.FACEBOOK_CLIENTID,
         'clientSecret': process.env.FACEBOOK_SECRET,
       },
       'google': {
-        'register': false,
-        'bind': true,
+        'strategy': 'google-auth',
         'clientId': process.env.GOOGLE_CLIENTID,
         'clientSecret': process.env.GOOGLE_SECRET,
       },
     },
+    'register': ['facebook', 'twitter'],
+    'bind': ['twitter', 'facebook', 'google'],
+    'login': ['twitter', 'facebook'],
     'redirections': {
       'success': '/',
       'error': '/login/',

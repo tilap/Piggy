@@ -1,4 +1,3 @@
-// node modules
 import koa from 'koa';
 import koaBodyParser from 'koa-bodyparser';
 import koaLocale from 'koa-locale';
@@ -14,20 +13,25 @@ import sanitizeUri from 'koa-sanitize-uri';
 import {Head} from 'piggy-htmldoc';
 import koaModuleLoader from 'library/middleware/koa-piggy-module-loader';
 import koaDevError from 'library/middleware/koa-dev-errors';
-
-// local modules
 import ViewBag from 'ViewBag';
 import koaUtils from 'koa-utils';
-
-// Specific
 import logger from 'library/logger';
 import redirectOnHtmlStatus from 'koa-redirectOnHtmlStatus';
 import koaRequestLog from 'library/middleware/koa-request-log';
-
-
 import config from 'config/main';
-let app = koa();
 
+process.on('SIGINT', () => {
+  logger.warn('Web Server stopped');
+  process.exit(0);
+});
+
+process.on('uncaughtException', err => {
+  console.error('Web uncaughtException !');
+  console.error(err);
+});
+
+const app = koa();
+app.on('error', err => logger.error('Web Server error', err) );
 
 if (!config.keys) {
   throw new Error('Please add session secret key in the config file!');
@@ -86,8 +90,10 @@ app.use(function *(next) {
 });
 
 // Passport
-import {middlewares} from 'library/middleware/passport';
-middlewares(app);
+import {registerSerializers, registerAppStrategies, initMiddlewares} from 'library/middleware/passport';
+registerSerializers();
+registerAppStrategies(app);
+initMiddlewares(app);
 app.use(function *(next) {
   this.viewBag.setProtected('currentUser', this.isAuthenticated() ? this.req.user : null);
   yield next;
@@ -130,8 +136,3 @@ if (!module.parent) {
 } else {
   module.exports = app;
 }
-
-process.on('SIGINT', function() {
-  logger.warn('Server stopped');
-  process.exit(0);
-});

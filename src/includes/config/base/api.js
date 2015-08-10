@@ -36,24 +36,24 @@ export default {
   'authentification': {
     'providers': {
       'twitter': {
-        'register': true,
-        'bind': false,
+        'strategy': 'twitter',
         'consumerKey': process.env.TWITTER_CLIENTID,
         'consumerSecret': process.env.TWITTER_SECRET,
       },
       'facebook': {
-        'register': true,
-        'bind': true,
+        'strategy': 'facebook',
         'clientID': process.env.FACEBOOK_CLIENTID,
         'clientSecret': process.env.FACEBOOK_SECRET,
       },
       'google': {
-        'register': false,
-        'bind': true,
+        'strategy': 'google-auth',
         'clientId': process.env.GOOGLE_CLIENTID,
         'clientSecret': process.env.GOOGLE_SECRET,
       },
     },
+    'register': ['twitter', 'facebook'],
+    'bind': ['twitter', 'facebook'],
+    'login': ['twitter', 'facebook', 'google'],
     'redirections': {
       'success': '/',
       'error': '/login/',

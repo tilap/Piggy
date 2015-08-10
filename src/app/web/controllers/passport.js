@@ -1,6 +1,6 @@
 import passport from 'koa-passport';
 import FlashMessage from 'FlashMessage';
-import {strategies} from 'library/middleware/passport';
+import {availableStrategies} from 'library/middleware/passport';
 
 import config from 'config/main';
 let authConfig = config.authentification || {};
@@ -12,7 +12,6 @@ const redirectLoginError = authConfig.redirections.error;
 const redirectLogout = authConfig.redirections.logout;
 const sessionKey = authConfig.redirections.sessionkey;
 
-
 module.exports.login = function *() {
   this.utils.requireNotConnected();
 
@@ -20,7 +19,7 @@ module.exports.login = function *() {
   let title = this.i18n.__('page.login.title');
   this.viewBag.get('html').head.title.queue(title);
   this.viewBag.set('pageTitle', title);
-  this.viewBag.set('strategies', strategies.login);
+  this.viewBag.set('strategies', availableStrategies.login);
   this.viewBag.set('message', this.utils.getFromQuery('message', ''));
   return yield this.renderView('passport/login.html');
 };
@@ -34,7 +33,7 @@ module.exports.register = function *() {
   let title = this.i18n.__('page.register.title');
   this.viewBag.get('html').head.title.queue(title);
   this.viewBag.set('pageTitle', title);
-  this.viewBag.set('strategies', strategies.register);
+  this.viewBag.set('strategies', availableStrategies.register);
   this.viewBag.set('message', this.utils.getFromQuery('message', ''));
 
   return yield this.renderView('passport/login.html');
@@ -43,7 +42,7 @@ module.exports.register = function *() {
 
 module.exports.authentificate = function *() {
   let medium = this.params.medium;
-  if (strategies.login.indexOf(medium) < 0) {
+  if (availableStrategies.login.indexOf(medium) < 0) {
     this.throw(404, this.i18n.__('authenfication.medium.disabled', medium));
   }
   return yield passport.authenticate(medium);
@@ -52,7 +51,7 @@ module.exports.authentificate = function *() {
 
 module.exports.authentificateCB = function *() {
   let medium = this.params.medium;
-  if (strategies.login.indexOf(medium) < 0) {
+  if (availableStrategies.login.indexOf(medium) < 0) {
     this.throw(404, this.i18n.__('authenfication.medium.disabled', medium));
   }
 

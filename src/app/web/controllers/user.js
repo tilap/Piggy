@@ -5,15 +5,15 @@ import FlashMessage from 'FlashMessage';
 module.exports.new = function *() {
   this.utils.requireConnected();
 
-  let userService = this.getModuleService('user');
+  let userService = yield this.getModuleService('user');
 
   let itemData = {};
   let formErrors = {};
 
   if (this.request.method === 'POST') {
     try {
-      itemData = this.utils.getFromPost(['username', 'firstname', 'lastname', 'email']);
-      let newUser = yield userService.createOneFromData(itemData, 'backoffice');
+      itemData = this.utils.getFromPostM(['username', 'firstname', 'lastname', 'email']);
+      let newUser = yield userService.createNewOne(itemData, 'backoffice');
 
       this.flash = new FlashMessage(this.i18n.__('user.new.success.message', newUser.username), FlashMessage.TYPES.SUCCESS);
       return this.redirect(this.request.href);
@@ -39,7 +39,7 @@ module.exports.new = function *() {
 module.exports.edit = function *() {
   this.utils.requireConnected();
 
-  let userService = this.getModuleService('user');
+  let userService = yield this.getModuleService('user');
 
   let id = this.params.id || '';
   let user = yield userService.getOneById(id);
@@ -52,7 +52,11 @@ module.exports.edit = function *() {
 
   if (this.request.method === 'POST') {
     try {
-      itemData = this.utils.getFromPost(['firstname', 'lastname', 'email']);
+      let newData = this.utils.getFromPostM(['firstname', 'lastname', 'email'], null, true);
+      Object.keys(newData).forEach( property => {
+        itemData[property] = newData[property];
+      });
+
       let updatedUser = yield userService.updateOneFromData(itemData, user.id);
 
       let msg = this.i18n.__('user.update.success.message', updatedUser.username);
@@ -73,10 +77,10 @@ module.exports.edit = function *() {
 module.exports.list = function *() {
   this.utils.requireConnected();
 
-  let userService = this.getModuleService('user');
+  let userService = yield this.getModuleService('user');
 
   try {
-    let users = yield userService.getByPage();
+    let users = yield userService.getByPage({}, 1, 10, 'username', 1);
     this.viewBag.set('users', users);
   } catch(err) {
     this.logger.error('Error while listing users', err);
@@ -87,7 +91,7 @@ module.exports.list = function *() {
 };
 
 module.exports.viewById = function *() {
-  let userService = this.getModuleService('user');
+  let userService = yield this.getModuleService('user');
 
   let id = this.params.id || '';
   let user = yield userService.getOneById(id);
@@ -100,7 +104,7 @@ module.exports.viewById = function *() {
 };
 
 module.exports.viewByUsername = function *() {
-  let userService = this.getModuleService('user');
+  let userService = yield this.getModuleService('user');
 
   let username = this.params.username || '';
   let user = yield userService.getOneByUsername(username);
@@ -114,7 +118,7 @@ module.exports.viewByUsername = function *() {
 module.exports.deleteById = function *() {
   this.utils.requireConnected();
 
-  let userService = this.getModuleService('user');
+  let userService = yield this.getModuleService('user');
 
   try {
     let id = this.params.id || '';
