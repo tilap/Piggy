@@ -3,7 +3,8 @@ import humanize from 'humanize';
 import cliColor from 'cli-color';
 import deepExtend from 'deep-extend';
 
-let config = require('config/main').loggers.winston; // @torefactor
+import config from 'config/main';
+let loggerConfig = config.loggers.winston;
 
 let cfg = deepExtend({
   'silly': { 'icon': '→', 'labelColor': 'magenta',     'messageColor': 'magenta'},
@@ -12,12 +13,12 @@ let cfg = deepExtend({
   'info': { 'icon': '✔', 'labelColor': 'cyan',        'messageColor': 'cyan'},
   'warn': { 'icon': '!', 'labelColor': 'yellow',      'messageColor': 'yellow'},
   'error': { 'icon': '✖', 'labelColor': 'red',         'messageColor': 'red'},
-}, config.console.colors);
+}, loggerConfig.console.colors);
 
 let loggerTransports = [];
 
 // Console transporter
-if (config.console && config.console.enabled) {
+if (loggerConfig.console && loggerConfig.console.enabled) {
   let consoleTransporter = new winston.transports.Console({
     'timestamp': function() {
       return humanize.date('H:i:s');
@@ -44,7 +45,7 @@ if (config.console && config.console.enabled) {
     'prettyPrint': true,
     'handleExceptions': true,
     'json': false,
-    'level': config.console.level,
+    'level': loggerConfig.console.level,
     'maxsize': 5242880, // 5MB
     'maxFiles': 5,
   });
@@ -53,13 +54,13 @@ if (config.console && config.console.enabled) {
 }
 
 // File transporter
-if (config.file && config.file.enabled) {
+if (loggerConfig.file && loggerConfig.file.enabled) {
   let fileTransporter = new winston.transports.File({
     'handleExceptions': true,
     'json': false,
     'colorize': false,
-    'level': config.file.level,
-    'filename': config.file.filename,
+    'level': loggerConfig.file.level,
+    'filename': loggerConfig.file.filename,
   });
 
   loggerTransports.push(fileTransporter);

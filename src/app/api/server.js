@@ -1,3 +1,4 @@
+// Packages
 import koa from 'koa';
 import koaBodyParser from 'koa-bodyparser';
 import koaLocale from 'koa-locale';
@@ -9,14 +10,21 @@ import koaCompress from 'koa-compress';
 import koaSwig from 'koa-swig';
 import sanitizeUri from 'koa-sanitize-uri';
 import koaUtils from 'koa-utils';
+
+// App packages
+import ApiBag from 'ApiBag';
+
+// Specific packages
 import logger from 'library/logger';
 import koaRequestLog from 'library/middleware/koa-request-log';
 import koaJWTauth from 'library/middleware/jwt-auth';
 import koaModuleLoader from 'library/middleware/koa-piggy-module-loader';
-import ApiBag from 'ApiBag';
+import {middlewares} from 'library/server/passport';
+
+// App
 import routers from 'routers';
 
-let config = require('config/main');
+import config from 'config/main';
 let app = koa();
 
 if (!config.keys) {
@@ -51,7 +59,7 @@ app.use(koaSession(sessionConfig));
 app.use(koaUtils);
 
 // Passport
-require('./library/server/passport').middlewares(app);
+middlewares(app);
 
 // Body parser middleware
 app.use(koaBodyParser(config.bodyparser));
@@ -59,9 +67,6 @@ app.use(koaBodyParser(config.bodyparser));
 // i18n middleware
 koaLocale(app, config.i18n.querystring);
 app.use(koai18n(app, config.i18n));
-
-// Static files middleware
-app.use(koaStatic(config.static.directory, config.static));
 
 app.use(koaJWTauth);
 app.use(koaModuleLoader);

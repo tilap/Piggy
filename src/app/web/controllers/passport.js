@@ -1,9 +1,11 @@
 import passport from 'koa-passport';
 import FlashMessage from 'FlashMessage';
 import {strategies} from 'library/server/passport';
-import {authentification as authConfig} from 'config/main';
+// import {authentification as authConfig} from 'config/main';
+import config from 'config/main';
+let authConfig = config.authentification || {};
 import jwt from 'jsonwebtoken';
-let tokenConfig = require('config/main').authentification.token;
+let tokenConfig = authConfig.token;
 
 const redirectLoginSuccess = authConfig.redirections.success;
 const redirectLoginError = authConfig.redirections.error;

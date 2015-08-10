@@ -25,7 +25,7 @@ import redirectOnHtmlStatus from 'koa-redirectOnHtmlStatus';
 import koaRequestLog from 'library/middleware/koa-request-log';
 
 
-let config = require('config/main');
+import config from 'config/main';
 let app = koa();
 
 
@@ -86,7 +86,8 @@ app.use(function *(next) {
 });
 
 // Passport
-require('./library/server/passport').middlewares(app);
+import {middlewares} from 'library/server/passport';
+middlewares(app);
 app.use(function *(next) {
   this.viewBag.setProtected('currentUser', this.isAuthenticated() ? this.req.user : null);
   yield next;

@@ -3,7 +3,7 @@ import path from 'path';
 
 let root = path.normalize(__dirname + '/../../../../../');
 export default {
-  'port': 3014,
+  'port': 3013,
   'keys': ['some-secret-key'],
   'db': {
     'local': 'mongodb://localhost/piggy',
@@ -88,10 +88,6 @@ export default {
     ],
   },
 
-  'static': {
-    'directory': path.join(root, 'public'),
-  },
-
   // @see https://github.com/koajs/generic-session#options
   'session': {
     'cookie': {
@@ -99,18 +95,5 @@ export default {
     },
     'key': 'myapp-cookie',
     'mongo': 'mongodb://localhost/piggy-sessions',
-  },
-
-  // @see https://github.com/fundon/koa-swig
-  'view': {
-    'root': './lib/app/web/views',
-    'autoescape': true,
-    'cache': false,
-    'ext': 'html',
-  },
-
-  // @see https://github.com/koajs/error
-  'error': {
-    'template': './lib/app/web/views/layouts/error.html',
   },
 };

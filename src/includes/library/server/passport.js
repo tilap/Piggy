@@ -1,11 +1,11 @@
 import passport from 'koa-passport';
 import logger from 'library/logger';
 import PassportExtractor from 'PassportExtractor';
-
 import ModuleFactory from 'library/ModuleFactory';
-let userService = ModuleFactory.getServiceInstance('user');
+import config from 'config/main';
 
-let passportConfig = require('config/main').authentification.providers;
+const userService = ModuleFactory.getServiceInstance('user');
+const passportConfig = config.authentification.providers;
 
 let PassportStrategies = {
   'twitter': require('passport-twitter').Strategy,
@@ -35,7 +35,7 @@ Object.keys(PassportStrategies).forEach(strategy => {
 
 module.exports.strategies = availableStrategies;
 
-module.exports.middlewares = function(app) {
+export function middlewares(app) {
   passport.serializeUser( (user, done) => {
     done(null, user.id);
   });
@@ -124,4 +124,4 @@ module.exports.middlewares = function(app) {
 
   app.use(passport.initialize());
   app.use(passport.session());
-};
+}

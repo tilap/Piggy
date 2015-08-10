@@ -137,7 +137,8 @@ gulp.task('server', function() {
     verbose: false,
     env: {
       NODE_ENV: options.env ? options.env : 'development',
-      NODE_PATH: './lib/app/modules:./lib/app/web:./lib/includes',
+      NODE_PATH: './lib/app/web:./lib/includes',
+      APP_SLUG: 'web',
     },
     watch: [
       'lib/**/*.js'
@@ -163,7 +164,8 @@ gulp.task('server:api', function() {
     verbose: false,
     env: {
       NODE_ENV: options.env ? options.env : 'development',
-      NODE_PATH: './lib/app/modules:./lib/app/api:./lib/includes',
+      NODE_PATH: './lib/app/api:./lib/includes',
+      APP_SLUG: 'api',
     },
     watch: [
       'lib/**/*.js'

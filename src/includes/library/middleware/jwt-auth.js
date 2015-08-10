@@ -4,8 +4,8 @@
 
 import jwt from 'jsonwebtoken';
 import ModuleFactory from 'library/ModuleFactory';
+import config from 'config/main';
 let userService = ModuleFactory.getServiceInstance('user');
-let config = require('config/main');
 
 export default function *(next) {
   // If connected, skip
@@ -32,8 +32,8 @@ export default function *(next) {
     }
 
     if (user) {
-      let p = new Promise( (resolve, reject) => {
-        return this.req.login(user, function(err, success) {
+      let p = new Promise( (resolve) => {
+        return this.req.login(user, function() {
           resolve(true);
         });
       });
