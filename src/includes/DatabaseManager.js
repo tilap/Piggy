@@ -1,10 +1,11 @@
-import monk from 'monk';
+let MongoClient = require('mongodb').MongoClient;
 
-export default class DatabaseManager {
+export default class DBManager {
+
   constructor(closeOnSigint = true) {
-    this._servers = {};
+    this._dbConfigs = {};
     this._instances = {};
-    this._defaultServer = '';
+    this._defaultDB = '';
 
     if (closeOnSigint) {
       process.on('SIGINT', () => {
@@ -13,38 +14,76 @@ export default class DatabaseManager {
     }
   }
 
-  addServer(name, conf) {
-    this._servers[name] = conf;
-    if (!this.hasDefaultServer()) {
-      this.setDefaultServer(name);
+  addDBConfig(name, conf) {
+    this._dbConfigs[name] = conf;
+    if (!this.hasDefaultDBName()) {
+      this.setDefaultDBName(name);
     }
   }
 
-  setDefaultServer(name) {
-    if (!this.hasServer(name)) {
-      throw new Error('Unknwon server "' + name + '"');
+  hasDBConfig(name) {
+    return Object.keys(this._dbConfigs).indexOf(name) > -1;
+  }
+
+  getDBConfig(name) {
+    if (!this.hasDBConfig(name)) {
+      throw new Error('DB ' + name + ' not set');
     }
-    this._defaultServer = name;
+    return this._dbConfigs[name];
   }
 
-  hasServer(name) {
-    return Object.keys(this._servers).indexOf(name) > -1;
+  setDefaultDBName(name) {
+    this._defaultDB = name;
   }
 
-  hasDefaultServer() {
-    return this._defaultServer !== '';
+  hasDefaultDBName() {
+    return this._defaultDB !== '';
   }
 
-  getServer(name) {
-    if (!this.hasServer(name)) {
-      throw new Error('Database server ' + name + ' not set');
-    }
-    return this._servers[name];
+  getDB(name) {
+    return new Promise( (resolve, reject) => {
+      if (this._instanceExists(name)) {
+        return resolve(this._instances[name]);
+      }
+
+      let config = this.getDBConfig(name);
+      return this._createInstance(name, config)
+        .then( instance => {
+          this._instances[name] = instance;
+          resolve(this._instances[name]);
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
+  }
+
+  getCollection(collection, database=null) {
+    let dbName = database || this._defaultDB;
+    return this.getDB(dbName)
+      .then(db => {
+        return db.collection(collection);
+      })
+      .catch(err => {
+        throw new Error('DB Collection error ' + err.message);
+      });
+  }
+
+  closeAllInstances() {
+    Object.keys(this._instances).forEach( name => {
+      this._closeInstance(name);
+    });
   }
 
   _createInstance(name, config) {
-    let db = monk(config);
-    this._instances[name] = db;
+    return new Promise( (resolve, reject) => {
+      MongoClient.connect(config, function(err, db) {
+        if (err) {
+          return reject(err);
+        }
+        resolve(db);
+      });
+    });
   }
 
   _instanceExists(name) {
@@ -57,25 +96,5 @@ export default class DatabaseManager {
     }
     this._instances[name].close();
     return true;
-  }
-
-  closeAllInstances() {
-    Object.keys(this._instances).forEach( name => {
-      this._closeInstance(name);
-    });
-  }
-
-  getDb(name) {
-    if (!this._instanceExists(name)) {
-      let config = this.getServer(name);
-      this._createInstance(name, config);
-    }
-
-    return this._instances[name];
-  }
-
-  getCollection(collection, serverName) {
-    serverName = serverName || this._defaultServer;
-    return this.getDb(serverName).get(collection);
   }
 }

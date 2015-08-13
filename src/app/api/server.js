@@ -1,4 +1,3 @@
-// Packages
 import koa from 'koa';
 import koaBodyParser from 'koa-bodyparser';
 import koaLocale from 'koa-locale';
@@ -9,22 +8,27 @@ import koaCompress from 'koa-compress';
 import koaSwig from 'koa-swig';
 import sanitizeUri from 'koa-sanitize-uri';
 import koaUtils from 'koa-utils';
-
-// App packages
 import ApiBag from 'ApiBag';
-
-// Specific packages
 import logger from 'library/logger';
 import koaRequestLog from 'library/middleware/koa-request-log';
 import koaJWTauth from 'library/middleware/jwt-auth';
 import koaModuleLoader from 'library/middleware/koa-piggy-module-loader';
-import {middlewares} from 'library/middleware/passport';
-
-// App
 import routers from 'routers';
-
 import config from 'config/main';
-let app = koa();
+
+process.on('SIGINT', () => {
+  logger.warn('Api Server stopped');
+  process.exit(0);
+});
+
+process.on('uncaughtException', err => {
+  console.error('Api uncaughtException !');
+  console.error(err);
+});
+
+const app = koa();
+app.on('error', err => logger.error('Api Server error', err) );
+
 
 if (!config.keys) {
   throw new Error('Please add session secret key in the config file!');
@@ -58,7 +62,9 @@ app.use(koaSession(sessionConfig));
 app.use(koaUtils);
 
 // Passport
-middlewares(app);
+import {registerSerializers, initMiddlewares} from 'library/middleware/passport';
+registerSerializers();
+initMiddlewares(app);
 
 // Body parser middleware
 app.use(koaBodyParser(config.bodyparser));

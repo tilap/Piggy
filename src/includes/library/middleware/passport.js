@@ -4,124 +4,129 @@ import PassportExtractor from 'PassportExtractor';
 import ModuleFactory from 'library/ModuleFactory';
 import config from 'config/main';
 
-const userService = ModuleFactory.getServiceInstance('user');
-const passportConfig = config.authentification.providers;
+const providersConfig = config.authentification.providers;
 
-let PassportStrategies = {
-  'twitter': require('passport-twitter').Strategy,
-  'facebook': require('passport-facebook').Strategy,
-  'google': require('passport-google-auth').Strategy,
-};
-
-let availableStrategies = {
-  'register': [],
-  'bind': [],
-  'login': [],
-};
-
-Object.keys(PassportStrategies).forEach(strategy => {
-  if (passportConfig[strategy]) {
-    if (passportConfig[strategy].bind || passportConfig[strategy].register) {
-      availableStrategies.login.push(strategy);
-    }
-    if (passportConfig[strategy].bind) {
-      availableStrategies.bind.push(strategy);
-    }
-    if (passportConfig[strategy].register) {
-      availableStrategies.register.push(strategy);
-    }
-  }
+let strategiesClasses = {};
+Object.keys(providersConfig).forEach( medium => {
+  strategiesClasses[medium] = require('passport-' + providersConfig[medium].strategy ).Strategy;
 });
 
-module.exports.strategies = availableStrategies;
+let availableStrategies = {
+  'register': config.authentification.register || [],
+  'bind': config.authentification.bind || [],
+  'login': config.authentification.login || [],
+  'all' : []
+};
+['register', 'bind', 'login'].forEach( key => {
+  availableStrategies[key].forEach( strategy => {
+    if(availableStrategies.all.indexOf(strategy) < 0) {
+      availableStrategies.all.push(strategy);
+    }
+  });
+});
 
-export function middlewares(app) {
+module.exports.availableStrategies = availableStrategies;
+
+export function registerSerializers() {
   passport.serializeUser( (user, done) => {
     done(null, user.id);
   });
 
   passport.deserializeUser( (id, done) => {
-    return userService.getOneById(id)
-      .catch( err => {
-        done(err);
-      })
-      .then( user => {
-        done(null, user);
+    return ModuleFactory
+      .getServiceInstance('user')
+      .then( service => {
+        return service.getOneById(id)
+          .catch( err => {
+            console.error('Passport deserialize user error', err);
+            done(err);
+          })
+          .then( user => {
+            done(null, user);
+          });
       });
   });
+}
 
+export function registerAppStrategies(app) {
   logger.info('Passport available strategies for login: ' + availableStrategies.login.join(', '));
   logger.info('Passport available strategies for register: ' + availableStrategies.register.join(', '));
   logger.info('Passport available strategies for binding: ' + availableStrategies.bind.join(', '));
 
-  availableStrategies.login.forEach( (strategy) => {
-    let strategyConfig = passportConfig[strategy];
+  availableStrategies.all.forEach( (strategy) => {
+    let Strategy = strategiesClasses[strategy];
+
+    // @todo use route instead of hard coded :)
+    let strategyConfig = providersConfig[strategy];
     strategyConfig.callbackURL = 'http://pickpic.com:3013/login/' + strategy + '/callback/';
     strategyConfig.returnURL = 'http://pickpic.com:3013/login/' + strategy + '/callback/';
 
-    passport.use( new PassportStrategies[strategy](strategyConfig, (token, tokenSecret, profile, done) => {
-      userService.getOneByStrategyAndToken(strategy, profile.id)
-        .then(
-          user => {
-            // login
-            if (user) {
-              if (availableStrategies.login.indexOf(strategy) < 0 ) {
-                throw new Error('Cannot use ' + strategy + ' to log in');
+    passport.use( new Strategy(strategyConfig, (token, tokenSecret, profile, done) => {
+      return ModuleFactory.getServiceInstance('user')
+        .then( userService => {
+          return userService.getOneByStrategyAndToken(strategy, profile.id)
+            .then( user => {
+              // Register
+              if (!user && availableStrategies.register.indexOf(strategy) < 0) {
+                throw new Error('Cannot use ' + strategy + ' to register');
               }
-              return user;
-            }
-            // Register
-            if (availableStrategies.register.indexOf(strategy) < 0) {
-              throw new Error('Cannot use ' + strategy + ' to register');
-            }
 
-            // Build user data
-            let userData = {};
-            let profileData = new PassportExtractor(profile);
-            ['username', 'lastname', 'firstname', 'email', 'gender'].forEach( property => {
-              if (profileData[property]) {
-                userData[property] = profileData[property];
-              }
-            });
-            userData._auths = {};
-            userData._auths[strategy] = profile;
-            let username;
-            try {
-              username = profileData.buildUsername();
-            } catch(err) {
-              throw new Error('Unable to generate a valid username'); // @todo: generate a unique random one
-            }
-
-            return userService.createUniqueUsername(username)
-              .catch( err => {
-                console.error('Passport error (userService.generateUniqueUsername)', err);
-                throw err;
-              })
-              .then(username => {
-                userData.username = username;
-                return userService.createOneFromData(userData);
-              })
-              .catch( err => {
-                console.error('Passport error (userService.saveOne)', err);
-                throw err;
-              })
-              .then( user => {
+              // login
+              if (user) {
+                if (availableStrategies.login.indexOf(strategy) < 0 ) {
+                  throw new Error('Cannot use ' + strategy + ' to log in');
+                }
                 return user;
+              }
+
+              // Build user data
+              let userData = {};
+              let profileData = new PassportExtractor(profile);
+              ['username', 'lastname', 'firstname', 'email', 'gender'].forEach( property => {
+                if (profileData[property]) {
+                  userData[property] = profileData[property];
+                }
               });
-          },
-          err => {
-            throw err;
-          }
-        )
-        .catch(err => {
-          done(err);
-        })
-        .then( user => {
-          done(null, user);
+              userData._auths = {};
+              userData._auths[strategy] = profile;
+              let username;
+              try {
+                username = profileData.buildUsername();
+              } catch(err) {
+                throw new Error('Unable to generate a valid username'); // @todo: generate a unique random one
+              }
+
+              return userService.createUniqueUsername(username)
+                .catch( err => {
+                  console.error('Passport error (userService.generateUniqueUsername)', err);
+                  throw err;
+                })
+                .then(username => {
+                  userData.username = username;
+                  return userService.createNewOne(userData, strategy);
+                })
+                .catch( err => {
+                  console.error('Passport error (userService.saveOne)', err);
+                  throw err;
+                })
+                .then( user => {
+                  return user;
+                });
+            })
+            .catch(err => {
+              console.error('error', err);
+              done(err);
+            })
+            .then( user => {
+              return done(null, user);
+            });
         });
     }));
   });
+}
 
+export function initMiddlewares(app) {
   app.use(passport.initialize());
   app.use(passport.session());
 }
+

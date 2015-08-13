@@ -92,11 +92,21 @@ export default {
       'type': String,
       'validators': [
         {
-          'fct': value => ['backoffice', 'passport'].indexOf(value) > -1,
+          'fct': value => ['backoffice', 'twitter', 'facebook', 'api'].indexOf(value) > -1,
           'skipIfEmpty': true,
           'msg': 'module.user.validation.error.source.enum.format',
         },
       ],
+    },
+    'created_at': {
+      'type': Date,
+      'validator': [],
+      'default': null,
+    },
+    'updated_at': {
+      'type': Date,
+      'validator': [],
+      'default': null,
     },
   },
 };

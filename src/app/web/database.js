@@ -6,6 +6,6 @@ export default db;
 
 if (config.db) {
   Object.keys(config.db).forEach(name => {
-    db.addServer(name, config.db[name]);
+    db.addDBConfig(name, config.db[name]);
   });
 }
