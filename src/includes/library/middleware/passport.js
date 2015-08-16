@@ -15,11 +15,12 @@ let availableStrategies = {
   'register': config.authentification.register || [],
   'bind': config.authentification.bind || [],
   'login': config.authentification.login || [],
-  'all' : []
+  'all': [],
 };
+
 ['register', 'bind', 'login'].forEach( key => {
   availableStrategies[key].forEach( strategy => {
-    if(availableStrategies.all.indexOf(strategy) < 0) {
+    if (availableStrategies.all.indexOf(strategy) < 0) {
       availableStrategies.all.push(strategy);
     }
   });
