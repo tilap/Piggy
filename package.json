@@ -41,6 +41,7 @@
     "passthrough-counter": "^1.0.0",
     "piggy-htmldoc": "^0.0.2",
     "piggy-module": "^0.0.12",
+    "require-dir": "^0.3.0",
     "springbokjs-errors": "^2.1.0",
     "winston": "^1.0.0"
   },
