@@ -10,30 +10,6 @@ See [my dev notes](./NOTES.md).
 
 Type ```make``` to get the full options list. Main important ones are:
 
-```
-# Install the package dependancies
-make install
-make i
-
-# Build the app
-make build
-make b
-
-# Start and watch the WEB APP with automatically reload
-make watch
-make w
-
-# Start and watch the API with automatically reload
-make wapi
-
-# Clean the generated files
-make clean
-make c
-
-# Remove all packages folders
-make reset
-make r
-```
 
 [devdep-image]: https://david-dm.org/tilap/piggy.svg
 [devdep-url]: https://david-dm.org/tilap/piggy#info=devDependencies
