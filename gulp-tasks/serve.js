@@ -2,6 +2,7 @@
 // web:server
 // api:server
 
+var config = require('./config.js');
 var gulp = require('gulp');
 var $ = require('gulp-load-plugins')({camelize: true});
 
@@ -17,9 +18,10 @@ function nodemon(env, cfg, key) {
     },
     watch: [
       cfg.dist + '/**/*.js',
-      config.server.includes.dist
+      config.includes.dist,
+      config.modules.dist
     ],
-    delay: 150
+    delay: 150,
   })
   .on('restart', function (files) {
     var filesStr = files ? 'Files changed: ' + files.join(', ') : '(manual request)';
@@ -29,6 +31,6 @@ function nodemon(env, cfg, key) {
 
 ['web', 'api'].forEach(function(app) {
   gulp.task(app + ':server', function() {
-    nodemon(config.env, config.server.app[app], app);
+    nodemon(config.env, config.app[app], app);
   });
-})
+});

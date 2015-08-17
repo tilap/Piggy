@@ -1,7 +1,10 @@
+var config = require('./../config.js');
+
 var gulp = require('gulp');
 var $ = require('gulp-load-plugins')({camelize: true});
 var inquirer = require('inquirer');
 var fs = require('fs');
+var path = require('path');
 
 gulp.task('create-module', function (done) {
   var srcPath = config.modules.templates;
@@ -9,9 +12,12 @@ gulp.task('create-module', function (done) {
   var moduleFiles = fs.readdirSync(srcPath).sort();
 
   console.info('');
-  console.info('==============================');
-  console.info('  Generator for empty module');
-  console.info('==============================');
+  console.info('');
+  console.info('  =====================================');
+  console.info('    Generate an empty business module');
+  console.info('  =====================================');
+  console.info('');
+  console.info('  Answer these few questions to generate a business module boilerplate.');
   console.info('');
 
   inquirer.prompt([
@@ -26,14 +32,16 @@ gulp.task('create-module', function (done) {
     { type: 'input',
       name: 'collection',
       message: 'Mongo Collection',
-      default: '',
+      default: function(answers) {
+        return answers.name.toLowerCase();
+      },
       validate: function(value) {
         return value!=='';
       }
     },
     { type: 'checkbox',
       name: 'files',
-      message: 'What to generate ?',
+      message: 'What to generate?',
       choices: moduleFiles,
       default: moduleFiles
     },
@@ -44,7 +52,7 @@ gulp.task('create-module', function (done) {
     },
     { type: 'confirm',
       name: 'moveon',
-      message: 'Continue ?'
+      message: 'Create the module?'
     }
   ],
   function (answers) {
@@ -69,14 +77,14 @@ gulp.task('create-module', function (done) {
     gulp.src(sourcesFiles)
       .pipe($.data(data))
       .pipe($.swig())
-      .pipe($.rename(function (path) {
-        path.dirname += '/' + data.Lowername;
-        path.extname = '.js';
-        console.info('Creating ' + path.basename + path.extname + ' in ' + destinationFolder + '/' + path.dirname);
+      .pipe($.rename(function (pathInfo) {
+        pathInfo.dirname += '/' + data.Lowername;
+        pathInfo.extname = '.js';
+        console.info('Create ' + pathInfo.basename + pathInfo.extname + ' in ' + path.resolve(destinationFolder + '/' + pathInfo.dirname));
       }))
       .pipe(gulp.dest(destinationFolder))
       .on('end', function () {
-        console.info('Module ' + data.Nicename + ' created');
+        console.info('=> Module ' + data.Nicename + ' successfully created');
         done();
       });
   });

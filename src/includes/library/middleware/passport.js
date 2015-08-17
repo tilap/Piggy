@@ -2,7 +2,7 @@ import passport from 'koa-passport';
 import logger from 'library/logger';
 import PassportExtractor from 'PassportExtractor';
 import ModuleFactory from 'library/ModuleFactory';
-import config from 'config/main';
+import config from 'config/server';
 
 const providersConfig = config.authentification.providers;
 

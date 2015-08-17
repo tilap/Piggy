@@ -1,4 +1,4 @@
-!.keep
+!.gitkeep
 
 # logs
 /logs/**/*
@@ -15,7 +15,10 @@ tmp/**/*
 
 public
 public/**/*
+!public/config.js
 
-# environment ovveride config
-src/config/environment/**/env-override.json
-src/config/environment/**/main.js
+# environment config
+src/includes/config/**/env-override.js
+src/includes/config/development/*.*
+src/includes/config/staging/*.*
+src/includes/config/production/*.*

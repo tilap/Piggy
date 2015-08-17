@@ -4,10 +4,10 @@ import path from 'path';
 let root = path.normalize(__dirname + '/../../../../');
 
 export default {
-  'port': 3014,
+  'port': 2223,
   'keys': ['some-secret-key'],
   'db': {
-    'local': 'mongodb://localhost/piggy',
+    'local': 'mongodb://localhost:27017/piggy',
   },
   'loggers': {
     'winston': {
@@ -76,7 +76,7 @@ export default {
 
   // @see https://github.com/fundon/koa-i18n
   'i18n': {
-    'directory': path.join(root, 'locales'),
+    'directory': path.join(root, 'src/locales'),
     'locales': ['en', 'fr'],
     'querystring': 'lang',
     'modes': [

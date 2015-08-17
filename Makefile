@@ -8,6 +8,7 @@ i: install
 install:
 	npm prune
 	npm install
+	$(BIN)/jspm install
 
 r: reset
 reset:
@@ -28,7 +29,7 @@ api:
 	$(BIN)/gulp api:dev
 
 module:
-	$(BIN)/gulp create-module
+	@$(BIN)/gulp create-module
 
 unused:
 	$(BIN)/gulp unusedPackages

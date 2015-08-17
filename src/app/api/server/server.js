@@ -14,7 +14,7 @@ import koaRequestLog from 'library/middleware/koa-request-log';
 import koaJWTauth from 'library/middleware/jwt-auth';
 import koaModuleLoader from 'library/middleware/koa-piggy-module-loader';
 import routers from 'routers';
-import config from 'config/main';
+import config from 'config/server';
 
 process.on('SIGINT', () => {
   logger.warn('Api Server stopped');
