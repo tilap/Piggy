@@ -12,8 +12,3 @@ module.exports.about = function *() {
   this.viewBag.get('html').head.title.queue('A propos');
   return yield this.renderView('statics/about.html');
 };
-
-module.exports.test = function *() {
-  this.viewBag.get('html').head.title.queue('Test');
-  return yield this.renderView('statics/test.html');
-};

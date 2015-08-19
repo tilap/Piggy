@@ -20,6 +20,11 @@ var del = require('del');
       build: app + ':es6-build',
       lint: app + ':es6-lint',
       watch: app + ':es6-lint',
+      views: {
+        clean: app + ':views-clean',
+        build: app + ':views-build',
+        watch: app + ':views-watch'
+      }
     }
   };
 
@@ -52,6 +57,35 @@ var del = require('del');
         .pipe(gulp.dest(cfg.dist));
     });
   });
+
+
+
+  gulp.task(cfg.tasks.views.clean, function() {
+    if(!appConfig.views) {
+      console.log('No view for app ' + app);
+    }
+    del(appConfig.views.dist + '/**/*.html');
+  });
+
+  gulp.task(cfg.tasks.views.build, function() {
+    if(!appConfig.views) {
+      console.log('No view for app ' + app);
+    }
+    return gulp.src(appConfig.views.src + '/**/*.html', { base: appConfig.views.src})
+      .pipe(gulp.dest(appConfig.views.dist));
+  });
+
+  gulp.task(cfg.tasks.views.watch, function() {
+    if(!appConfig.views) {
+      console.log('No view for app ' + app);
+    }
+    return gulp.watch(appConfig.views.src + '/**/*.html', function(fileStatus) {
+      console.log('[Views watcher] ' + fileStatus.type + ' ' + fileStatus.path);
+      return gulp.src(fileStatus.path, { base: appConfig.views.src})
+        .pipe(gulp.dest(appConfig.views.dist));
+    });
+  });
+
 });
 
 

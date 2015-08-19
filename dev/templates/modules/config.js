@@ -16,12 +16,12 @@ export default {
     // Properties working with service createNewOne and updateOneFromData method override
     'created_at': {
       'type': Date,
-      'validator': [{'fct': 'isDate', 'skipIfEmpty': true, 'msg': 'module.{{collection}}.validation.error.created_at.format'}],
+      'validators': [{'fct': 'isDate', 'skipIfEmpty': true, 'msg': 'module.{{collection}}.validation.error.created_at.format'}],
       'default': null,
     },
     'updated_at': {
       'type': Date,
-      'validator': [{'fct': 'isDate',  'skipIfEmpty': true, 'msg': 'module.{{collection}}.validation.error.updated_at.format'}],
+      'validators': [{'fct': 'isDate',  'skipIfEmpty': true, 'msg': 'module.{{collection}}.validation.error.updated_at.format'}],
       'default': null,
     },
 
@@ -33,7 +33,6 @@ export default {
       'type': String, // ObjectId, Array, Object
       'default': '',
       'unique': true,
-      'required': true,
       'validators': [
         { // Basic required with custom message
           'fct': 'required',

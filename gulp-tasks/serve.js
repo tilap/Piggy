@@ -18,6 +18,7 @@ function nodemon(env, cfg, key) {
     },
     watch: [
       cfg.dist + '/**/*.js',
+      cfg.dist + '/**/*.html',
       config.includes.dist,
       config.modules.dist
     ],

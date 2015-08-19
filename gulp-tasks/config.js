@@ -13,6 +13,10 @@ module.exports = {
       dist: root + '/lib/app/web/server',
       paths: ['./lib/app/web/server', './lib/includes'],
       sourcemap: false,
+      views: {
+        src: './src/app/web/views/',
+        dist: './lib/app/web/views'
+      },
     },
     api: {
       src: root + '/src/app/api/server',
@@ -37,14 +41,9 @@ module.exports = {
     }
   },
   modules: {
-    templates: root + '/dev/modules/templates/',
     src: root + '/src/modules/',
     dist: root + '/lib/modules/',
     sourcemap: true,
-  },
-  views: {
-    src: './src/app/web/**/*.html',
-    dist: './lib/app/web'
   },
   plugins: {
     babel: {
@@ -104,5 +103,21 @@ module.exports = {
     browsersync: debug,
     less_sourcemap: debug, // Sourcemap for frontend css
     js_sourcemap: debug, // Sourcemap for frontend javascript
-  }
+  },
+  generators: {
+    api: {
+      controller: {
+        template: root + '/dev/templates/api/controller.js',
+        dist: root + '/src/app/api/server/controllers/'
+      },
+      router: {
+        template: root + '/dev/templates/api/router.js',
+        dist: root + '/src/app/api/server/routers/'
+      }
+    },
+    modules: {
+      templates: root + '/dev/templates/modules/',
+    }
+  },
+
 };

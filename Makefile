@@ -31,5 +31,8 @@ api:
 module:
 	@$(BIN)/gulp create-module
 
+apigen:
+	@$(BIN)/gulp create-api
+
 unused:
 	$(BIN)/gulp unusedPackages

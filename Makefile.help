@@ -14,5 +14,6 @@
 [c]lean   : remove all the generated files
 web       : Clean, build and start server for app "WEB" development
 api       : Clean, build and start server for app "API" development
-module    : Start cli tool to create new module
+module    : Business module scaffolding cli tool
+apigen    : Api controller and route from business module scaffolding cli tool
 unused    : Find useless packages

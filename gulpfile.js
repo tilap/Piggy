@@ -14,7 +14,7 @@ gulp.task('clean', function() {
       'api:es6-clean',
       'includes:es6-clean',
       'modules:es6-clean',
-      'views:clean',
+      'web:views-clean',
       'front:js-clean',
       'front:css-clean'
     ]
@@ -24,7 +24,8 @@ gulp.task('clean', function() {
 gulp.task('build', function() {
   runSequence(
     ['clean'],
-    ['views:build', 'includes:es6-build'],
+    ['web:views-build'],
+    ['includes:es6-build', 'modules:es6-build'],
     ['web:es6-build', 'api:es6-build'],
     ['front:js-build', 'front:css-build']
   );
@@ -34,9 +35,9 @@ gulp.task('web:dev', function() {
   runSequence(
     ['web:es6-clean', 'web:es6-lint'],
     ['includes:es6-build', 'modules:es6-build'],
-    ['web:es6-build', 'views:build', 'front:js-build', 'front:css-build'],
+    ['web:es6-build', 'web:views-build', 'front:js-build', 'front:css-build'],
     ['includes:es6-watch', 'modules:es6-watch'],
-    ['web:es6-watch', 'views:watch', 'front:js-watch', 'front:css-watch'],
+    ['web:es6-watch', 'web:views-watch', 'front:js-watch', 'front:css-watch'],
     ['web:server'],
     ['browsersync']
   );

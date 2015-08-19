@@ -7,7 +7,7 @@ var fs = require('fs');
 var path = require('path');
 
 gulp.task('create-module', function (done) {
-  var srcPath = config.modules.templates;
+  var srcPath = config.generators.modules.templates;
   var distPath = config.modules.src;
   var moduleFiles = fs.readdirSync(srcPath).sort();
 

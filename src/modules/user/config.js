@@ -21,16 +21,13 @@ export default {
       'unique': true,
       'required': true,
       'validators': [
-        {
-          'fct': 'required',
+        { 'fct': 'required',
           'msg': 'module.user.validation.error.username.required',
         },
-        {
-          'fct': value => { return value.match(/^[a-z][a-z0-9]*$/); },
+        { 'fct': value => { return value.match(/^[a-z][a-z0-9]*$/); },
           'msg': 'module.user.validation.error.username.alnum',
         },
-        {
-          'fct': 'isLength',
+        { 'fct': 'isLength',
           'args': [6, 20],
           'msg': 'module.user.validation.error.username.length',
         },
