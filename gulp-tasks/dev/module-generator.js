@@ -47,8 +47,12 @@ gulp.task('create-module', function (done) {
     },
     { type: 'input',
       name: 'destination',
-      message: 'Destination',
+      message: 'Destination path',
       default: distPath
+    },
+    { type: 'confirm',
+      name: 'example',
+      message: 'Include some example?'
     },
     { type: 'confirm',
       name: 'moveon',
@@ -65,7 +69,8 @@ gulp.task('create-module', function (done) {
     var data = {
       Lowername: answers.name.toLowerCase(),
       Nicename: answers.name.charAt(0).toUpperCase() + answers.name.substr(1).toLowerCase(),
-      collection: answers.collection
+      collection: answers.collection,
+      example: answers.example
     };
     var destinationFolder = answers.destination;
 
