@@ -18,7 +18,8 @@ import koaUtils from 'koa-utils';
 import logger from 'library/logger';
 import redirectOnHtmlStatus from 'koa-redirectOnHtmlStatus';
 import koaRequestLog from 'library/middleware/koa-request-log';
-import config from 'config/main';
+import config from 'config/server';
+import appConfig from 'config/app';
 
 process.on('SIGINT', () => {
   logger.warn('Web Server stopped');
@@ -63,7 +64,7 @@ if (config.loggers.requests) {
 
 // Force clean uri
 app.use(sanitizeUri({
-  'ignore': [/^assets\/.*/i, /.*\.(js|html|css|png|jpg|gif)$/i],
+  'ignore': [/^assets\/.*/i, /.*\.(js|html|css|png|jpg|gif|ico)$/i],
 }));
 
 // Session middleware
@@ -83,7 +84,7 @@ app.use(function *(next) {
     'head': new Head(),
   });
 
-  this.viewBag.get('html').head.title.queue('Mon appli');
+  this.viewBag.get('html').head.title.queue(appConfig.name);
   this.renderView = (file) => this.render('scripts/' + file, this.viewBag);
 
   yield next;
@@ -99,29 +100,22 @@ app.use(function *(next) {
   yield next;
 });
 
-// Body parser middleware
 app.use(koaBodyParser(config.bodyparser));
 
-// i18n middleware
 koaLocale(app, config.i18n.querystring);
 app.use(koai18n(app, config.i18n));
 
-// Static files middleware
 app.use(koaStatic(config.static.directory, config.static));
 
-// Flash message middleware
 app.use(koaFlash(config.flash));
 
 app.use(koaModuleLoader);
 
-// Render middleware
 app.context.render = koaSwig(config.view);
 
-// Response compress
 app.use(koaCompress());
 
 // Routing
-// @todo: replace koa-router by a both front/back router (like https://github.com/kieran/barista )
 import routers from 'routers';
 Object.keys(routers).forEach( id => {
   app.use(routers[id].middleware());

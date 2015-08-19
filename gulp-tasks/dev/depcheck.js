@@ -1,6 +1,8 @@
 // Chack unused packages.
 // As it grep, packages use with require(var) are not found...
 
+var config = require('./../config.js');
+
 var gulp = require('gulp');
 var depcheck = require('depcheck');
 

@@ -3,6 +3,13 @@
 <head>
   <meta charset="utf-8">
   {{ html.head.toString() }}
+
+  <link href="/style/main.css" rel="stylesheet" type="text/css">
+  <script src="/jspm_packages/system.js"></script>
+  <script src="/config.js"></script>
+  <script>
+    System.import('js/main');
+  </script>
 </head>
 <body>
 

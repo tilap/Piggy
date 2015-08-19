@@ -1,5 +1,5 @@
 import DatabaseManager from 'DatabaseManager';
-import config from 'config/main';
+import config from 'config/server';
 
 let db = new DatabaseManager();
 export default db;

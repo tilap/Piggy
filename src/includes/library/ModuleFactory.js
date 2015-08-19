@@ -59,7 +59,7 @@ let moduleClasses = {
   'managers': {},
 };
 
-const serviceDirectory = path.normalize( __dirname + '/../modules/');
+const serviceDirectory = path.normalize( __dirname + '/../../modules/');
 let fileInServiceDirectory = fs.readdirSync(serviceDirectory);
 fileInServiceDirectory.forEach( file => {
   let serviceFile = serviceDirectory + file + '/Service.js';

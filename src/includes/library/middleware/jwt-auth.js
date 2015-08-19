@@ -4,7 +4,7 @@
 
 import jwt from 'jsonwebtoken';
 import ModuleFactory from 'library/ModuleFactory';
-import config from 'config/main';
+import config from 'config/server';
 let userService = ModuleFactory.getServiceInstance('user');
 
 export default function *(next) {

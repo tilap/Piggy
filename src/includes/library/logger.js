@@ -3,7 +3,7 @@ import humanize from 'humanize';
 import cliColor from 'cli-color';
 import deepExtend from 'deep-extend';
 
-import config from 'config/main';
+import config from 'config/server';
 let loggerConfig = config.loggers.winston;
 
 let cfg = deepExtend({
