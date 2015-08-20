@@ -4,9 +4,8 @@
 import ModuleFactory from 'library/ModuleFactory';
 
 export default function *(next) {
-  this.getModuleService = (module) => {
+  this.getModuleService = (module, app='api') => {
     let user = this.utils.getUser();
-    let app = 'api';
     return ModuleFactory.getServiceInstance(module)
       .then( service => {
         if (user) {
