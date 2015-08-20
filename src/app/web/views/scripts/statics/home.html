@@ -1,7 +1,25 @@
 {% extends '../../layouts/default.html' %}
 
 {% block content %}
+
 <h1>Home</h1>
 This is the home page
-{{ test }}
+
+<form id="subscribe-form">
+  <input type="email" placeholder="john@doe.com">
+  <input type="submit" value="S'inscrire">
+</form>
+
+<ul>
+
+<h2>Newsfeed</h2>
+{% for source in sources %}
+  {% if source.url %}
+  <li><a href="{{ source.url }}" target="_blank">{{ source.title }}</a></li>
+  {% else %}
+  <li>{{ source.title }}</li>
+  {% endif %}
+{% endfor %}
+</ul>
+
 {% endblock %}

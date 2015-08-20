@@ -9,7 +9,16 @@ var cfg= {
   sourcemap: config.enabled.js_sourcemap
 };
 
-gulp.task('front:js-build', function() {
+gulp.task('front:js-module', function() {
+  return gulp.src(config.modules.src + '/**/*.js', { base : config.modules.src })
+    // .pipe($.if(cfg.sourcemap, $.sourcemaps.init()))
+    .pipe($.babel(config.plugins.babel_front))
+    .pipe($.uglify(config.plugins.uglify))
+    // .pipe($.if(cfg.sourcemap, $.sourcemaps.write('.')))
+    .pipe(gulp.dest(config.modules.dist_front));
+});
+
+gulp.task('front:js-build', ['front:js-module'], function() {
   return gulp.src(cfg.src + '/**/*.js', { base : cfg.src })
     .pipe($.if(cfg.sourcemap, $.sourcemaps.init()))
     .pipe($.babel(config.plugins.babel_front))

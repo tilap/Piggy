@@ -43,6 +43,7 @@ module.exports = {
   modules: {
     src: root + '/src/modules/',
     dist: root + '/lib/modules/',
+    dist_front: root + '/public/js/modules',
     sourcemap: true,
   },
   plugins: {

@@ -75,7 +75,8 @@
       "baseURL": "public"
     },
     "dependencies": {
-      "jquery": "github:components/jquery@^2.1.4"
+      "jquery": "github:components/jquery@^2.1.4",
+      "piggy-module": "npm:piggy-module@^0.0.12"
     },
     "devDependencies": {
       "babel": "npm:babel-core@^5.1.13",

@@ -19,6 +19,7 @@ System.config({
     "babel-runtime": "npm:babel-runtime@5.8.20",
     "core-js": "npm:core-js@0.9.18",
     "jquery": "github:components/jquery@2.1.4",
+    "piggy-module": "npm:piggy-module@0.0.12",
     "github:jspm/nodelibs-process@0.1.1": {
       "process": "npm:process@0.10.1"
     },
@@ -28,6 +29,12 @@ System.config({
     "npm:core-js@0.9.18": {
       "fs": "github:jspm/nodelibs-fs@0.1.2",
       "process": "github:jspm/nodelibs-process@0.1.1",
+      "systemjs-json": "github:systemjs/plugin-json@0.1.0"
+    },
+    "npm:piggy-module@0.0.12": {
+      "validator": "npm:validator@3.43.0"
+    },
+    "npm:validator@3.43.0": {
       "systemjs-json": "github:systemjs/plugin-json@0.1.0"
     }
   }
