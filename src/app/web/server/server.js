@@ -64,7 +64,7 @@ if (config.loggers.requests) {
 
 // Force clean uri
 app.use(sanitizeUri({
-  'ignore': [/^assets\/.*/i, /.*\.(js|html|css|png|jpg|gif|ico)$/i],
+  'ignore': [/^assets\/.*/i, /.*\.(js|html|css|png|jpg|gif|ico|js.map)$/i],
 }));
 
 // Session middleware

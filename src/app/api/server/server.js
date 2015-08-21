@@ -15,6 +15,7 @@ import koaJWTauth from 'library/middleware/jwt-auth';
 import koaModuleLoader from 'library/middleware/koa-piggy-module-loader';
 import routers from 'routers';
 import config from 'config/server';
+import cors from 'kcors';
 
 process.on('SIGINT', () => {
   logger.warn('Api Server stopped');
@@ -29,11 +30,13 @@ process.on('uncaughtException', err => {
 const app = koa();
 app.on('error', err => logger.error('Api Server error', err) );
 
-
 if (!config.keys) {
   throw new Error('Please add session secret key in the config file!');
 }
 app.keys = config.keys;
+
+// Cross domain authorization
+app.use(cors());
 
 // Logger (in file & console dep. on config) from controller
 app.use(function *(next) {
@@ -48,7 +51,7 @@ if (config.loggers.requests) {
 
 // Force clean uri
 app.use(sanitizeUri({
-  'ignore': [/^assets\/.*/i, /.*\.(js|html|css|png|jpg|gif)$/i],
+  'ignore': [/^assets\/.*/i, /.*\.(js|html|css|png|jpg|gif|js\-map)$/i],
 }));
 
 // Session middleware
