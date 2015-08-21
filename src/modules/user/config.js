@@ -1,11 +1,9 @@
-import { ObjectId } from 'mongodb';
-
 export default {
   'collection': 'users',
 
   'attributes': {
     '_id': {
-      'type': ObjectId,
+      'type': Object,
       'unique': true,
       'validators': [
         {

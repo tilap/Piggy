@@ -1,25 +1,25 @@
 System.config({
-  "baseURL": "/",
-  "transpiler": "babel",
-  "babelOptions": {
+  baseURL: "/",
+  defaultJSExtensions: true,
+  transpiler: "babel",
+  babelOptions: {
     "optional": [
       "runtime"
     ]
   },
-  "paths": {
-    "*": "*.js",
-    "github:*": "jspm_packages/github/*.js",
-    "npm:*": "jspm_packages/npm/*.js"
-  }
-});
+  paths: {
+    "github:*": "jspm_packages/github/*",
+    "npm:*": "jspm_packages/npm/*"
+  },
 
-System.config({
-  "map": {
+  map: {
     "babel": "npm:babel-core@5.8.22",
     "babel-runtime": "npm:babel-runtime@5.8.20",
     "core-js": "npm:core-js@0.9.18",
+    "github/fetch": "github:github/fetch@0.9.0",
+    "jakearchibald/es6-promise": "github:jakearchibald/es6-promise@3.0.2",
     "jquery": "github:components/jquery@2.1.4",
-    "piggy-module": "npm:piggy-module@0.0.12",
+    "piggy-module": "npm:piggy-module@api-storage",
     "github:jspm/nodelibs-process@0.1.1": {
       "process": "npm:process@0.10.1"
     },
@@ -31,7 +31,7 @@ System.config({
       "process": "github:jspm/nodelibs-process@0.1.1",
       "systemjs-json": "github:systemjs/plugin-json@0.1.0"
     },
-    "npm:piggy-module@0.0.12": {
+    "npm:piggy-module@api-storage": {
       "validator": "npm:validator@3.43.0"
     },
     "npm:validator@3.43.0": {
@@ -39,4 +39,3 @@ System.config({
     }
   }
 });
-

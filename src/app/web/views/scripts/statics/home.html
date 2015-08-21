@@ -10,9 +10,8 @@ This is the home page
   <input type="submit" value="S'inscrire">
 </form>
 
+<h2>Newsfeed list</h2>
 <ul>
-
-<h2>Newsfeed</h2>
 {% for source in sources %}
   {% if source.url %}
   <li><a href="{{ source.url }}" target="_blank">{{ source.title }}</a></li>
@@ -22,4 +21,6 @@ This is the home page
 {% endfor %}
 </ul>
 
+<h2>User list loaded from api on front</h2>
+<ul id="user-list"></ul>
 {% endblock %}

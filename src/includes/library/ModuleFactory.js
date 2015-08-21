@@ -1,4 +1,4 @@
-import Storage from 'piggy-module/lib/Storage/Db';
+import MongoStorage from 'piggy-module/lib/Storage/Mongo';
 import dbManager from 'database';
 import fs from 'fs';
 import path from 'path';
@@ -34,7 +34,7 @@ export default class ModuleFactory {
   static getStorage(module) {
     return dbManager.getCollection(module)
       .then( collection => {
-        let storage = new Storage(collection);
+        let storage = new MongoStorage(collection);
         return storage;
       });
   }

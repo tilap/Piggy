@@ -30,7 +30,7 @@ export default class ApiBagRessource {
       'type': this.type,
     };
     if (this._attributes && Object.keys(this._attributes).length > 0) {
-      res.attribues = this._attributes;
+      res.attributes = this._attributes;
     }
     return res;
   }

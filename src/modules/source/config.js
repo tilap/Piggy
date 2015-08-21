@@ -1,11 +1,9 @@
-import { ObjectId } from 'mongodb';
-
 export default {
   'collection': 'source',
 
   'attributes': {
     '_id': {
-        'type': ObjectId,
+        'type': Object,
         'unique': true,
         'validators': [
           { 'fct': 'isMongoId', 'skipIfEmpty': true, 'msg': 'module.source.validation.error.mongoid'}
