@@ -24,6 +24,8 @@ build:
 
 web:
 	$(BIN)/gulp web:dev
+websync:
+	$(BIN)/gulp web:dev-sync
 
 api:
 	$(BIN)/gulp api:dev

@@ -13,6 +13,7 @@
 [b]uild   : generate all the files
 [c]lean   : remove all the generated files
 web       : Clean, build and start server for app "WEB" development
+websync   : Same as web, but queue browsersync for frontend quick dev
 api       : Clean, build and start server for app "API" development
 module    : Business module scaffolding cli tool
 apigen    : Api controller and route from business module scaffolding cli tool

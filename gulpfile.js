@@ -38,7 +38,13 @@ gulp.task('web:dev', function() {
     ['web:es6-build', 'web:views-build', 'front:js-build', 'front:css-build'],
     ['includes:es6-watch', 'modules:es6-watch'],
     ['web:es6-watch', 'web:views-watch', 'front:js-watch', 'front:css-watch'],
-    ['web:server'],
+    ['web:server']
+  );
+});
+
+gulp.task('web:dev-sync', function() {
+  runSequence(
+    ['web:dev'],
     ['browsersync']
   );
 });
