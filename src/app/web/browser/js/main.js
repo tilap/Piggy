@@ -1,5 +1,6 @@
 import ModuleFactory from './ModuleFactory';
 import ValidationError from 'piggy-module/lib/ValidationError';
+import sweetalert from 'sweetalert/dist/sweetalert.min.js';
 
 let userService = ModuleFactory.getServiceInstance('user');
 
@@ -41,16 +42,16 @@ form.onsubmit = function() {
         Object.keys(errors.validation).forEach( property => {
           errorMessage += errors.validation[property].message + "\n";
         });
-        alert(errorMessage);
+        sweetalert('Error', errorMessage, 'error');
       }
       else {
-        alert('Internal server error: ' + errors.message);
+        sweetalert('Error', 'Internal server error: ' + errors.message, 'error');
       }
       return false;
     })
     .then( user => {
       if(user) {
-        alert('User with username "' + user.username + '" has been created');
+        sweetalert('User created!', 'User with username "' + user.username + '" has been created', 'success');
         ['username', 'firstname', 'lastname', 'email'].forEach( key => {
           document.getElementsByName(key)[0].value = '';
         });

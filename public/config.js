@@ -18,9 +18,8 @@ System.config({
     "core-js": "npm:core-js@1.1.1",
     "github/fetch": "github:github/fetch@0.9.0",
     "jakearchibald/es6-promise": "github:jakearchibald/es6-promise@3.0.2",
-    "jquery": "github:components/jquery@2.1.4",
     "piggy-module": "npm:piggy-module@api-storage",
-    "twbs/bootstrap": "github:twbs/bootstrap@4.0.0-alpha",
+    "sweetalert": "github:t4t5/sweetalert@1.1.0",
     "github:jspm/nodelibs-process@0.1.1": {
       "process": "npm:process@0.10.1"
     },
