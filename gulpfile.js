@@ -44,7 +44,6 @@ gulp.task('web:dev', function() {
 
 gulp.task('web:dev-sync', function() {
   runSequence(
-    ['web:dev'],
     ['browsersync']
   );
 });

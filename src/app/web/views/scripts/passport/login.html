@@ -2,16 +2,29 @@
 
 {% block content %}
 
-    <h1>{{ pageTitle }}</h1>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="page-header">
+        <h1>{{ pageTitle }}</h1>
+      </div>
+      {% if message %}
+        <div class="alert alert-warning">{{ message }}</div>
+      {% endif %}
+    </div>
+  </div>
+</div>
 
-    {% if message %}
-        <p>{{ message }}</p>
-    {% endif %}
-
-    <ul>
-    {% for strategy in strategies %}
-      <li><a href="/login/{{strategy}}/">{{strategy}}</a></li>
-    {% endfor %}
-    </ul>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <ul>
+      {% for strategy in strategies %}
+        <a href="/login/{{strategy}}/" class="btn btn-primary btn-lg">{{strategy}}</a>
+      {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
 
 {% endblock %}

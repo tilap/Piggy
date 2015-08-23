@@ -1,16 +1,13 @@
 let serviceName = 'user';
+
 module.exports.get = function *() {
   let service = yield this.getModuleService(serviceName);
 
   this.bag.setMultipleRessourceResponse();
 
-  let options = this.utils.getFromQueryM(['page', 'limit', 'orderby', 'order'], null, true);
-  let page = options.page && options.page.match(/^\d+$/) && options.page > 0 ? options.page : 1;
-  let limit = options.limite && options.limit.match(/^\d+$/) && options.limit > 0 && options.limit < 1000 ? options.limit : 25;
-  let orderby = options.orderby && ['username', 'firstname', 'lastname', 'email'].indexOf(options.orderby) > -1 ? options.orderby : 'username';
-  let order = options.order && options.order === 'desc' ? 'desc' : 'asc';
-
-  let items = yield service.getByPage({}, page, limit, orderby, order);
+  let criteria = this.utils.getFromQuery('criteria', {});
+  let options = this.utils.getFromQuery('options', {});
+  let items = yield service.get(criteria, options);
   this.bag.setDataFromVos(items);
   return this.renderBag();
 };

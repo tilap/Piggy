@@ -1,66 +1,39 @@
-import ApiStorage from 'piggy-module/lib/Storage/Api';
+// import ApiStorage from 'piggy-module/lib/Storage/Api';
+import ApiStorage from './ApiStorage';
+
 import SourceService from './modules/source/Service';
 import SourceManager from './modules/source/Manager';
 import UserService from './modules/user/Service';
 import UserManager from './modules/user/Manager';
 
 let moduleClasses = {
-  'services': {
-    'source': SourceService,
-    'user': UserService
+  'source': {
+    'service': SourceService,
+    'manager': SourceManager,
   },
-  'managers': {
-    'source' : SourceManager,
-    'user' : UserManager
-  },
+  'user': {
+    'service': UserService,
+    'manager': UserManager,
+  }
 };
 
 export default class ModuleFactory {
-  static serviceExists(module) {
-    return Object.keys(ModuleFactory._classes.services).indexOf(module) > -1;
-  }
 
   static getServiceInstance(module, context={}) {
-    let Service = ModuleFactory.getServiceClass(module);
-    return ModuleFactory.getManagerInstance(module)
-      .then( manager => {
-        let s = new Service(manager);
-        s.setFullContext(context);
-        return s;
-      });
-  }
-
-  static getServiceClass(module) {
-    if (!ModuleFactory.serviceExists(module)) {
+    if (Object.keys(ModuleFactory._classes).indexOf(module) < 0) {
       throw new Error('Unable to get service module class ' + module);
     }
-    return ModuleFactory._classes.services[module];
-  }
 
-  static managerExists(module) {
-    return Object.keys(ModuleFactory._classes.managers).indexOf(module) > -1;
-  }
-
-  static getManagerInstance(module) {
-    let Manager = ModuleFactory.getManagerClass(module);
-    return ModuleFactory.getStorage(module)
-      .then( storage => {
-        return new Manager(storage);
-      });
-  }
-
-  static getManagerClass(module) {
-    if (!ModuleFactory.managerExists(module)) {
-      throw new Error('Unable to get manager module class ' + module);
-    }
-    return ModuleFactory._classes.managers[module];
-  }
-
-  static getStorage(module) {
+    let Service = ModuleFactory._classes[module].service;
+    let Manager = ModuleFactory._classes[module].manager;
     let collection = 'http://pickpic.com:2223/' + module + '/';
-    return new Promise( (resolve, reject) => {
-      return resolve(new ApiStorage(collection));
-    });
+
+    let storage = new ApiStorage(collection);
+
+    let manager = new Manager(storage);
+    let service = new Service(manager);
+    service.setFullContext(context);
+    return service;
   }
 }
 

@@ -2,25 +2,35 @@
 
 {% block content %}
 
-<h1>Home</h1>
-This is the home page
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="page-header">
+        <h1>Home </h1>
+      </div>
+    </div>
+  </div>
+</div>
 
-<form id="subscribe-form">
-  <input type="email" placeholder="john@doe.com">
-  <input type="submit" value="S'inscrire">
-</form>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <h2>Newsfeed list</h2>
+      {% if sources.length %}
+      <ul>
+      {% for source in sources %}
+        {% if source.url %}
+        <li><a href="{{ source.url }}" target="_blank">{{ source.title }}</a></li>
+        {% else %}
+        <li>{{ source.title }}</li>
+        {% endif %}
+      {% endfor %}
+      </ul>
+      {% else %}
+        No source yet
+      {% endif %}
+    </div>
+  </div>
+</div>
 
-<h2>Newsfeed list</h2>
-<ul>
-{% for source in sources %}
-  {% if source.url %}
-  <li><a href="{{ source.url }}" target="_blank">{{ source.title }}</a></li>
-  {% else %}
-  <li>{{ source.title }}</li>
-  {% endif %}
-{% endfor %}
-</ul>
-
-<h2>User list loaded from api on front</h2>
-<ul id="user-list"></ul>
 {% endblock %}

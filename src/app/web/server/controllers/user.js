@@ -1,4 +1,4 @@
-import ManagerError from 'piggy-module/lib/Errors';
+import ValidationError from 'piggy-module/lib/ValidationError';
 import FlashMessage from 'FlashMessage';
 
 
@@ -18,11 +18,12 @@ module.exports.new = function *() {
       this.flash = new FlashMessage(this.i18n.__('user.new.success.message', newUser.username), FlashMessage.TYPES.SUCCESS);
       return this.redirect(this.request.href);
     } catch(errors) {
-      if (errors instanceof ManagerError) {
+      if (errors instanceof ValidationError) {
+        formErrors = errors.validation;
+      } else {
         this.logger.error('Error while inserting user', errors);
         this.throw(500, this.i18n.__('user.new.exception.message'));
       }
-      formErrors = errors;
     }
   }
 
@@ -63,7 +64,12 @@ module.exports.edit = function *() {
       this.flash = new FlashMessage(msg, FlashMessage.TYPES.SUCCESS);
       this.redirect(this.request.href);
     } catch(errors) {
-      formErrors = errors;
+      if (errors instanceof ValidationError) {
+        formErrors = errors.validation;
+      } else {
+        this.logger.error('Error while inserting user', errors);
+        this.throw(500, this.i18n.__('user.new.exception.message'));
+      }
     }
   }
 

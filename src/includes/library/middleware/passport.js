@@ -59,8 +59,8 @@ export function registerAppStrategies(app) {
 
     // @todo use route instead of hard coded :)
     let strategyConfig = providersConfig[strategy];
-    strategyConfig.callbackURL = 'http://pickpic.com:3014/login/' + strategy + '/callback/';
-    strategyConfig.returnURL = 'http://pickpic.com:3014/login/' + strategy + '/callback/';
+    strategyConfig.callbackURL = 'http://pickpic.com:3013/login/' + strategy + '/callback/';
+    strategyConfig.returnURL = 'http://pickpic.com:3013/login/' + strategy + '/callback/';
 
     passport.use( new Strategy(strategyConfig, (token, tokenSecret, profile, done) => {
       return ModuleFactory.getServiceInstance('user')

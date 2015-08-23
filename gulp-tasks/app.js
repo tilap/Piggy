@@ -11,6 +11,7 @@ var del = require('del');
 
 ['web', 'api'].forEach(function(app) {
   var appConfig = config.app[app];
+
   var cfg = {
     src : appConfig.src,
     dist : appConfig.dist,
@@ -39,8 +40,8 @@ var del = require('del');
   gulp.task(cfg.tasks.lint, function() {
     gulp.src(cfg.src + '/**/*.js')
       .pipe($.eslint())
-      .pipe($.eslint.formatEach('compact', process.stderr))
-      .pipe($.eslint.failAfterError());
+      .pipe($.eslint.formatEach());
+      // .pipe($.eslint.failAfterError());
   });
 
   gulp.task(cfg.tasks.clean, function() {

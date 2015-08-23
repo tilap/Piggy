@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   {{ html.head.toString() }}
 
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" type="text/css">
   <link href="/style/main.css" rel="stylesheet" type="text/css">
   <script src="/jspm_packages/system.js"></script>
   <script src="/config.js"></script>
@@ -13,29 +14,47 @@
 </head>
 <body>
 
-{% if currentUser %}
-  {{ currentUser.username }} | <a href="/logout/">Logout</a>
-{% else %}
-  Not connected.
-  <a href="/login/">Login</a> or <a href="/register/">Register</a>
-{% endif %}
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/">
+        App test
+      </a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li><a href="/dashboard/users/">Manage user JS</a></li>
+      <li><a href="/user/">Manage user</a></li>
+      <li><a href="/about/">About</a></li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+      <p class="navbar-text">
+      {% if currentUser %}
+        {{ currentUser.username }} | <a href="/logout/">Logout</a>
+      {% else %}
+        Not connected.
+        <a href="/login/">Login</a> or <a href="/register/">Register</a>
+      {% endif %}
+      </p>
+    </ul>
 
-{# TODO Put the full dom in another file and make it renderable by browser #}
+  </div>
+</nav>
+
 {% if flash.title || flash.content %}
-  <div class="flash-message flash-message-{{flash.type }}">
-      {% if flash.title %}
-      <div class="flash-message-title">{{ flash.title }}</div>
-      {% endif %}
-      {% if flash.content %}
-      <div class="flash-message-content">{{ flash.content }}</div>
-      {% endif %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="alert alert-{{flash.type }}">
+          {% if flash.title %}
+          <div><strong>{{ flash.title }}</strong></div>
+          {% endif %}
+          {% if flash.content %}
+          <div class="flash-message-content">{{ flash.content }}</div>
+          {% endif %}
+      </div>
+    </div>
   </div>
-{% endif %}
-
-{% if currentUser %}
-  <div>
-    <a href="/user/">Manage users</a>
-  </div>
+</div>
 {% endif %}
 
 {% block content %}{% endblock %}

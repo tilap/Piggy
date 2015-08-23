@@ -26,8 +26,11 @@ export default function *(next) {
       let temp;
       queryStr.split('&').forEach( query => {
         temp = query.split('=');
-        if (temp[0] && temp[1] && param === temp[0]) {
+        if (temp[0] && param === temp[0] && temp[1]) {
           result = decodeURIComponent(temp[1]);
+          try {
+            result = JSON.parse(result);
+          } catch(err) {}
         }
       });
       return result;
@@ -49,6 +52,9 @@ export default function *(next) {
         temp = query.split('=');
         if (temp[0] && temp[1] && params.indexOf(temp[0]) > -1) {
           result[temp[0]] = decodeURIComponent(temp[1]);
+          try {
+            result[temp[0]] = JSON.parse(result[temp[0]]);
+          } catch(err) {}
         }
       });
       return result;
