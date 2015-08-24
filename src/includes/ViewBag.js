@@ -7,15 +7,15 @@ export default class ViewBag {
     return Object.getOwnPropertyNames(this).indexOf(key) > -1;
   }
 
-  get(key, defaultValue='') {
+  get(key, defaultValue = '') {
     return this.has(key) ? this[key] : defaultValue;
   }
 
-  set(key, value='') {
+  set(key, value = '') {
     this[key] = value;
   }
 
-  setProtected(key, value='') {
+  setProtected(key, value = '') {
     Object.defineProperty(this, key, {
       'writable': false,
       'configurable': false,

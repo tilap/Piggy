@@ -58,7 +58,7 @@ export default class DBManager {
     });
   }
 
-  getCollection(collection, database=null) {
+  getCollection(collection, database = null) {
     let dbName = database || this._defaultDB;
     return this.getDB(dbName)
       .then(db => {

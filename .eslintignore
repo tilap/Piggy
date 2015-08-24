@@ -1,3 +1,8 @@
 !**/*.{js,jsx}
 **/*.min.{js,jsx}
 ./gulpfile.js
+./gul-tasks/**/*
+./src/locales/**/*
+src/app/web/browser/**/*
+./dev/**/*
+

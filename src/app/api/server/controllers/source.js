@@ -34,14 +34,14 @@ module.exports.getOneById = function *() {
 };
 
 
-module.exports.createOne = function *() {
+module.exports.insertOne = function *() {
   let service = yield this.getModuleService(moduleName);
 
   this.bag.setSingleRessourceResponse();
 
   let itemData = this.utils.getFromPostM(createProperties);
   try {
-    let newVo = yield service.createNewOne(itemData, 'api');
+    let newVo = yield service.insertOne(itemData, 'api');
     this.bag.setDataFromVo(newVo);
     this.renderBag();
   } catch(errors) {

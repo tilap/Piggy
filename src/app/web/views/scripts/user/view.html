@@ -1,17 +1,37 @@
 {% extends '../../layouts/default.html' %}
 
 {% block content %}
-
-<h1>User {{ user.username }}</h1>
-
-<ul>
-  <li><strong>id</strong>: {{ user.id }}</li>
-  <li><strong>username</strong>: {{ user.username }}</li>
-  <li><strong>firstname</strong>: {{ user.firstname || 'N/A' }}</li>
-  <li><strong>lastname</strong>: {{ user.lastname || 'N/A' }}</li>
-  <li><strong>email</strong>: {{ user.email || 'N/A' }}</li>
-  <li><strong>gender</strong>: {{ user.gender || 'N/A' }}</li>
-  <li><strong>source</strong>: {{ user.source || 'N/A' }}</li>
-</ul>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <h1 class="text-center">User {{ user.username }}</h1>
+    </div>
+    <div class="col-md-8 col-md-push-2">
+      <table class="table table-striped table-bordered table-condensed">
+        <tr>
+          <td>id</td><td>{{ user.id }}</td>
+        </tr>
+        <tr>
+          <td>username</td><td>{{ user.username }}</td>
+        </tr>
+        <tr>
+          <td>firstname</td><td>{{ user.firstname || 'N/A' }}</td>
+        </tr>
+        <tr>
+          <td>lastname</td><td>{{ user.lastname || 'N/A' }}</td>
+        </tr>
+        <tr>
+          <td>email</td><td>{{ user.email || 'N/A' }}</td>
+        </tr>
+        <tr>
+          <td>gender</td><td>{{ user.gender || 'N/A' }}</td>
+        </tr>
+        <tr>
+          <td>source</td><td>{{ user.source || 'N/A' }}</td>
+        </tr>
+      </ul>
+    </div>
+  </div>
+</div>
 
 {% endblock %}

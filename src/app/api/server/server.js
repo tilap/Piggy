@@ -28,7 +28,7 @@ process.on('uncaughtException', err => {
 });
 
 const app = koa();
-app.on('error', err => logger.error('Api Server error', err) );
+// app.on('error', err => logger.error('Api Server error', err) );
 
 if (!config.keys) {
   throw new Error('Please add session secret key in the config file!');
@@ -89,12 +89,10 @@ app.use(function *(next) {
   this.bag = new ApiBag();
   this.renderBag = () => this.body = this.bag.toJson();
 
-  // Error interception for clean response whatever happens
   try {
     yield next;
   } catch(err) {
     logger.error('Api dispatch error: ' + err.message, err);
-
     this.bag.reset();
     if (this.response.status === 404) {
       this.bag.addError('not found');

@@ -1,6 +1,6 @@
 export default class FlashMessage {
 
-  constructor(title= '', type=null, content='') {
+  constructor(title = '', type = null, content = '') {
     this.title = title;
     this.type = this.isType(type) ? type : FlashMessage.TYPES.INFO;
     this.content = content;

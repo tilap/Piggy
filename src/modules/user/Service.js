@@ -6,20 +6,20 @@ export default class UserService extends Service {
     super(manager);
   }
 
-  createNewOne(data, source='') {
+  insertOne(data, source = '') {
     data._source = source;
     data.created_at = new Date();
     data.updated_at = new Date();
-    return super.createOneFromData(data);
+    return super.insertOne(data);
   }
 
-  updateOneFromData(data, id) {
+  updateOne(id, data) {
     data.updated_at = new Date();
-    return super.updateOneFromData(data, id);
+    return super.updateOne(id, data);
   }
 
   getOneByUsername(username) {
-    return this._manager.getOneByUsername(username);
+    return this.getOneByUniqueProperty('username', username);
   }
 
   getOneByStrategyAndToken(strategy, token) {

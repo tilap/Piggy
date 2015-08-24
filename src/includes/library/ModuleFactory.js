@@ -13,7 +13,7 @@ export default class ModuleFactory {
     return Object.keys(ModuleFactory._classes.managers).indexOf(module) > -1;
   }
 
-  static getServiceInstance(module, context={}) {
+  static getServiceInstance(module, context = {}) {
     let Service = ModuleFactory.getServiceClass(module);
     return ModuleFactory.getManagerInstance(module)
       .then( manager => {

@@ -5,13 +5,13 @@ let router = new Router();
 
 router.prefix('/user');
 
-router.get('user.list', '/', controller.list);
-router.get('user.new', '/new/', controller.new);
+router.get( '/', controller.list);
+router.get( '/new/', controller.new);
 router.post('/new/', controller.new);
-router.get('user.viewById', '/view/:id/', controller.viewById);
-router.get('user.viewByUsername', '/view/u/:username/', controller.viewByUsername);
-router.get('user.edit', '/edit/:id/', controller.edit);
+router.get( '/view/:id/', controller.viewById);
+router.get( '/view/u/:username/', controller.viewByUsername);
+router.get( '/edit/:id/', controller.edit);
 router.post('/edit/:id/', controller.edit);
-router.get('user.delete', '/delete/:id/', controller.deleteById);
+router.get( '/delete/:id/', controller.deleteById);
 
 module.exports = router;

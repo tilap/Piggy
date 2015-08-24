@@ -1,5 +1,4 @@
 import Manager from 'piggy-module/lib/Manager';
-import ManagerError from 'piggy-module/lib/Errors';
 import ItemVo from './Vo';
 import ItemValidator from './Validator';
 
@@ -13,7 +12,7 @@ export default class UserManager extends Manager {
     let criteria = {};
     criteria['_auths.' + strategy + '.id'] = strategyId;
 
-    return new Promise( (resolve) => {
+    return new Promise( (resolve, reject) => {
       this.get(criteria).then( users => {
         switch (users.length) {
           case 0:
@@ -21,7 +20,7 @@ export default class UserManager extends Manager {
           case 1:
             return resolve(users[0]);
           default:
-            throw new ManagerError('Multiple results for getByStrategyToken method');
+            reject(new Error('Multiple results for getByStrategyToken method'));
         }
       });
     });

@@ -20,6 +20,8 @@ gulp.task('create-api', function (done) {
     return propertyList;
   }
 
+  var templateFile = config.generators.api.controller.template;
+  var distPath = config.generators.api.controller.dist;
   var modules = fs.readdirSync(config.modules.src).sort();
 
   console.info('');
@@ -75,6 +77,7 @@ gulp.task('create-api', function (done) {
       properties_list_update_public : "['" + answers.properties_update.join("', '") + "']",
       properties_list_public : "['" + answers.properties_filter.join("', '") + "']"
     };
+    var destinationFolder = answers.destination;
 
     var templateFile = config.generators.api.controller.template;
     var destinationFolder = config.generators.api.controller.dist;

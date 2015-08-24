@@ -14,12 +14,12 @@ let moduleClasses = {
   'user': {
     'service': UserService,
     'manager': UserManager,
-  }
+  },
 };
 
 export default class ModuleFactory {
 
-  static getServiceInstance(module, context={}) {
+  static getServiceInstance(module, context = {}) {
     if (Object.keys(ModuleFactory._classes).indexOf(module) < 0) {
       throw new Error('Unable to get service module class ' + module);
     }
@@ -29,7 +29,6 @@ export default class ModuleFactory {
     let collection = 'http://pickpic.com:2223/' + module + '/';
 
     let storage = new ApiStorage(collection);
-
     let manager = new Manager(storage);
     let service = new Service(manager);
     service.setFullContext(context);

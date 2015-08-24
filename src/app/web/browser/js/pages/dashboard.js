@@ -1,2 +1,0 @@
-import ModuleFactory from './../ModuleFactory';
-

@@ -9,10 +9,10 @@ import koaCompress from 'koa-compress';
 import koaFlash from 'koa-flash';
 import koaSwig from 'koa-swig';
 import koaError from 'koa-error';
+import koaDevError from 'library/middleware/koa-dev-errors';
 import sanitizeUri from 'koa-sanitize-uri';
 import {Head} from 'piggy-htmldoc';
 import koaModuleLoader from 'library/middleware/koa-piggy-module-loader';
-import koaDevError from 'library/middleware/koa-dev-errors';
 import ViewBag from 'ViewBag';
 import koaUtils from 'koa-utils';
 import logger from 'library/logger';
@@ -35,7 +35,7 @@ const app = koa();
 app.on('error', err => logger.error('Web Server error', err) );
 
 if (!config.keys) {
-  throw new Error('Please add session secret key in the config file!');
+  throw new Error('Configuration error: add session secret key in the config file!');
 }
 app.keys = config.keys;
 

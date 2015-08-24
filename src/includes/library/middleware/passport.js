@@ -104,7 +104,7 @@ export function registerAppStrategies(app) {
                 })
                 .then(username => {
                   userData.username = username;
-                  return userService.createNewOne(userData, strategy);
+                  return userService.insertOne(userData, strategy);
                 })
                 .catch( err => {
                   console.error('Passport error (userService.saveOne)', err);

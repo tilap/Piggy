@@ -14,17 +14,28 @@
         <thead>
           <tr>
             <tr>
+              <th>ID</th>
               <th>Username</th>
               <th>First name</th>
               <th>Last name</th>
               <th>Email</th>
+              <th>Actions</th>
             </tr>
           </tr>
         </thead>
         <tbody id="user-list">
           <tr>
-            <td colspan="4">
-              <div class="alert alert-info">Loading...</div>
+            <td colspan="6">
+              {% for user in users %}
+              <tr>
+                <td> {{ user.id }}</td>
+                <td> {{ user.username }}</td>
+                <td> {{ user.firstname }}</td>
+                <td> {{ user.lastname }}</td>
+                <td> {{ user.email }}</td>
+                <td><a data-delete="{{ user.id }}">Supprimer</a></td>
+              </tr>
+              {% endfor %}
             </td>
           </tr>
         </tbody>

@@ -7,7 +7,7 @@ export default function *(next) {
   } catch (err) {
     logger.error(stackParser(err).toString());
 
-    // 401 (require auth) and 404 alread managed with redirectOnHtmlStatus
+    // 401 (require auth) managed with redirectOnHtmlStatus
     if (this.status === 401 || this.status === 404) {
       return next;
     }

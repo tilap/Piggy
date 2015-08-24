@@ -4,49 +4,52 @@
 <div class="container">
   <div class="row">
     <div class="col-md-12">
-      <h1>Create new user</h1>
+      <h1>Edit user {{ form.user.username }}</h1>
     </div>
     <div class="col-md-12">
-
+        {% if Object.keys(form.errors).length>0 %}
+        <div class="alert alert-danger">Error in the form</div>
+        {% endif %}
         <form method="post" class="form-horizontal">
             <div class="form-group">
                 <label class="col-sm-2 control-label" for="username">username</label>
                 <div class="col-sm-10">
                     <input type="text" name="username" id="username" value="{{ form.user.username }}" class="form-control">
+                    {% if form.errors.username %}
+                        {{ form.errors.username.message }}
+                    {% endif %}
                 </div>
-                {% if form.errors.username %}
-                    {{ form.errors.username.message }}
-                {% endif %}
             </div>
 
             <div class="form-group">
                 <label class="col-sm-2 control-label" for="firstname">firstname</label>
                 <div class="col-sm-10">
                     <input type="text" name="firstname" id="firstname" value="{{ form.user.firstname }}" class="form-control">
+                    {% if form.errors.firstname %}
+                        {{ form.errors.firstname.message }}
+                    {% endif %}
                 </div>
-                {% if form.errors.firstname %}
-                    {{ form.errors.firstname.message }}
-                {% endif %}
             </div>
 
             <div class="form-group">
                 <label class="col-sm-2 control-label" for="lastname">lastname</label>
                 <div class="col-sm-10">
                     <input type="text" name="lastname" id="lastname" value="{{ form.user.lastname }}" class="form-control">
+                    {% if form.errors.lastname %}
+                        {{ form.errors.lastname.message }}
+                    {% endif %}
                 </div>
-                {% if form.errors.lastname %}
-                    {{ form.errors.lastname.message }}
-                {% endif %}
+
             </div>
 
             <div class="form-group">
                 <label class="col-sm-2 control-label" for="email">email</label>
                 <div class="col-sm-10">
                     <input type="text" name="email" id="email" value="{{ form.user.email }}" class="form-control">
+                    {% if form.errors.email %}
+                        {{ form.errors.email.message }}
+                    {% endif %}
                 </div>
-                {% if form.errors.email %}
-                    {{ form.errors.email.message }}
-                {% endif %}
             </div>
             <input type="submit" class="btn btn-primary">
         </form>

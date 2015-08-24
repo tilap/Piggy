@@ -148,23 +148,21 @@ export default class ApiBag {
     }
   }
 
+  checkFormat() {
+    if (!this.hasDatas() && !this.hasErrors()) {
+      throw new Error(ApiBag.ERRORS.OUTPUT_FORMAT_EMPTY);
+    }
+
+    if (this.hasDatas() && this.hasErrors()) {
+      throw new Error(ApiBag.ERRORS.OUTPUT_FORMAT_DUAL);
+    }
+  }
+
   toJson() {
     try {
-      if (!this.hasDatas() && !this.hasErrors()) {
-        if(this._raw) {
-          this._datas = {};
-        }
-        else if(this._multiple) {
-          this._datas = [];
-        }
-        else {
-          throw new Error(ApiBag.ERRORS.OUTPUT_FORMAT_EMPTY);
-        }
-      }
-      if (this.hasDatas() && this.hasErrors()) {
-        throw new Error(ApiBag.ERRORS.OUTPUT_FORMAT_DUAL);
-      }
+      this.checkFormat();
     } catch(err) {
+      // TODO: return json response
       return {
         'errors': [err.message],
       };
@@ -191,5 +189,4 @@ Object.defineProperty(ApiBag, 'ERRORS', {
     'RESSOURCE_MISSING': 'RESSOURCE_MISSING',
   }),
 });
-
 

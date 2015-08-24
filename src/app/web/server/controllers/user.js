@@ -6,17 +6,14 @@ module.exports.new = function *() {
   this.utils.requireConnected();
 
   let userService = yield this.getModuleService('user');
-
   let itemData = {};
   let formErrors = {};
-
   if (this.request.method === 'POST') {
     try {
       itemData = this.utils.getFromPostM(['username', 'firstname', 'lastname', 'email']);
-      let newUser = yield userService.createNewOne(itemData, 'backoffice');
-
+      let newUser = yield userService.insertOne(itemData, 'backoffice');
       this.flash = new FlashMessage(this.i18n.__('user.new.success.message', newUser.username), FlashMessage.TYPES.SUCCESS);
-      return this.redirect(this.request.href);
+      return this.redirect('/user/');
     } catch(errors) {
       if (errors instanceof ValidationError) {
         formErrors = errors.validation;
@@ -41,24 +38,20 @@ module.exports.edit = function *() {
   this.utils.requireConnected();
 
   let userService = yield this.getModuleService('user');
-
   let id = this.params.id || '';
   let user = yield userService.getOneById(id);
-  if (!user) {
-    this.throw(404, this.i18n.__('user.edit.notfound.message'));
-  }
-
+  this.assert(user, 404, 'user.edit.notfound.message');
   let itemData = user.data;
   let formErrors = {};
 
   if (this.request.method === 'POST') {
     try {
-      let newData = this.utils.getFromPostM(['firstname', 'lastname', 'email'], null, true);
+      let newData = this.utils.getFromPostM(['username', 'firstname', 'lastname', 'email'], null, true);
       Object.keys(newData).forEach( property => {
         itemData[property] = newData[property];
       });
 
-      let updatedUser = yield userService.updateOneFromData(itemData, user.id);
+      let updatedUser = yield userService.updateOne(user.id, itemData);
 
       let msg = this.i18n.__('user.update.success.message', updatedUser.username);
       this.flash = new FlashMessage(msg, FlashMessage.TYPES.SUCCESS);
@@ -84,9 +77,8 @@ module.exports.list = function *() {
   this.utils.requireConnected();
 
   let userService = yield this.getModuleService('user');
-
   try {
-    let users = yield userService.getByPage({}, 1, 10, 'username', 1);
+    let users = yield userService.getByPage({}, 1, 1000, 'username', 1);
     this.viewBag.set('users', users);
   } catch(err) {
     this.logger.error('Error while listing users', err);
@@ -101,11 +93,8 @@ module.exports.viewById = function *() {
 
   let id = this.params.id || '';
   let user = yield userService.getOneById(id);
-  if (!user) {
-    this.throw(404, this.i18n.__('user.view.notfound.message'));
-  }
+  this.assert(user, 404, 'user.view.notfound.message');
   this.viewBag.set('user', user);
-
   return yield this.renderView('user/view.html');
 };
 
@@ -114,31 +103,26 @@ module.exports.viewByUsername = function *() {
 
   let username = this.params.username || '';
   let user = yield userService.getOneByUsername(username);
-  if (!user) {
-    this.throw(404, this.i18n.__('user.view.notfound.message'));
-  }
+  this.assert(user, 404, 'user.view.notfound.message');
   this.viewBag.set('user', user);
   return yield this.renderView('user/view.html');
 };
 
 module.exports.deleteById = function *() {
   this.utils.requireConnected();
-
   let userService = yield this.getModuleService('user');
+  let id = this.params.id || '';
+  let user = yield userService.getOneById(id);
+  this.assert(user, 404, 'user.delete.notfound.message');
 
-  try {
-    let id = this.params.id || '';
-    let user = yield userService.getOneById(id);
-    if (!user) {
-      this.throw(404, this.i18n.__('user.view.notfound.message'));
-    }
-
-    yield userService.deleteOneById(id);
-    let msg = this.i18n.__('user.deleted.success.message', user.username);
+  let deleted = yield userService.delete({'_id': id});
+  let msg;
+  if (deleted) {
+    msg = this.i18n.__('user.deleted.success.message', user.username);
     this.flash = new FlashMessage(msg, FlashMessage.TYPES.SUCCESS);
-    return this.redirect('/user/');
-  } catch(err) {
-    this.logger.error(err);
-    return this.throw(500, err.message);
+  } else {
+    msg = this.i18n.__('user.deleted.error.message', user.username);
+    this.flash = new FlashMessage(msg, FlashMessage.TYPES.ERROR);
   }
+  return this.redirect('/user/');
 };

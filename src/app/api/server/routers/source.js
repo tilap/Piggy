@@ -7,7 +7,7 @@ router.prefix('/source');
 
 router.get('/', controller.get);
 router.get('/:id/', controller.getOneById);
-router.post('/', controller.createOne);
+router.post('/', controller.insertOne);
 router.patch('/:id/', controller.updateOneById);
 router.delete('/:id/', controller.deleteOneById);
 

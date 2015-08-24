@@ -1,11 +1,21 @@
 export default function *(next) {
   this.utils = {
 
-    'getFromPost': (key, defaultValue='') => {
-      return this.request.body && this.request.body[key] ? this.request.body[key] : defaultValue;
+    'getFromPost': (key, defaultValue = '') => {
+      if (!this.request.body || !this.request.body[key]) {
+        return defaultValue;
+      }
+      let result = this.request.body[key];
+      try {
+        result = JSON.parse(result);
+      } catch(err) {
+
+      }
+
+      return result;
     },
 
-    'getFromPostM': (keys, defaultValue='', ignoreMultipleMissings=false) => {
+    'getFromPostM': (keys, defaultValue = '', ignoreMultipleMissings = false) => {
       let result = {};
       keys.forEach(key => {
         if (Object.keys(this.request.body).indexOf(key) > -1) {
@@ -36,7 +46,7 @@ export default function *(next) {
       return result;
     },
 
-    'getFromQueryM': (params, defaultValue, ignoreMultipleMissings=false) => {
+    'getFromQueryM': (params, defaultValue, ignoreMultipleMissings = false) => {
       const queryStr = this.request.querystring;
       let result = {};
       if (!ignoreMultipleMissings) {

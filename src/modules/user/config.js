@@ -3,11 +3,10 @@ export default {
 
   'attributes': {
     '_id': {
-      'type': Object,
+      'type': 'ID',
       'unique': true,
       'validators': [
-        {
-          'fct': 'isMongoId',
+        { 'fct': 'isMongoId',
           'skipIfEmpty': true,
           'msg': 'module.user.validation.error.mongoid',
         },
