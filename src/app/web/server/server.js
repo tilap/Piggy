@@ -2,22 +2,21 @@ import koa from 'koa';
 import koaBodyParser from 'koa-bodyparser';
 import koaLocale from 'koa-locale';
 import koai18n from 'koa-i18n';
-import koaStatic from 'koa-static'; // @todo if koa-static-cache is bette?
+import koaStatic from 'koa-static'; // @todo see if koa-static-cache is bette?
 import koaSession from 'koa-generic-session';
 import KoaMongoStore from 'koa-sess-mongo-store';
 import koaCompress from 'koa-compress';
 import koaFlash from 'koa-flash';
 import koaSwig from 'koa-swig';
 import koaError from 'koa-error';
-import koaDevError from 'library/middleware/koa-dev-errors';
 import sanitizeUri from 'koa-sanitize-uri';
+import logger from 'library/logger';
 import {Head} from 'piggy-htmldoc';
 import koaModuleLoader from 'library/middleware/koa-piggy-module-loader';
 import ViewBag from 'ViewBag';
 import koaUtils from 'koa-utils';
-import logger from 'library/logger';
+import koaAuth from 'library/koa-auth';
 import redirectOnHtmlStatus from 'koa-redirectOnHtmlStatus';
-import koaRequestLog from 'library/middleware/koa-request-log';
 import config from 'config/server';
 import appConfig from 'config/app';
 
@@ -26,17 +25,12 @@ process.on('SIGINT', () => {
   process.exit(0);
 });
 
-process.on('uncaughtException', err => {
-  console.error('Web uncaughtException !');
-  console.error(err);
+const app = koa();
+app.on('error', err => {
+  logger.error('Web Server error: %s', err.message);
+  logger.error('Error stack: %s', err.stack);
 });
 
-const app = koa();
-app.on('error', err => logger.error('Web Server error', err) );
-
-if (!config.keys) {
-  throw new Error('Configuration error: add session secret key in the config file!');
-}
 app.keys = config.keys;
 
 // Logger (in file & console dep. on config) from controller
@@ -46,7 +40,6 @@ app.use(function *(next) {
 });
 
 app.use(koaError(config.error));
-app.use(koaDevError);
 
 // On 401, redirect to login page
 app.use(redirectOnHtmlStatus({
@@ -57,10 +50,6 @@ app.use(redirectOnHtmlStatus({
   'accepts': 'html',
 }));
 
-// Add logs on requests
-if (config.loggers.requests) {
-  app.use(koaRequestLog);
-}
 
 // Force clean uri
 app.use(sanitizeUri({
@@ -75,7 +64,9 @@ if (sessionConfig.mongo) {
 app.use(koaSession(sessionConfig));
 
 // Utils
+app.use(koaModuleLoader);
 app.use(koaUtils);
+app.use(koaAuth);
 
 // Viewdata
 app.use(function *(next) {
@@ -108,8 +99,6 @@ app.use(koai18n(app, config.i18n));
 app.use(koaStatic(config.static.directory, config.static));
 
 app.use(koaFlash(config.flash));
-
-app.use(koaModuleLoader);
 
 app.context.render = koaSwig(config.view);
 

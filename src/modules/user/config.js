@@ -102,5 +102,24 @@ export default {
       'validator': [],
       'default': null,
     },
+    'profiles': {
+      'type': Array,
+      'default': [],
+      'validators': [
+        {
+          'fct': (value) => {
+            let availableProfiles = ['admin', 'user'];
+            value.forEach(profile => {
+              if(availableProfiles.indexOf(profile) < -1) {
+                return false;
+              }
+            });
+            return true;
+          },
+          'skipIfEmpty': true,
+          'msg': 'module.user.validation.error.profile.enum.format',
+        },
+      ],
+    }
   },
 };

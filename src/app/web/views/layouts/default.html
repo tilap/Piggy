@@ -8,6 +8,14 @@
   <link href="/style/main.css" rel="stylesheet" type="text/css">
   <link href="/jspm_packages/github/t4t5/sweetalert@1.1.0/dist/sweetalert.css" rel="stylesheet" type="text/css">
 
+  <script type="text/javascript">
+    {% if currentUser %}
+    var currentUserData = {{ currentUser.data | json | safe }};
+    {% else %}
+    var currentUserData = null;
+    {% endif %}
+  </script>
+
   <script src="/jspm_packages/system.js"></script>
   <script src="/config.js"></script>
   <script>

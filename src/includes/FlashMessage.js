@@ -1,3 +1,6 @@
+/*
+ * Basic Flash message class with title, structured type and content
+ */
 export default class FlashMessage {
 
   constructor(title = '', type = null, content = '') {

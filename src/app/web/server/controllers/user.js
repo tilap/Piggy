@@ -1,17 +1,22 @@
 import ValidationError from 'piggy-module/lib/ValidationError';
 import FlashMessage from 'FlashMessage';
 
+let itemServiceName = 'user';
+let insertField = ['username', 'firstname', 'lastname', 'email'];
+let updateFields = ['firstname', 'lastname', 'email'];
+let defaultGetOptions = {'limit': 100, 'sort': [['created_at', 'desc']]};
 
 module.exports.new = function *() {
-  this.utils.requireConnected();
+  // Restricted to admin
+  this.auth.requireProfile('admin');
 
-  let userService = yield this.getModuleService('user');
+  let itemService = this.getModuleService(itemServiceName);
   let itemData = {};
   let formErrors = {};
   if (this.request.method === 'POST') {
     try {
-      itemData = this.utils.getFromPostM(['username', 'firstname', 'lastname', 'email']);
-      let newUser = yield userService.insertOne(itemData, 'backoffice');
+      itemData = this.utils.getFromPostM(insertField);
+      let newUser = yield itemService.insertOne(itemData, 'backoffice');
       this.flash = new FlashMessage(this.i18n.__('user.new.success.message', newUser.username), FlashMessage.TYPES.SUCCESS);
       return this.redirect('/user/');
     } catch(errors) {
@@ -35,32 +40,35 @@ module.exports.new = function *() {
 
 
 module.exports.edit = function *() {
-  this.utils.requireConnected();
-
-  let userService = yield this.getModuleService('user');
   let id = this.params.id || '';
-  let user = yield userService.getOneById(id);
-  this.assert(user, 404, 'user.edit.notfound.message');
-  let itemData = user.data;
+
+  // Restricted to admin and self user
+  this.auth.requireConnected();
+  this.assert(this.auth.hasProfile('admin') || this.auth.getUser().id === id, 403);
+
+  let itemService = this.getModuleService(itemServiceName);
+  let item = yield itemService.getOneById(id);
+  this.assert(item, 404, 'user.edit.notfound.message');
+  let itemData = item.data;
   let formErrors = {};
 
   if (this.request.method === 'POST') {
     try {
-      let newData = this.utils.getFromPostM(['username', 'firstname', 'lastname', 'email'], null, true);
+      let newData = this.utils.getFromPostM(updateFields, null, true);
       Object.keys(newData).forEach( property => {
         itemData[property] = newData[property];
       });
 
-      let updatedUser = yield userService.updateOne(user.id, itemData);
+      let updatedItem = yield itemService.updateOne(item.id, itemData);
 
-      let msg = this.i18n.__('user.update.success.message', updatedUser.username);
+      let msg = this.i18n.__('user.update.success.message', updatedItem.username);
       this.flash = new FlashMessage(msg, FlashMessage.TYPES.SUCCESS);
       this.redirect(this.request.href);
     } catch(errors) {
       if (errors instanceof ValidationError) {
         formErrors = errors.validation;
       } else {
-        this.logger.error('Error while inserting user', errors);
+        this.logger.error('Error while inserting item', errors);
         this.throw(500, this.i18n.__('user.new.exception.message'));
       }
     }
@@ -74,12 +82,15 @@ module.exports.edit = function *() {
 };
 
 module.exports.list = function *() {
-  this.utils.requireConnected();
+  // Restricted to admin
+  this.auth.requireProfile('admin');
 
-  let userService = yield this.getModuleService('user');
+  let itemService = this.getModuleService(itemServiceName);
   try {
-    let users = yield userService.getByPage({}, 1, 1000, 'username', 1);
-    this.viewBag.set('users', users);
+    console.log('ok 1');
+    let items = yield itemService.get({}, defaultGetOptions);
+    console.log('ok 2');
+    this.viewBag.set('users', items);
   } catch(err) {
     this.logger.error('Error while listing users', err);
     this.throw(500);
@@ -89,39 +100,36 @@ module.exports.list = function *() {
 };
 
 module.exports.viewById = function *() {
-  let userService = yield this.getModuleService('user');
-
   let id = this.params.id || '';
-  let user = yield userService.getOneById(id);
-  this.assert(user, 404, 'user.view.notfound.message');
-  this.viewBag.set('user', user);
-  return yield this.renderView('user/view.html');
-};
 
-module.exports.viewByUsername = function *() {
-  let userService = yield this.getModuleService('user');
+  // Restricted to admin and self user
+  this.auth.requireConnected();
+  this.assert(this.auth.hasProfile('admin') || this.auth.getUser().id === id, 403);
 
-  let username = this.params.username || '';
-  let user = yield userService.getOneByUsername(username);
-  this.assert(user, 404, 'user.view.notfound.message');
-  this.viewBag.set('user', user);
+  let itemService = this.getModuleService('user');
+  let item = yield itemService.getOneById(id);
+
+  this.assert(item, 404, 'user.view.notfound.message');
+  this.viewBag.set('user', item);
   return yield this.renderView('user/view.html');
 };
 
 module.exports.deleteById = function *() {
-  this.utils.requireConnected();
-  let userService = yield this.getModuleService('user');
-  let id = this.params.id || '';
-  let user = yield userService.getOneById(id);
-  this.assert(user, 404, 'user.delete.notfound.message');
+  // Restricted to admin
+  this.auth.requireProfile('admin');
 
-  let deleted = yield userService.delete({'_id': id});
+  let itemService = this.getModuleService('user');
+  let id = this.params.id || '';
+  let item = yield itemService.getOneById(id);
+  this.assert(item, 404, 'user.delete.notfound.message');
+
+  let deleted = yield itemService.delete({'_id': id});
   let msg;
   if (deleted) {
-    msg = this.i18n.__('user.deleted.success.message', user.username);
+    msg = this.i18n.__('user.deleted.success.message', item.username);
     this.flash = new FlashMessage(msg, FlashMessage.TYPES.SUCCESS);
   } else {
-    msg = this.i18n.__('user.deleted.error.message', user.username);
+    msg = this.i18n.__('user.deleted.error.message', item.username);
     this.flash = new FlashMessage(msg, FlashMessage.TYPES.ERROR);
   }
   return this.redirect('/user/');

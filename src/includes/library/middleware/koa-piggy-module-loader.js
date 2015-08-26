@@ -5,17 +5,15 @@ import ModuleFactory from 'library/ModuleFactory';
 
 export default function *(next) {
   this.getModuleService = (module, app = 'api') => {
-    let user = this.utils.getUser();
-    return ModuleFactory.getServiceInstance(module)
-      .then( service => {
-        if (user) {
-          service.setContext('user', user);
-        }
-        if (app) {
-          service.setContext('app', app);
-        }
-        return service;
-      });
+    let user = this.auth.getUser();
+    let service = ModuleFactory.getServiceInstance(module);
+    if (user) {
+      service.setContext('user', user);
+    }
+    if (app) {
+      service.setContext('app', app);
+    }
+    return service;
   };
   yield next;
 }

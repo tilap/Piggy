@@ -9,7 +9,7 @@ let userService = ModuleFactory.getServiceInstance('user');
 
 export default function *(next) {
   // If connected, skip
-  if (this.utils.getUser()) {
+  if (this.auth.getUser()) {
     return yield next;
   }
 

@@ -1,5 +1,5 @@
 import Router from 'koa-router';
-import controller from '../controllers/source';
+import controller from '../controllers/user';
 
 let router = new Router();
 
@@ -9,6 +9,6 @@ router.get('/', controller.get);
 router.get('/:id/', controller.getOneById);
 router.post('/', controller.insertOne);
 router.patch('/:id/', controller.updateOneById);
-router.delete('/:id/', controller.deleteOneById);
+router.delete('/', controller.deleteMany);
 
 module.exports = router;

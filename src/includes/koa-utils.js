@@ -1,6 +1,5 @@
 export default function *(next) {
   this.utils = {
-
     'getFromPost': (key, defaultValue = '') => {
       if (!this.request.body || !this.request.body[key]) {
         return defaultValue;
@@ -11,7 +10,6 @@ export default function *(next) {
       } catch(err) {
 
       }
-
       return result;
     },
 
@@ -68,19 +66,7 @@ export default function *(next) {
         }
       });
       return result;
-    },
-
-    'requireConnected': () => {
-      if (!this.isAuthenticated()) {
-        this.throw(401);
-      }
-    },
-    'requireNotConnected': () => {
-      if (this.isAuthenticated()) {
-        this.throw(404);
-      }
-    },
-    'getUser': () => this.req.user ? this.req.user : null,
+    }
   };
 
   yield next;

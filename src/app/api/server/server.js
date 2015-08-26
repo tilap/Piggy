@@ -6,11 +6,10 @@ import koaSession from 'koa-generic-session';
 import KoaMongoStore from 'koa-sess-mongo-store';
 import koaCompress from 'koa-compress';
 import koaSwig from 'koa-swig';
-import sanitizeUri from 'koa-sanitize-uri';
 import koaUtils from 'koa-utils';
-import ApiBag from 'ApiBag';
+import koaAuth from 'library/koa-auth';
+import ApiBag from 'ApiBag/Bag';
 import logger from 'library/logger';
-import koaRequestLog from 'library/middleware/koa-request-log';
 import koaJWTauth from 'library/middleware/jwt-auth';
 import koaModuleLoader from 'library/middleware/koa-piggy-module-loader';
 import routers from 'routers';
@@ -22,17 +21,12 @@ process.on('SIGINT', () => {
   process.exit(0);
 });
 
-process.on('uncaughtException', err => {
-  console.error('Api uncaughtException !');
-  console.error(err);
+const app = koa();
+app.on('error', err => {
+  logger.error('Api Server error: %s', err.message);
+  logger.error('Error stack: %s', err.stack);
 });
 
-const app = koa();
-// app.on('error', err => logger.error('Api Server error', err) );
-
-if (!config.keys) {
-  throw new Error('Please add session secret key in the config file!');
-}
 app.keys = config.keys;
 
 // Cross domain authorization
@@ -44,16 +38,6 @@ app.use(function *(next) {
   yield next;
 });
 
-// Add logs on requests
-if (config.loggers.requests) {
-  app.use(koaRequestLog);
-}
-
-// Force clean uri
-app.use(sanitizeUri({
-  'ignore': [/^assets\/.*/i, /.*\.(js|html|css|png|jpg|gif|js\-map)$/i],
-}));
-
 // Session middleware
 let sessionConfig = config.session;
 if (sessionConfig.mongo) {
@@ -63,6 +47,7 @@ app.use(koaSession(sessionConfig));
 
 // Utils
 app.use(koaUtils);
+app.use(koaAuth);
 
 // Passport
 import {registerSerializers, initMiddlewares} from 'library/middleware/passport';
@@ -118,8 +103,3 @@ if (!module.parent) {
 } else {
   module.exports = app;
 }
-
-process.on('SIGINT', function() {
-  logger.warn('Server stopped');
-  process.exit(0);
-});

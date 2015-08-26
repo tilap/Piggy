@@ -27,7 +27,7 @@ export default {
 
     /*
     // Ugly Example ==============================================
-    // SHow you all the most usefull features
+    // Show all the most usefull features
 
     'propertyname': {
       'type': String, // ObjectId, Array, Object

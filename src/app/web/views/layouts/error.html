@@ -2,21 +2,56 @@
 <html>
 <head>
     <title>Error - {{ status }}</title>
+    <style>
+    body {
+        padding: 20px;
+        font-size: 18px;
+        font-family: 'Arial', sans-serif;
+        background: #fff;
+        color: #000;
+        text-align: center;
+    }
+    h1:after{
+        content: '';
+        display: block;
+        width: 140px;
+        height: 1px;
+        background: #000;
+        margin: 10px auto;
+    }
+    .infos {
+        text-align: left;
+        padding: 15px;
+        margin: 15px 0;
+        border: 1px solid #666;
+        color: #454545;
+        background:#f3f3f3;
+    }
+    h2{
+        margin:0;
+    }
+    </style>
 </head>
 <body>
 <div id="error">
 
-{% if status == 404 %}
+{% if status == 403 %}
+    <h1>Access denied</h1>
+    <p>Sorry but you're not granted to see this page.</p>
+{% elif status == 404 %}
     <h1>Page not found</h1>
+    <p>Sorry but there is nothing here.</p>
 {% elif status == 500 %}
     <h1>Internal error</h1>
-    <p>Looks like something broke!</p>
+    <p>Oups, looks like something broke!</p>
 {% endif %}
 
 {% if env == 'development' %}
-    <h2>Developper only message:</h2>
-    <pre><code>{{ error }}</code></pre>
-    <pre><code>{{ stack }}</code></pre>
+    <div class="infos">
+        <h2>Developper only message:</h2>
+        <pre><code>{{ error }}</code></pre>
+        <pre><code>{{ stack }}</code></pre>
+    </div>
 {% endif %}
 
 </div>

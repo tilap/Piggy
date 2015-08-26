@@ -1,4 +1,5 @@
 export default class ApiBagRessource {
+
   constructor(id = null, type = null, attributes = {}, links = {}) {
     this.id = id;
     this.type = type;
@@ -44,4 +45,3 @@ export default class ApiBagRessource {
     return res;
   }
 }
-

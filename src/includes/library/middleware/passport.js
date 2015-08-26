@@ -28,23 +28,21 @@ let availableStrategies = {
 
 module.exports.availableStrategies = availableStrategies;
 
+let userService = ModuleFactory.getServiceInstance('user');
+
 export function registerSerializers() {
   passport.serializeUser( (user, done) => {
     done(null, user.id);
   });
 
   passport.deserializeUser( (id, done) => {
-    return ModuleFactory
-      .getServiceInstance('user')
-      .then( service => {
-        return service.getOneById(id)
-          .catch( err => {
-            console.error('Passport deserialize user error', err);
-            done(err);
-          })
-          .then( user => {
-            done(null, user);
-          });
+    return userService.getOneById(id)
+      .catch( err => {
+        console.error('Passport deserialize user error', err);
+        done(err);
+      })
+      .then( user => {
+        done(null, user);
       });
   });
 }
@@ -63,64 +61,61 @@ export function registerAppStrategies(app) {
     strategyConfig.returnURL = 'http://pickpic.com:3013/login/' + strategy + '/callback/';
 
     passport.use( new Strategy(strategyConfig, (token, tokenSecret, profile, done) => {
-      return ModuleFactory.getServiceInstance('user')
-        .then( userService => {
-          return userService.getOneByStrategyAndToken(strategy, profile.id)
-            .then( user => {
-              // Register
-              if (!user && availableStrategies.register.indexOf(strategy) < 0) {
-                throw new Error('Cannot use ' + strategy + ' to register');
-              }
+      return userService.getOneByStrategyAndToken(strategy, profile.id)
+        .then( user => {
+          // Register
+          if (!user && availableStrategies.register.indexOf(strategy) < 0) {
+            throw new Error('Cannot use ' + strategy + ' to register');
+          }
 
-              // login
-              if (user) {
-                if (availableStrategies.login.indexOf(strategy) < 0 ) {
-                  throw new Error('Cannot use ' + strategy + ' to log in');
-                }
-                return user;
-              }
+          // login
+          if (user) {
+            if (availableStrategies.login.indexOf(strategy) < 0 ) {
+              throw new Error('Cannot use ' + strategy + ' to log in');
+            }
+            return user;
+          }
 
-              // Build user data
-              let userData = {};
-              let profileData = new PassportExtractor(profile);
-              ['username', 'lastname', 'firstname', 'email', 'gender'].forEach( property => {
-                if (profileData[property]) {
-                  userData[property] = profileData[property];
-                }
-              });
-              userData._auths = {};
-              userData._auths[strategy] = profile;
-              let username;
-              try {
-                username = profileData.buildUsername();
-              } catch(err) {
-                throw new Error('Unable to generate a valid username'); // @todo: generate a unique random one
-              }
+          // Build user data
+          let userData = {};
+          let profileData = new PassportExtractor(profile);
+          ['username', 'lastname', 'firstname', 'email', 'gender'].forEach( property => {
+            if (profileData[property]) {
+              userData[property] = profileData[property];
+            }
+          });
+          userData._auths = {};
+          userData._auths[strategy] = profile;
+          let username;
+          try {
+            username = profileData.buildUsername();
+          } catch(err) {
+            throw new Error('Unable to generate a valid username'); // @todo: generate a unique random one
+          }
 
-              return userService.createUniqueUsername(username)
-                .catch( err => {
-                  console.error('Passport error (userService.generateUniqueUsername)', err);
-                  throw err;
-                })
-                .then(username => {
-                  userData.username = username;
-                  return userService.insertOne(userData, strategy);
-                })
-                .catch( err => {
-                  console.error('Passport error (userService.saveOne)', err);
-                  throw err;
-                })
-                .then( user => {
-                  return user;
-                });
+          return userService.createUniqueUsername(username)
+            .catch( err => {
+              console.error('Passport error (userService.generateUniqueUsername)', err);
+              throw err;
             })
-            .catch(err => {
-              console.error('error', err);
-              done(err);
+            .then(username => {
+              userData.username = username;
+              return userService.insertOne(userData, strategy);
+            })
+            .catch( err => {
+              console.error('Passport error (userService.saveOne)', err);
+              throw err;
             })
             .then( user => {
-              return done(null, user);
+              return user;
             });
+        })
+        .catch(err => {
+          console.error('error', err);
+          done(err);
+        })
+        .then( user => {
+          return done(null, user);
         });
     }));
   });
@@ -130,4 +125,3 @@ export function initMiddlewares(app) {
   app.use(passport.initialize());
   app.use(passport.session());
 }
-

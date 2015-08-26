@@ -13,7 +13,7 @@ const redirectLogout = authConfig.redirections.logout;
 const sessionKey = authConfig.redirections.sessionkey;
 
 module.exports.login = function *() {
-  this.utils.requireNotConnected();
+  this.auth.requireNotConnected();
 
   this.session[sessionKey] = this.utils.getFromQuery('redirect', redirectLoginSuccess);
   let title = this.i18n.__('page.login.title');
@@ -26,7 +26,7 @@ module.exports.login = function *() {
 
 
 module.exports.register = function *() {
-  this.utils.requireNotConnected();
+  this.auth.requireNotConnected();
 
   this.session[sessionKey] = this.utils.getFromQuery('redirect', redirectLoginSuccess);
 
@@ -100,13 +100,13 @@ module.exports.authentificateCB = function *() {
 
 
 module.exports.logout = function *() {
-  this.utils.requireConnected();
+  this.auth.requireConnected();
   this.logout();
   return this.redirect(redirectLogout);
 };
 
 module.exports.getToken = function *() {
-  this.utils.requireConnected();
+  this.auth.requireConnected();
   let user = this.utils.getUser();
 
   let payload = {

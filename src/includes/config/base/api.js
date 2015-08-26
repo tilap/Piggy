@@ -6,10 +6,7 @@ let root = path.normalize(__dirname + '/../../../../');
 export default {
   'port': 2223,
   'keys': ['some-secret-key'],
-  'db': {
-    // 'local': 'mongodb://localhost:27017/piggy',
-    'local': 'mongodb://tilap:test@ds035633.mongolab.com:35633/piggy',
-  },
+  'db': 'mongodb://tilap:test@ds035633.mongolab.com:35633/piggy',
   'loggers': {
     'winston': {
       'console': {
@@ -29,8 +26,7 @@ export default {
         'level': 'warn',
         'filename': path.resolve(root, 'tmp/logs/api.log.json'),
       },
-    },
-    'requests': true,
+    }
   },
 
   // PassportJs
@@ -53,7 +49,6 @@ export default {
       },
     },
     'register': ['twitter', 'facebook'],
-    'bind': ['twitter', 'facebook'],
     'login': ['twitter', 'facebook', 'google'],
     'redirections': {
       'success': '/',

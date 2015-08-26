@@ -14,7 +14,6 @@
         <thead>
           <tr>
             <tr>
-              <th>ID</th>
               <th>Username</th>
               <th>First name</th>
               <th>Last name</th>
@@ -28,18 +27,31 @@
             <td colspan="6">
               {% for user in users %}
               <tr>
-                <td> {{ user.id }}</td>
-                <td> {{ user.username }}</td>
+                <td>
+                  <a href="/user/view/{{ user.id }}/" title="{{ user.id }}">{{ user.username }}</a>
+                </td>
                 <td> {{ user.firstname }}</td>
                 <td> {{ user.lastname }}</td>
                 <td> {{ user.email }}</td>
-                <td><a data-delete="{{ user.id }}">Supprimer</a></td>
+                <td>
+                  <a class="btn btn-default btn-xs" href="/user/edit/{{ user.id }}/">Edit</a>
+                  <a class="btn btn-default btn-xs" data-delete="{{ user.id }}">Delete</a>
+                </td>
               </tr>
               {% endfor %}
             </td>
           </tr>
         </tbody>
       </table>
+
+<!--
+<div class="btn-group">
+  <div class="btn btn-default">1</div>
+  <div class="btn btn-default">2</div>
+  <div class="btn btn-default">3</div>
+</div>
+-->
+
     </div>
     <div class="col-md-4">
 
