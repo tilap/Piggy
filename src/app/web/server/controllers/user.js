@@ -16,7 +16,7 @@ module.exports.new = function *() {
   if (this.request.method === 'POST') {
     try {
       itemData = this.utils.getFromPostM(insertField);
-      let newUser = yield itemService.insertOne(itemData, 'backoffice');
+      let newUser = yield itemService.insertOne(itemData);
       this.flash = new FlashMessage(this.i18n.__('user.new.success.message', newUser.username), FlashMessage.TYPES.SUCCESS);
       return this.redirect('/user/');
     } catch(errors) {
@@ -87,9 +87,7 @@ module.exports.list = function *() {
 
   let itemService = this.getModuleService(itemServiceName);
   try {
-    console.log('ok 1');
     let items = yield itemService.get({}, defaultGetOptions);
-    console.log('ok 2');
     this.viewBag.set('users', items);
   } catch(err) {
     this.logger.error('Error while listing users', err);

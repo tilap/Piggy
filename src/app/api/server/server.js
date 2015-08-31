@@ -6,15 +6,18 @@ import koaSession from 'koa-generic-session';
 import KoaMongoStore from 'koa-sess-mongo-store';
 import koaCompress from 'koa-compress';
 import koaSwig from 'koa-swig';
+import cors from 'kcors';
 import koaUtils from 'koa-utils';
-import koaAuth from 'library/koa-auth';
 import ApiBag from 'ApiBag/Bag';
 import logger from 'library/logger';
 import koaJWTauth from 'library/middleware/jwt-auth';
-import koaModuleLoader from 'library/middleware/koa-piggy-module-loader';
+import koaAuth from 'library/middleware/koa-auth';
+import moduleLoader from 'library/middleware/moduleLoader';
+import Context from 'Context';
+import ServiceAuth from 'library/ServiceAuth';
+import ModuleFactory from 'library/ModuleFactory';
 import routers from 'routers';
 import config from 'config/server';
-import cors from 'kcors';
 
 process.on('SIGINT', () => {
   logger.warn('Api Server stopped');
@@ -47,7 +50,6 @@ app.use(koaSession(sessionConfig));
 
 // Utils
 app.use(koaUtils);
-app.use(koaAuth);
 
 // Passport
 import {registerSerializers, initMiddlewares} from 'library/middleware/passport';
@@ -61,8 +63,9 @@ app.use(koaBodyParser(config.bodyparser));
 koaLocale(app, config.i18n.querystring);
 app.use(koai18n(app, config.i18n));
 
+app.use(moduleLoader('api'));
+app.use(koaAuth);
 app.use(koaJWTauth);
-app.use(koaModuleLoader);
 
 // Render middleware
 app.context.render = koaSwig(config.view);

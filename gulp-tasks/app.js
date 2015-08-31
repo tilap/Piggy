@@ -31,6 +31,12 @@ var del = require('del');
 
   gulp.task(cfg.tasks.build, function() {
     return gulp.src(cfg.src + '/**/*.js')
+
+      // CLEAN
+      .pipe($.replace(/\{FRONT\}(.|[\n])*?{\/FRONT\}/ig, function(reg) {
+        return reg.split(/\r\n|\r|\n/).join('\n// ');
+      }))
+
       .pipe($.if(appConfig.sourcemap, $.sourcemaps.init()))
       .pipe($.babel(config.plugins.babel))
       .pipe($.if(appConfig.sourcemap, $.sourcemaps.write('.')))
@@ -38,10 +44,12 @@ var del = require('del');
   });
 
   gulp.task(cfg.tasks.lint, function() {
-    gulp.src(cfg.src + '/**/*.js')
-      .pipe($.eslint())
-      .pipe($.eslint.formatEach());
+
+    // gulp.src(cfg.src + '/**/*.js')
+    //   .pipe($.eslint())
+    //   .pipe($.eslint.formatEach());
       // .pipe($.eslint.failAfterError());
+
   });
 
   gulp.task(cfg.tasks.clean, function() {
@@ -52,14 +60,18 @@ var del = require('del');
     return gulp.watch(cfg.watch, function(fileStatus) {
       console.log('[ES6 watcher] ' + fileStatus.path + ' (' + fileStatus.type + ') ' + ' => transpile it into ' + cfg.dist);
       return gulp.src(fileStatus.path, { base : cfg.src })
+
+        // CLEAN
+        .pipe($.replace(/\{FRONT\}(.|[\n])*?{\/FRONT\}/ig, function(reg) {
+          return reg.split(/\r\n|\r|\n/).join('\n// ');
+        }))
+
         .pipe($.if(appConfig.sourcemap, $.sourcemaps.init()))
         .pipe($.babel(config.plugins.babel))
         .pipe($.if(appConfig.sourcemap, $.sourcemaps.write('.')))
         .pipe(gulp.dest(cfg.dist));
     });
   });
-
-
 
   gulp.task(cfg.tasks.views.clean, function() {
     if(!appConfig.views) {

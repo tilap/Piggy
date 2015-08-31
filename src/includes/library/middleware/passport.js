@@ -1,7 +1,7 @@
 import passport from 'koa-passport';
 import logger from 'library/logger';
 import PassportExtractor from 'PassportExtractor';
-import ModuleFactory from 'library/ModuleFactory';
+import initializeService from 'library/ServiceInitializer'
 import config from 'config/server';
 
 const providersConfig = config.authentification.providers;
@@ -28,7 +28,7 @@ let availableStrategies = {
 
 module.exports.availableStrategies = availableStrategies;
 
-let userService = ModuleFactory.getServiceInstance('user');
+let userService = initializeService('user');
 
 export function registerSerializers() {
   passport.serializeUser( (user, done) => {

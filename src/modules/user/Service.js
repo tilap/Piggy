@@ -7,10 +7,20 @@ export default class UserService extends Service {
   }
 
   insertOne(data, source = '') {
+    if (!source && this.hasContext('app')) {
+      source = this.getContext('app');
+    }
     data._source = source;
     data.created_at = new Date();
     data.updated_at = new Date();
-    return super.insertOne(data);
+
+    return super.insertOne(data)
+      .then( vo => {
+        if(this.hasContext('event')) {
+          this.getContext('event').trigger('user:created', vo);
+        }
+        return vo;
+      });
   }
 
   updateOne(id, data) {
@@ -24,36 +34,6 @@ export default class UserService extends Service {
 
   getOneByStrategyAndToken(strategy, token) {
     return this._manager.getByStrategyToken(strategy, token);
-  }
-
-  hasProfile(profile='', vo = null) {
-    if(null===vo) {
-      if(this.getContext('user')==null) {
-        return false;
-      }
-      vo = this.getContext('user');
-    }
-    return vo.profiles && vo.profiles.indexOf(profile) > -1;
-  }
-
-  hasAnyProfile(profiles=[], vo = null) {
-    let result = false;
-    profiles.forEach( profile => {
-      if(this.hasProfile(profile, vo)) {
-        result = true;
-      }
-    });
-    return result;
-  }
-
-  hasAllProfiles(profiles=[]) {
-    let result = true;
-    profiles.forEach( profile => {
-      if(!this.hasProfile(profile, vo)) {
-        result = false;
-      }
-    });
-    return result;
   }
 
   async createUniqueUsername(username) {

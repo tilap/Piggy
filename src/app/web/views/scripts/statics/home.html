@@ -15,19 +15,14 @@
 <div class="container">
   <div class="row">
     <div class="col-md-12">
-      <h2>Newsfeed list</h2>
-      {% if sources.length %}
+      <h2>User list</h2>
+      {{ users.length }}
+      {% if users.length %}
       <ul>
-      {% for source in sources %}
-        {% if source.url %}
-        <li><a href="{{ source.url }}" target="_blank">{{ source.title }}</a></li>
-        {% else %}
-        <li>{{ source.title }}</li>
-        {% endif %}
+      {% for user in users %}
+        <li>{{ user.username }}</li>
       {% endfor %}
       </ul>
-      {% else %}
-        No source yet
       {% endif %}
     </div>
   </div>

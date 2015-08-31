@@ -12,10 +12,10 @@ import koaError from 'koa-error';
 import sanitizeUri from 'koa-sanitize-uri';
 import logger from 'library/logger';
 import {Head} from 'piggy-htmldoc';
-import koaModuleLoader from 'library/middleware/koa-piggy-module-loader';
 import ViewBag from 'ViewBag';
 import koaUtils from 'koa-utils';
-import koaAuth from 'library/koa-auth';
+import koaAuth from 'library/middleware/koa-auth';
+import moduleLoader from 'library/middleware/moduleLoader';
 import redirectOnHtmlStatus from 'koa-redirectOnHtmlStatus';
 import config from 'config/server';
 import appConfig from 'config/app';
@@ -64,32 +64,33 @@ if (sessionConfig.mongo) {
 app.use(koaSession(sessionConfig));
 
 // Utils
-app.use(koaModuleLoader);
 app.use(koaUtils);
-app.use(koaAuth);
-
-// Viewdata
-app.use(function *(next) {
-  this.viewBag = new ViewBag();
-  this.viewBag.setProtected('html', {
-    'head': new Head(),
-  });
-
-  this.viewBag.get('html').head.title.queue(appConfig.name);
-  this.renderView = (file) => this.render('scripts/' + file, this.viewBag);
-
-  yield next;
-});
 
 // Passport
 import {registerSerializers, registerAppStrategies, initMiddlewares} from 'library/middleware/passport';
 registerSerializers();
 registerAppStrategies(app);
 initMiddlewares(app);
+
+app.use(moduleLoader('backoffice'));
+app.use(koaAuth);
+
+// View stuff
 app.use(function *(next) {
-  this.viewBag.setProtected('currentUser', this.isAuthenticated() ? this.req.user : null);
+  // Viewbag initialization
+  this.viewBag = new ViewBag();
+  this.viewBag.setProtected('html', {
+    'head': new Head(),
+  });
+  this.viewBag.setProtected('context', this.context);
+  this.viewBag.get('html').head.title.queue(appConfig.name);
+
+  // Helper
+  this.renderView = (file) => this.render('scripts/' + file, this.viewBag);
+
   yield next;
 });
+
 
 app.use(koaBodyParser(config.bodyparser));
 

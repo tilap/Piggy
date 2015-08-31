@@ -107,7 +107,7 @@ module.exports.logout = function *() {
 
 module.exports.getToken = function *() {
   this.auth.requireConnected();
-  let user = this.utils.getUser();
+  let user = this.auth.getUser();
 
   let payload = {
     'id': user.id,

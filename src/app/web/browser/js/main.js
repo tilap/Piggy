@@ -1,21 +1,25 @@
 import $ from 'jquery';
 import sweetalert from 'sweetalert/dist/sweetalert.min.js';
-
-import ModuleFactory from './ModuleFactory';
 import ValidationError from 'piggy-module/lib/ValidationError';
 import {UnreachableStorage} from 'piggy-module/lib/Storage/Errors';
 
-// $(document).ready( function() {
-//   console.log(currentUserData);
+import Context from './includes/Context';
+let context = new Context();
+if(currentContext) {
+  Object.keys(currentContext).forEach(k => {
+    context.set(k, currentContext[k]);
+  });
+}
 
-//   ModuleFactory.getServiceInstance('user').then( userService => {
+import initializeService from './includes/library/ServiceInitializer';
+function getModuleService(module) {
+  return initializeService(module, context);
+};
 
-//   });
-// });
 let form = document.getElementById('user-create-form');
 let $table = $('#user-list');
 
-let userService = ModuleFactory.getServiceInstance('user');
+let userService = getModuleService('user');
 
 function showUserList() {
   userService.get({}, {'limit': 100, 'sort': [['created_at', 'desc']]})

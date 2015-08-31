@@ -9,11 +9,7 @@
   <link href="/jspm_packages/github/t4t5/sweetalert@1.1.0/dist/sweetalert.css" rel="stylesheet" type="text/css">
 
   <script type="text/javascript">
-    {% if currentUser %}
-    var currentUserData = {{ currentUser.data | json | safe }};
-    {% else %}
-    var currentUserData = null;
-    {% endif %}
+    var currentContext = {{ context.getAll() | json | safe }};
   </script>
 
   <script src="/jspm_packages/system.js"></script>
@@ -38,8 +34,8 @@
     </ul>
     <ul class="nav navbar-nav navbar-right">
       <p class="navbar-text">
-      {% if currentUser %}
-        {{ currentUser.username }} | <a href="/logout/">Logout</a>
+      {% if context.auth._user.username %}
+        {{ context.auth._user.username }} | <a href="/logout/">Logout</a>
       {% else %}
         Not connected.
         <a href="/login/">Login</a> or <a href="/register/">Register</a>

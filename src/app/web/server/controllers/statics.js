@@ -1,9 +1,9 @@
 module.exports.home = function *() {
   this.viewBag.get('html').head.title.queue('Accueil');
 
-  let sourceService = this.getModuleService('source');
-  let sources = sourceService.getByPage({}, 1, 10, 'created_at', 1);
-  this.viewBag.set('sources', sources);
+  let userService = this.getModuleService('user');
+  let users = userService.get();
+  this.viewBag.set('users', users);
   return yield this.renderView('statics/home.html');
 };
 

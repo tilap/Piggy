@@ -34,6 +34,16 @@ module.exports = {
     js: {
       src: root + '/src/app/web/browser/js',
       dist: root + '/public/js',
+      includes: {
+        src: root + '/src/includes',
+        dist: root + '/public/js/includes',
+        files: [
+          'Context.js',
+          'library/ServiceLoader.js',
+          'library/ServiceInitializer.js',
+          'library/ServiceAuth.js'
+        ]
+      }
     },
     css: {
       src: root + '/src/app/web/browser/style',
@@ -46,6 +56,8 @@ module.exports = {
     dist_front: root + '/public/js/modules',
     sourcemap: true,
   },
+
+  // Plugin config
   plugins: {
     babel: {
       compact: !debug,
@@ -96,15 +108,19 @@ module.exports = {
     },
     uglify: { // @see https://github.com/terinjokes/gulp-uglify
       mangle: !debug,
-      preserveComments: debug ? 'all' : false,
+      preserveComments: debug ? 0 : 'all',
       warnings: debug,
     },
   },
+
+  // Feature enabled/disabled
   enabled: {
     browsersync: debug,
     less_sourcemap: debug, // Sourcemap for frontend css
     js_sourcemap: debug, // Sourcemap for frontend javascript
   },
+
+  // For code generation
   generators: {
     api: {
       controller: {

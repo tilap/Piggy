@@ -27,7 +27,8 @@ gulp.task('build', function() {
     ['web:views-build'],
     ['includes:es6-build', 'modules:es6-build'],
     ['web:es6-build', 'api:es6-build'],
-    ['front:js-build', 'front:css-build']
+    ['front:library'],
+    ['front:js-build', 'front:css-build', ]
   );
 });
 
@@ -36,8 +37,9 @@ gulp.task('web:dev', function() {
     ['web:es6-clean', 'web:es6-lint'],
     ['includes:es6-build', 'modules:es6-build'],
     ['web:es6-build', 'web:views-build', 'front:js-build', 'front:css-build'],
+    ['front:library'],
     ['includes:es6-watch', 'modules:es6-watch'],
-    ['web:es6-watch', 'web:views-watch', 'front:js-watch', 'front:css-watch'],
+    ['web:es6-watch', 'web:views-watch', 'front:js-watch', 'front:css-watch', 'front:library-watch'],
     ['web:server']
   );
 });
@@ -59,3 +61,19 @@ gulp.task('api:dev', function() {
   );
 });
 
+/*
+var $ = require('gulp-load-plugins')({camelize: true});
+gulp.task('test', function() {
+  console.log('running test');
+
+
+  var a = 'aaaaa{FRONT}toto{/FRONT}{FRONT}toto{/FRONT}ccccc'.match(regex);
+  console.log(a);
+
+  gulp.src('./test.input')
+    .pipe($.replace(/\{FRONT\}(.|[\n])*?{\/FRONT\}/ig, function(reg) {
+      return reg.split(/\r\n|\r|\n/).join('\n// ');
+    }))
+    .pipe(gulp.dest('./test.output'));
+});
+*/
