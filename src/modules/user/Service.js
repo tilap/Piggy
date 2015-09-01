@@ -7,8 +7,9 @@ export default class UserService extends Service {
   }
 
   insertOne(data, source = '') {
-    if (!source && this.hasContext('app')) {
-      source = this.getContext('app');
+
+    if (!source && this.getContext() && this.getContext().get('app', null)) {
+      source = this.getContext().get('app');
     }
     data._source = source;
     data.created_at = new Date();

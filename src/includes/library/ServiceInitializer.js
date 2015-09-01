@@ -11,7 +11,7 @@ import storageOption from 'database';
 export default function initializeService(module, context=null) {
   let service = loadService(module, storageOption);
   if(context && context instanceof Context) {
-    service.setFullContext(context);
+    service.setContext(context);
   }
   return service;
 }

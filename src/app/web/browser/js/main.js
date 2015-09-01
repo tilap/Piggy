@@ -2,16 +2,23 @@ import $ from 'jquery';
 import sweetalert from 'sweetalert/dist/sweetalert.min.js';
 import ValidationError from 'piggy-module/lib/ValidationError';
 import {UnreachableStorage} from 'piggy-module/lib/Storage/Errors';
-
 import Context from './includes/Context';
+import initializeService from './includes/library/ServiceInitializer';
+import ServiceAuth from './includes/library/ServiceAuth';
+import UserVo from './modules/user/Vo';
+
 let context = new Context();
 if(currentContext) {
-  Object.keys(currentContext).forEach(k => {
-    context.set(k, currentContext[k]);
-  });
+  if(currentContext.app) {
+    context.set('app', currentContext.app);
+  }
+  if(currentContext.auth) {
+    let user = new UserVo(currentContext.auth._user.data);
+    let authService = new ServiceAuth(user);
+    context.set('auth', authService);
+  }
 }
 
-import initializeService from './includes/library/ServiceInitializer';
 function getModuleService(module) {
   return initializeService(module, context);
 };

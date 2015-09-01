@@ -14,8 +14,9 @@ import logger from 'library/logger';
 import {Head} from 'piggy-htmldoc';
 import ViewBag from 'ViewBag';
 import koaUtils from 'koa-utils';
-import koaAuth from 'library/middleware/koa-auth';
-import moduleLoader from 'library/middleware/moduleLoader';
+import koaAuth from 'library/koa-middlewares/auth';
+import moduleLoader from 'library/koa-middlewares/module-loader';
+import {registerSerializers, registerAppStrategies, initMiddlewares} from 'library/koa-middlewares/passport';
 import redirectOnHtmlStatus from 'koa-redirectOnHtmlStatus';
 import config from 'config/server';
 import appConfig from 'config/app';
@@ -67,7 +68,6 @@ app.use(koaSession(sessionConfig));
 app.use(koaUtils);
 
 // Passport
-import {registerSerializers, registerAppStrategies, initMiddlewares} from 'library/middleware/passport';
 registerSerializers();
 registerAppStrategies(app);
 initMiddlewares(app);
