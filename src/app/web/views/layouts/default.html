@@ -1,17 +1,14 @@
 <!doctype html>
 <html>
 <head>
-  <meta charset="utf-8">
   {{ html.head.toString() }}
-
+  <meta name="apple-mobile-web-app-capable" content="yes" />
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" type="text/css">
   <link href="/style/main.css" rel="stylesheet" type="text/css">
   <link href="/jspm_packages/github/t4t5/sweetalert@1.1.0/dist/sweetalert.css" rel="stylesheet" type="text/css">
-
   <script type="text/javascript">
     var currentContext = {{ context.getAll() | json | safe }};
   </script>
-
   <script src="/jspm_packages/system.js"></script>
   <script src="/config.js"></script>
   <script>
@@ -23,8 +20,8 @@
 <nav class="navbar navbar-default navbar-fixed-top">
   <div class="container">
     <div class="navbar-header">
-      <a class="navbar-brand" href="/">
-        App test
+      <a class="navbar-brand" href="{{ app.url }}">
+        {{ app.name }}
       </a>
     </div>
     <ul class="nav navbar-nav">
@@ -34,7 +31,7 @@
     </ul>
     <ul class="nav navbar-nav navbar-right">
       <p class="navbar-text">
-      {% if context.get('auth')._user.username %}
+      {% if context.get('auth') && context.get('auth')._user %}
         {{ context.get('auth')._user.username }} | <a href="/logout/">Logout</a>
       {% else %}
         Not connected.

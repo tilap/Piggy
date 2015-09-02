@@ -12,6 +12,7 @@ import ApiBag from 'ApiBag/Bag';
 import logger from 'library/logger';
 import koaJWTauth from 'library/koa-middlewares/jwt';
 import koaAuth from 'library/koa-middlewares/auth';
+import koaContext from 'library/koa-middlewares/context';
 import moduleLoader from 'library/koa-middlewares/module-loader';
 import Context from 'Context';
 import ServiceAuth from 'library/ServiceAuth';
@@ -63,7 +64,8 @@ app.use(koaBodyParser(config.bodyparser));
 koaLocale(app, config.i18n.querystring);
 app.use(koai18n(app, config.i18n));
 
-app.use(moduleLoader('api'));
+app.use(koaContext('api'));
+app.use(moduleLoader);
 app.use(koaAuth);
 app.use(koaJWTauth);
 

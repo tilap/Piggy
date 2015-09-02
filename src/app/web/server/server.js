@@ -12,8 +12,10 @@ import koaError from 'koa-error';
 import sanitizeUri from 'koa-sanitize-uri';
 import logger from 'library/logger';
 import {Head} from 'piggy-htmldoc';
+import ElementBase from 'piggy-htmldoc/lib/ElementBase';
 import ViewBag from 'ViewBag';
 import koaUtils from 'koa-utils';
+import koaContext from 'library/koa-middlewares/context';
 import koaAuth from 'library/koa-middlewares/auth';
 import moduleLoader from 'library/koa-middlewares/module-loader';
 import {registerSerializers, registerAppStrategies, initMiddlewares} from 'library/koa-middlewares/passport';
@@ -72,7 +74,8 @@ registerSerializers();
 registerAppStrategies(app);
 initMiddlewares(app);
 
-app.use(moduleLoader('backoffice'));
+app.use(koaContext('backoffice'));
+app.use(moduleLoader);
 app.use(koaAuth);
 
 // View stuff
@@ -80,10 +83,19 @@ app.use(function *(next) {
   // Viewbag initialization
   this.viewBag = new ViewBag();
   this.viewBag.setProtected('html', {
-    'head': new Head(),
+    'head': new Head("\n  "),
   });
   this.viewBag.setProtected('context', this.context);
-  this.viewBag.get('html').head.title.queue(appConfig.name);
+  this.viewBag.setProtected('app', appConfig);
+
+  this.viewBag.get('html').head
+    .siteTitle(appConfig.name)
+    .setDescription('Une super description')
+    .setCharset('UTF-8')
+    .setLocale('fr-FR')
+    .setCanonical('http://tralala.com/pouet/')
+    .addDnsPrefetch('http://pouetpouet.com')
+    .addDnsPrefetch('http://pouetpouet2.com');
 
   // Helper
   this.renderView = (file) => this.render('scripts/' + file, this.viewBag);
