@@ -12,7 +12,7 @@ import koaError from 'koa-error';
 import sanitizeUri from 'koa-sanitize-uri';
 import logger from 'library/logger';
 import {Head} from 'piggy-htmldoc';
-import ElementBase from 'piggy-htmldoc/lib/ElementBase';
+// import ElementBase from 'piggy-htmldoc/lib/ElementBase';
 import ViewBag from 'ViewBag';
 import koaUtils from 'koa-utils';
 import koaContext from 'library/koa-middlewares/context';

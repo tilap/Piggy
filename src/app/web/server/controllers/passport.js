@@ -1,6 +1,6 @@
 import passport from 'koa-passport';
 import FlashMessage from 'FlashMessage';
-import {availableStrategies} from 'library/middleware/passport';
+import {availableStrategies} from 'library/koa-middlewares/passport';
 
 import config from 'config/server';
 let authConfig = config.authentification || {};

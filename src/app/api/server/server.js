@@ -14,9 +14,6 @@ import koaJWTauth from 'library/koa-middlewares/jwt';
 import koaAuth from 'library/koa-middlewares/auth';
 import koaContext from 'library/koa-middlewares/context';
 import moduleLoader from 'library/koa-middlewares/module-loader';
-import Context from 'Context';
-import ServiceAuth from 'library/ServiceAuth';
-import ModuleFactory from 'library/ModuleFactory';
 import routers from 'routers';
 import config from 'config/server';
 
@@ -53,7 +50,7 @@ app.use(koaSession(sessionConfig));
 app.use(koaUtils);
 
 // Passport
-import {registerSerializers, initMiddlewares} from 'library/middleware/passport';
+import {registerSerializers, initMiddlewares} from 'library/koa-middlewares/passport';
 registerSerializers();
 initMiddlewares(app);
 

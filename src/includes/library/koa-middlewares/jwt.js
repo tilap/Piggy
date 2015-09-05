@@ -3,9 +3,9 @@
  */
 
 import jwt from 'jsonwebtoken';
-import ModuleFactory from 'library/ModuleFactory';
+import initializeService from 'library/ServiceInitializer';
 import config from 'config/server';
-let userService = ModuleFactory.getServiceInstance('user');
+let userService = initializeService('user');
 
 export default function *(next) {
   // If connected, skip
