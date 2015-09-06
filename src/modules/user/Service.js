@@ -7,7 +7,6 @@ export default class UserService extends Service {
   }
 
   insertOne(data, source = '') {
-
     if (!source && this.getContext() && this.getContext().get('app', null)) {
       source = this.getContext().get('app');
     }
@@ -17,9 +16,9 @@ export default class UserService extends Service {
 
     return super.insertOne(data)
       .then( vo => {
-        if(this.hasContext('event')) {
-          this.getContext('event').trigger('user:created', vo);
-        }
+        // if (this.hasContext('event')) {
+        //   this.getContext('event').trigger('user:created', vo);
+        // }
         return vo;
       });
   }
@@ -37,6 +36,7 @@ export default class UserService extends Service {
     return this._manager.getByStrategyToken(strategy, token);
   }
 
+// {SERVER}
   async createUniqueUsername(username) {
     let usernameBase = username;
     let inc = 0;
@@ -50,4 +50,5 @@ export default class UserService extends Service {
       username = usernameBase + inc;
     }
   }
+// {/SERVER}
 }

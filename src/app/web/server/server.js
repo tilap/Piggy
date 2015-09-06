@@ -29,10 +29,10 @@ process.on('SIGINT', () => {
 });
 
 const app = koa();
-app.on('error', err => {
-  logger.error('Web Server error: %s', err.message);
-  logger.error('Error stack: %s', err.stack);
-});
+// app.on('error', err => {
+//   logger.error('Web Server error: %s', err.message);
+//   logger.error('Error stack: %s', err.stack);
+// });
 
 app.keys = config.keys;
 

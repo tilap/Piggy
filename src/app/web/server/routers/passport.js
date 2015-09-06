@@ -3,9 +3,9 @@ import controller from '../controllers/passport';
 
 import config from 'config/server';
 let providers = config.authentification.providers;
+let strategies = Object.keys(providers);
 
 let router = new Router();
-let strategies = Object.keys(providers);
 
 router.get('login', '/login', controller.login);
 router.get('register', '/register', controller.register);

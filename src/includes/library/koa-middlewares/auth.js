@@ -15,7 +15,7 @@ export default function *(next) {
   };
 
   this.auth.getUser = () => {
-    return this.auth.getService.getUser();
+    return this.auth.getService().getUser();
   };
 
   this.auth.hasProfile = (profile) => {

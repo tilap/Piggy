@@ -80,7 +80,7 @@
       "github/fetch": "github:github/fetch@^0.9.0",
       "jakearchibald/es6-promise": "github:jakearchibald/es6-promise@^3.0.2",
       "jquery": "github:components/jquery@^2.1.4",
-      "piggy-module": "github:tilap/piggy-module@api-storage",
+      "piggy-module": "npm:piggy-module@^0.1.0",
       "sweetalert": "github:t4t5/sweetalert@1.1.0"
     },
     "devDependencies": {

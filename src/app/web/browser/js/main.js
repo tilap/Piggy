@@ -2,30 +2,11 @@ import $ from 'jquery';
 import sweetalert from 'sweetalert/dist/sweetalert.min.js';
 import ValidationError from 'piggy-module/lib/ValidationError';
 import {UnreachableStorage} from 'piggy-module/lib/Storage/Errors';
-import Context from './includes/Context';
-import initializeService from './includes/library/ServiceInitializer';
-import ServiceAuth from './includes/library/ServiceAuth';
-import UserVo from './modules/user/Vo';
 
-let context = new Context();
-if(currentContext) {
-  if(currentContext.app) {
-    context.set('app', currentContext.app);
-  }
-  if(currentContext.auth) {
-    let user = new UserVo(currentContext.auth._user.data);
-    let authService = new ServiceAuth(user);
-    context.set('auth', authService);
-  }
-}
-
-function getModuleService(module) {
-  return initializeService(module, context);
-};
+import getModuleService from './bootstrap';
 
 let form = document.getElementById('user-create-form');
 let $table = $('#user-list');
-
 let userService = getModuleService('user');
 
 function showUserList() {

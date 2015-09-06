@@ -105,18 +105,28 @@ module.exports.logout = function *() {
   return this.redirect(redirectLogout);
 };
 
-module.exports.getToken = function *() {
-  this.auth.requireConnected();
-  let user = this.auth.getUser();
+import ApiBagBase from 'ApiBag/Base';
 
-  let payload = {
-    'id': user.id,
-    'created_at': new Date(),
+module.exports.getToken = function *() {
+  let bag = new ApiBagBase();
+  let res = {
+    'token': null,
   };
-  let config = {
-    'algorithm': tokenConfig.algorithm,
-    'expiresInMinutes': tokenConfig.expiresInMinutes,
-  };
-  let token = jwt.sign(payload, tokenConfig.secret, config);
-  this.body = token;
+
+  if (this.auth.getUser()) {
+    let user = this.auth.getUser();
+    let payload = {
+      'id': user.id,
+      'created_at': new Date(),
+    };
+    let config = {
+      'algorithm': tokenConfig.algorithm,
+      'expiresInMinutes': tokenConfig.expiresInMinutes,
+    };
+    res.token = jwt.sign(payload, tokenConfig.secret, config);
+  }
+
+  bag.setData(res);
+
+  this.body = bag.toJson();
 };
