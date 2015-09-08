@@ -96,12 +96,28 @@ Object.keys(routers).forEach( id => {
   app.use(routers[id].middleware());
 });
 
-// Self app or required
-if (!module.parent) {
-  let port = config.port || 3000;
-  app.listen(port, () => {
-    logger.info('Server listening on port %s under %s environment', port, process.env.NODE_ENV || 'development' );
+
+// Socket io
+let server = require('http').Server(app.callback());
+let io = require('socket.io')(server);
+
+io.on('connection', function(socket) {
+  console.log('connected !!!');
+  socket.emit('news', { 'hello': 'world' });
+  socket.on('test', function(data) {
+    console.log('test called');
+    console.log(data);
   });
-} else {
-  module.exports = app;
-}
+});
+
+let port = config.port || 3000;
+server.listen(port);
+// // Self app or required
+// if (!module.parent) {
+//   let port = config.port || 3000;
+//   app.listen(port, () => {
+//     logger.info('Server listening on port %s under %s environment', port, process.env.NODE_ENV || 'development' );
+//   });
+// } else {
+//   module.exports = app;
+// }

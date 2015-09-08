@@ -3,8 +3,7 @@ module.exports.whoami = function *() {
   let user = this.auth.getUser();
   if (user) {
     this.bag.setDataFromVo(user);
-  }
-  else {
+  } else {
     this.bag.setData({});
   }
   return this.renderBag();

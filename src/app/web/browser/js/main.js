@@ -5,6 +5,21 @@ import {UnreachableStorage} from 'piggy-module/lib/Storage/Errors';
 
 import getModuleService from './bootstrap';
 
+
+import io from 'socket.io-client/socket.io.js';
+
+var socket = io('localhost:2223');
+socket.on('connect', function(){
+  console.log('SOCKET CONNECTED');
+});
+socket.on('event', function(data){
+  console.log('SOCKET EVENT');
+});
+socket.on('disconnect', function(){
+  console.log('SOCKET DISCONNECTED');
+});
+
+
 let form = document.getElementById('user-create-form');
 let $table = $('#user-list');
 let userService = getModuleService('user');

@@ -45,6 +45,7 @@
     "piggy-htmldoc": "^0.0.3",
     "piggy-module": "^0.1.0",
     "require-dir": "^0.3.0",
+    "socket.io": "^1.3.6",
     "springbokjs-errors": "^2.1.0",
     "winston": "^1.0.0"
   },
@@ -81,6 +82,7 @@
       "jakearchibald/es6-promise": "github:jakearchibald/es6-promise@^3.0.2",
       "jquery": "github:components/jquery@^2.1.4",
       "piggy-module": "npm:piggy-module@^0.1.0",
+      "socket.io-client": "npm:socket.io-client@^1.3.6",
       "sweetalert": "github:t4t5/sweetalert@1.1.0"
     },
     "devDependencies": {
