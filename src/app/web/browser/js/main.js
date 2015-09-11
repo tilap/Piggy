@@ -1,30 +1,48 @@
-import $ from 'jquery';
-import sweetalert from 'sweetalert/dist/sweetalert.min.js';
-import ValidationError from 'piggy-module/lib/ValidationError';
-import {UnreachableStorage} from 'piggy-module/lib/Storage/Errors';
 
-import getModuleService from './bootstrap';
+console.log(document.cookie);
 
 
 import io from 'socket.io-client/socket.io.js';
 
-var socket = io('localhost:2223');
+let socket = io('api.pickpic.com:2223', {query: 'hello=world'});
 socket.on('connect', function(){
   console.log('SOCKET CONNECTED');
+  socket.emit('testamoua');
 });
-socket.on('event', function(data){
-  console.log('SOCKET EVENT');
-});
+
 socket.on('disconnect', function(){
   console.log('SOCKET DISCONNECTED');
 });
 
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+import $ from 'jquery';
+import sweetalert from 'sweetalert/dist/sweetalert.min.js';
+import ValidationError from 'piggy-module/lib/ValidationError';
+import {UnreachableStorage} from 'piggy-module/lib/Storage/Errors';
+import getModuleService from './bootstrap';
+
+import cookies from 'cookies-js';
+
+const jwtCookieName = 'jwttoken';
 
 let form = document.getElementById('user-create-form');
 let $table = $('#user-list');
 let userService = getModuleService('user');
 
 function showUserList() {
+  // socket.emit('event_front', 'coucou');
   userService.get({}, {'limit': 100, 'sort': [['created_at', 'desc']]})
     .then( users => {
       let result = '';
@@ -45,10 +63,7 @@ function showUserList() {
       }
       $table.html(result);
       initTableActions();
-    }) .catch(err => {
-      console.error(err);
-    })
-    .catch(errors => {
+    }).catch(errors => {
       serviceError(errors);
     });
 }
@@ -114,3 +129,5 @@ function serviceError(error) {
     sweetalert('Error', 'Internal server error: ' + error.message, 'error');
   }
 }
+
+*/

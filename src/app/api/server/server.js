@@ -97,18 +97,69 @@ Object.keys(routers).forEach( id => {
 });
 
 
+
+
+import initializeService from 'library/ServiceInitializer';
+import jwt from 'jsonwebtoken';
+
 // Socket io
 let server = require('http').Server(app.callback());
 let io = require('socket.io')(server);
 
-io.on('connection', function(socket) {
-  console.log('connected !!!');
-  socket.emit('news', { 'hello': 'world' });
-  socket.on('test', function(data) {
-    console.log('test called');
-    console.log(data);
+
+io.use(function(socket, next) {
+  // console.log(socket.client.request.headers);
+
+  console.log('cookies =>=>=> ', socket.request.headers.cookie);
+  next();
+  /*
+  let jwtToken = socket.handshake.query.token || '';
+
+  if (jwtToken && config.authentification && config.authentification.token) {
+
+    let tokenConfig = config.authentification.token;
+    let jwtcfg = {
+      'algorithm': tokenConfig.algorithm,
+      'expiresInMinutes': tokenConfig.expiresInMinutes,
+    };
+    let payload = jwt.verify(jwtToken, tokenConfig.secret, jwtcfg);
+    let userService = initializeService('user');
+    userService.getOneById(payload.id)
+      .then( user => {
+        console.log('user found');
+        socket.user = user;
+        next();
+      })
+      .catch(err => {
+        next();
+      });
+
+    next();
+  }
+  else {
+    next();
+  }
+  */
+});
+
+io.on('connection', (socket) => {
+  console.log('user enter socket');
+  // console.log(socket.context);
+
+  socket.on('testamoua', () => {
+    console.log('useless test');
+  });
+
+  socket.on('disconnect', () => {
+    console.log('user exit socket');
   });
 });
+
+
+
+
+
+
 
 let port = config.port || 3000;
 server.listen(port);

@@ -61,6 +61,7 @@ export default {
       'secret': 'plug_in_baby',
       'algorithm': 'HS256',
       'expiresInMinutes': 10080, // 7 days
+      'cookiename' : 'jwttoken'
     },
   },
 

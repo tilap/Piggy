@@ -15,6 +15,8 @@ System.config({
   map: {
     "babel": "npm:babel-core@5.8.23",
     "babel-runtime": "npm:babel-runtime@5.8.20",
+    "browser-cookie-lite": "npm:browser-cookie-lite@1.0.4",
+    "cookies-js": "npm:cookies-js@1.2.2",
     "core-js": "npm:core-js@1.1.4",
     "github/fetch": "github:github/fetch@0.9.0",
     "jakearchibald/es6-promise": "github:jakearchibald/es6-promise@3.0.2",

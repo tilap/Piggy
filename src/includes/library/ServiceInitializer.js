@@ -8,9 +8,9 @@ let storageOption = 'http://localhost:2223/';
 import storageOption from 'database';
 // {/BACK}
 
-export default function initializeService(module, context=null) {
+export default function initializeService(module, context = null) {
   let service = loadService(module, storageOption);
-  if(context && context instanceof Context) {
+  if (context && context instanceof Context) {
     service.setContext(context);
   }
   return service;

@@ -1,16 +1,31 @@
 import passport from 'koa-passport';
 import FlashMessage from 'FlashMessage';
 import {availableStrategies} from 'library/koa-middlewares/passport';
-
+import ApiBagBase from 'ApiBag/Base';
 import config from 'config/server';
-let authConfig = config.authentification || {};
 import jwt from 'jsonwebtoken';
-let tokenConfig = authConfig.token;
+
+const authConfig = config.authentification || {};
+const tokenConfig = authConfig.token;
 
 const redirectLoginSuccess = authConfig.redirections.success;
 const redirectLoginError = authConfig.redirections.error;
 const redirectLogout = authConfig.redirections.logout;
 const sessionKey = authConfig.redirections.sessionkey;
+
+
+function getUserJwtToken(user, cfg) {
+  let payload = {
+    'id': user.id,
+    'created_at': new Date(),
+  };
+  let tokenCfg = {
+    'algorithm': cfg.algorithm,
+    'expiresInMinutes': cfg.expiresInMinutes,
+  };
+  return jwt.sign(payload, cfg.secret, tokenCfg);
+}
+
 
 module.exports.login = function *() {
   this.auth.requireNotConnected();
@@ -88,6 +103,13 @@ module.exports.authentificateCB = function *() {
         'redirectUrl': ctx.session[sessionKey] || redirectLoginSuccess,
       };
 
+
+      ctx.cookies.set(tokenConfig.cookiename, getUserJwtToken(user, tokenConfig), {
+        'signed': false,
+        'httpOnly': false,
+        'domain': 'toto.com',
+      });
+
       if (ctx.session[sessionKey]) {
         delete ctx.session[sessionKey];
       }
@@ -101,32 +123,16 @@ module.exports.authentificateCB = function *() {
 
 module.exports.logout = function *() {
   this.auth.requireConnected();
+  // this.cookies.set(tokenConfig.cookiename, '', { 'expires': new Date(1), 'path': '/'});
   this.logout();
   return this.redirect(redirectLogout);
 };
 
-import ApiBagBase from 'ApiBag/Base';
 
 module.exports.getToken = function *() {
   let bag = new ApiBagBase();
-  let res = {
-    'token': null,
-  };
-
-  if (this.auth.getUser()) {
-    let user = this.auth.getUser();
-    let payload = {
-      'id': user.id,
-      'created_at': new Date(),
-    };
-    let config = {
-      'algorithm': tokenConfig.algorithm,
-      'expiresInMinutes': tokenConfig.expiresInMinutes,
-    };
-    res.token = jwt.sign(payload, tokenConfig.secret, config);
-  }
-
-  bag.setData(res);
-
+  bag.setData({
+    'token': this.auth.getUser() ? getUserJwtToken(this.auth.getUser(), tokenConfig) : null,
+  });
   this.body = bag.toJson();
 };
